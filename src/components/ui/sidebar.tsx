@@ -2,14 +2,14 @@
 
 import { cn } from "@/lib/utils";
 import Link, { LinkProps } from "next/link";
-import React, { useState, createContext, useContext, ReactNode, FC } from "react";
+import React, { useState, createContext, useContext } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 
 interface Links {
   label: string;
   href: string;
-  icon: React.ReactNode;
+  icon: React.JSX.Element | React.ReactNode;
 }
 
 interface SidebarContextProps {
@@ -36,7 +36,7 @@ export const SidebarProvider = ({
   setOpen: setOpenProp,
   animate = true,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
   open?: boolean;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   animate?: boolean;
@@ -59,7 +59,7 @@ export const Sidebar = ({
   setOpen,
   animate,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
   open?: boolean;
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   animate?: boolean;
@@ -71,53 +71,56 @@ export const Sidebar = ({
   );
 };
 
-export const SidebarBody: FC<{ children: ReactNode; className?: string }> = ({ children, className }) => {
+export const SidebarBody = (props: React.ComponentProps<typeof motion.div>) => {
   return (
     <>
-      <DesktopSidebar className={className}>{children}</DesktopSidebar>
-      <MobileSidebar className={className}>{children}</MobileSidebar>
+      <DesktopSidebar {...props} />
+      <MobileSidebar {...(props as React.ComponentProps<"div">)} />
     </>
   );
 };
 
-export const DesktopSidebar: FC<{ className?: string; children: ReactNode }> = ({ className, children }) => {
+export const DesktopSidebar = ({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<typeof motion.div>) => {
   const { open, setOpen, animate } = useSidebar();
   return (
     <motion.div
       className={cn(
-        "h-full hidden md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 flex-shrink-0 overflow-hidden rounded-tr-3xl",
+        "h-full px-4 py-4 hidden md:flex md:flex-col bg-neutral-100 dark:bg-neutral-800 w-[300px] flex-shrink-0",
         className
       )}
       animate={{
-        width: animate ? (open ? "300px" : "80px") : "300px",
+        width: animate ? (open ? "300px" : "60px") : "300px",
       }}
       onMouseEnter={() => setOpen(true)}
       onMouseLeave={() => setOpen(false)}
-      style={{
-        minWidth: animate ? (open ? 300 : 80) : 300,
-      }}
+      {...props}
     >
-      <div className="flex flex-col justify-center items-center h-full px-2 py-4">
-        {children}
-      </div>
+      {children}
     </motion.div>
   );
 };
 
-export const MobileSidebar: FC<{ className?: string; children: ReactNode }> = ({ className, children }) => {
+export const MobileSidebar = ({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) => {
   const { open, setOpen } = useSidebar();
   return (
     <>
       <div
         className={cn(
-          "h-10 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full",
-          className
+          "h-10 px-4 py-4 flex flex-row md:hidden items-center justify-between bg-neutral-100 dark:bg-neutral-800 w-full"
         )}
+        {...props}
       >
         <div className="flex justify-end z-20 w-full">
           <Menu
             className="text-neutral-800 dark:text-neutral-200 cursor-pointer"
-            size={24}
             onClick={() => setOpen(!open)}
           />
         </div>
@@ -140,7 +143,7 @@ export const MobileSidebar: FC<{ className?: string; children: ReactNode }> = ({
                 className="absolute right-10 top-10 z-50 text-neutral-800 dark:text-neutral-200 cursor-pointer"
                 onClick={() => setOpen(!open)}
               >
-                <X size={24} />
+                <X />
               </div>
               {children}
             </motion.div>
@@ -151,27 +154,35 @@ export const MobileSidebar: FC<{ className?: string; children: ReactNode }> = ({
   );
 };
 
-export const SidebarLink: FC<{ link: Links; className?: string }> = ({ link, className }) => {
-  const { open } = useSidebar();
-  const icon = React.isValidElement(link.icon)
-    ? React.cloneElement(link.icon, {
-        className: cn("w-8 h-8 text-neutral-700 dark:text-neutral-200"),
-      })
-    : link.icon;
-
+export const SidebarLink = ({
+  link,
+  className,
+  ...props
+}: {
+  link: Links;
+  className?: string;
+  props?: LinkProps;
+}) => {
+  const { open, animate } = useSidebar();
   return (
-    <Link href={link.href} legacyBehavior>
-      <a className={cn("flex items-center justify-center gap-2 py-3", className)}>
-        {icon}
-        <span
-          className={cn(
-            "text-neutral-700 dark:text-neutral-200 text-sm transition-opacity duration-200 whitespace-pre",
-            !open && "opacity-0"
-          )}
-        >
-          {link.label}
-        </span>
-      </a>
+    <Link
+      href={link.href}
+      className={cn(
+        "flex items-center justify-start gap-2 group/sidebar py-2",
+        className
+      )}
+      {...props}
+    >
+      {link.icon}
+      <motion.span
+        animate={{
+          display: animate ? (open ? "inline-block" : "none") : "inline-block",
+          opacity: animate ? (open ? 1 : 0) : 1,
+        }}
+        className="text-neutral-700 dark:text-neutral-200 text-sm group-hover/sidebar:translate-x-1 transition duration-150 whitespace-pre inline-block !p-0 !m-0"
+      >
+        {link.label}
+      </motion.span>
     </Link>
   );
 };
