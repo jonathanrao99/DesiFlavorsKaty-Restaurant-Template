@@ -27,12 +27,6 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           {/* Logo and Description */}
           <div className="space-y-4">
-            <Link href="/" className="inline-block">
-              <h2 className="flex items-center justify-center">
-                <span className="font-samarkan text-3xl text-desi-orange">Desi</span>
-                <span className="font-butler text-2xl font-bold ml-2 tracking-wide text-white-900">Flavors Katy</span>
-              </h2>
-            </Link>
             <div className="max-w-xs space-y-2">
               <p className="text-gray-300">
                 Join our newsletter for the latest updates and exclusive offers.
@@ -161,6 +155,14 @@ const Footer = () => {
           </div>
         </div>
 
+        <div className="text-center mb-4 md:mb-6">
+          <Link href="/" className="inline-block">
+            <h2 className="flex items-center justify-center w-[85vw] mx-auto">
+              <span className="font-samarkan text-[12vw] md:text-[10vw] text-desi-orange leading-none">Desi</span>
+              <span className="font-butler text-[10vw] md:text-[8vw] font-bold ml-2 tracking-tight text-white leading-none">Flavors Katy</span>
+            </h2>
+          </Link>
+        </div>
         <div className="border-t border-gray-800 mt-10 pt-8 text-center text-gray-400 text-sm">
           <p>© {currentYear} Desi Flavors Katy. All rights reserved.</p>
         </div>

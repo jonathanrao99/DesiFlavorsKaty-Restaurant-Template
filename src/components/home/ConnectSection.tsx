@@ -1,7 +1,6 @@
 import { Instagram, Facebook, Twitter, Youtube, MapPin, Clock, Phone, Mail, ExternalLink } from 'lucide-react';
 import ContactForm from '../contact/ContactForm';
-import { ContactInfo } from '../ui/ContactInfo';
-import { MotionDiv } from '../ui/MotionDiv';
+import { MotionDiv } from '../MotionDiv';
 import { motion } from 'framer-motion';
 import React from 'react';
 

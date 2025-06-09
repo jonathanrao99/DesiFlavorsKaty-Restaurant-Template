@@ -1,13 +1,10 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Button } from "@/components/ui/button";
+import { Button } from "@heroui/react";
 import { useCart } from "@/context/CartContext";
 import { CartItem } from "@/context/CartContext";
 import { useRouter } from 'next/navigation';
-import { toast } from '@/components/ui/use-toast';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/components/ui/select";
+import { addToast, Input } from '@heroui/react';
 import { MapPin } from 'lucide-react';
 import ReturningCustomer from '@/components/cart/ReturningCustomer';
 
@@ -126,11 +123,11 @@ const CartSummary = ({ items, deliveryMethod, setDeliveryMethod }: CartSummaryPr
     }
     if (deliveryMethod === 'delivery') {
       if (!deliveryAddress) {
-        toast({ title: 'Missing address', description: 'Please enter a delivery address before proceeding.', variant: 'destructive' });
+        addToast({ title: 'Missing address', description: 'Please enter a delivery address before proceeding.', color: 'danger' });
         return;
       }
       if (calculatedFee === null) {
-        toast({ title: 'Fee not calculated', description: 'Please calculate the delivery fee before proceeding.', variant: 'destructive' });
+        addToast({ title: 'Fee not calculated', description: 'Please calculate the delivery fee before proceeding.', color: 'danger' });
         return;
       }
     }
@@ -160,7 +157,7 @@ const CartSummary = ({ items, deliveryMethod, setDeliveryMethod }: CartSummaryPr
 
       {deliveryMethod === 'delivery' && (
         <div className="mt-4 space-y-2 relative">
-          <Label htmlFor="delivery-address">Delivery Address</Label>
+          <label htmlFor="delivery-address" className="block text-sm font-medium text-gray-700">Delivery Address</label>
           <div className="relative">
             <Input
               id="delivery-address"

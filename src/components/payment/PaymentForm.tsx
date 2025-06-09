@@ -6,9 +6,8 @@ import {
   CreditCardIcon,
   User
 } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@heroui/react";
+import { Input } from "@heroui/react";
 
 interface PaymentFormProps {
   cardName: string;
@@ -140,7 +139,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
       {/* Customer Info Fields */}
       <div className="space-y-4 mb-6 animate-fade-in-delay">
         <div className="space-y-2">
-          <Label htmlFor="customerName">Full Name</Label>
+          <label htmlFor="customerName" className="block text-sm font-medium text-gray-700">Full Name</label>
           <Input
             id="customerName"
             aria-invalid={!!customerNameError}
@@ -162,7 +161,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           )}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="customerEmail">Email Address</Label>
+          <label htmlFor="customerEmail" className="block text-sm font-medium text-gray-700">Email Address</label>
           <Input
             id="customerEmail"
             aria-invalid={!!customerEmailError}
@@ -186,7 +185,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           )}
         </div>
         <div className="space-y-2">
-          <Label htmlFor="customerPhone">Phone Number</Label>
+          <label htmlFor="customerPhone" className="block text-sm font-medium text-gray-700">Phone Number</label>
           <Input
             id="customerPhone"
             aria-invalid={!!customerPhoneError}
@@ -211,7 +210,7 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
         </div>
         {deliveryMethod === 'delivery' && (
           <div className="space-y-2">
-            <Label htmlFor="deliveryAddress">Delivery Address</Label>
+            <label htmlFor="deliveryAddress" className="block text-sm font-medium text-gray-700">Delivery Address</label>
             <Input
               id="deliveryAddress"
               aria-invalid={!!deliveryAddressError}
@@ -241,14 +240,14 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           {/* Card Details */}
           <h1 className="text-2xl font-display font-bold mb-4 mt-4">Card Details</h1>
           <div className="space-y-2">
-            <Label htmlFor="cardName">Name on Card</Label>
+            <label htmlFor="cardName" className="block text-sm font-medium text-gray-700">Name on Card</label>
             <div className="relative">
               <Input id="cardName" placeholder="John Smith" value={cardName} onChange={(e) => setCardName(e.target.value)} className="pl-10 rounded-half border-gray-300 shadow-sm transition-all focus:ring-2 focus:ring-desi-orange focus:outline-none" required />
               <User size={16} className="absolute left-3 top-3 text-gray-500" />
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="cardNumber">Card Number</Label>
+            <label htmlFor="cardNumber" className="block text-sm font-medium text-gray-700">Card Number</label>
             <div className="relative">
               <Input id="cardNumber" placeholder="4242 4242 4242 4242" value={cardNumber} onChange={handleCardNumberChange} maxLength={19} className="pl-10 rounded-half border-gray-300 shadow-sm transition-all focus:ring-2 focus:ring-desi-orange focus:outline-none" required />
               <CreditCardIcon size={16} className="absolute left-3 top-3 text-gray-500" />
@@ -256,18 +255,18 @@ const PaymentForm: React.FC<PaymentFormProps> = ({
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2 col-span-1">
-              <Label htmlFor="expiryDate">Expiry Date</Label>
+              <label htmlFor="expiryDate" className="block text-sm font-medium text-gray-700">Expiry Date</label>
               <div className="relative">
                 <Input id="expiryDate" placeholder="MM/YY" value={expiryDate} onChange={handleExpiryDateChange} maxLength={5} className="pl-10 rounded-half border-gray-300 shadow-sm transition-all focus:ring-2 focus:ring-desi-orange focus:outline-none" required />
                 <Calendar size={16} className="absolute left-3 top-3 text-gray-500" />
               </div>
             </div>
             <div className="space-y-2 col-span-1">
-              <Label htmlFor="cvv">CVV</Label>
+              <label htmlFor="cvv" className="block text-sm font-medium text-gray-700">CVV</label>
               <Input id="cvv" placeholder="123" value={cvv} onChange={(e) => setCvv(e.target.value.replace(/\D/g, ''))} maxLength={4} type="password" className="rounded-half border-gray-300 shadow-sm transition-all focus:ring-2 focus:ring-desi-orange focus:outline-none" required />
             </div>
             <div className="space-y-2 col-span-1">
-              <Label htmlFor="billingZip">Billing Zip</Label>
+              <label htmlFor="billingZip" className="block text-sm font-medium text-gray-700">Billing Zip</label>
               <Input id="billingZip" placeholder="12345" value={billingZip} onChange={(e) => setBillingZip(e.target.value.replace(/\D/g, ''))} maxLength={5} className="rounded-half border-gray-300 shadow-sm transition-all focus:ring-2 focus:ring-desi-orange focus:outline-none" required />
             </div>
           </div>

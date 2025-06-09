@@ -3,6 +3,7 @@ import NavbarWrapper from '@/components/NavbarWrapper';
 import FooterWrapper from '@/components/FooterWrapper';
 import { CartProvider } from '@/context/CartContext';
 import ReactQueryProvider from '@/components/ReactQueryProvider';
+import { HeroUIProvider, ToastProvider } from '@heroui/react';
 
 export const metadata = {
   title: 'Next.js',
@@ -19,9 +20,12 @@ export default function RootLayout({
       <body>
         <CartProvider>
           <ReactQueryProvider>
-            <NavbarWrapper />
-            {children}
-            <FooterWrapper />
+            <HeroUIProvider>
+              <ToastProvider />
+              <NavbarWrapper />
+              {children}
+              <FooterWrapper />
+            </HeroUIProvider>
           </ReactQueryProvider>
         </CartProvider>
       </body>

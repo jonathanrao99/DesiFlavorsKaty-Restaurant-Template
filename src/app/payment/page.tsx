@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
-import { toast } from '@/components/ui/use-toast';
+import { addToast } from '@heroui/react';
 import { submitOrder } from '@/services/orderService';
 import PaymentForm from '@/components/payment/PaymentForm';
 import OrderSummary from '@/components/payment/OrderSummary';
@@ -98,10 +98,10 @@ const Payment = () => {
     // Redirect if cart is empty
     if (cartItems.length === 0 && !paymentSuccess) {
       router.push('/cart');
-      toast({
+      addToast({
         title: "Cart is empty",
         description: "Please add items to your cart before proceeding to payment",
-        variant: "destructive",
+        color: "danger",
       });
     }
   }, [cartItems.length, router, paymentSuccess, deliveryMethod, getCartTotal]);
@@ -147,25 +147,25 @@ const Payment = () => {
       clearCart(); setPaymentSuccess(true); localStorage.removeItem('deliveryMethod');
       setTimeout(() => {
         router.push('/');
-        toast({ title: 'Order placed successfully!', description: 'Thank you for your order. Your food will be ready soon!' });
+        addToast({ title: 'Order placed successfully!', description: 'Thank you for your order. Your food will be ready soon!' });
       }, 3000);
     } catch (error: any) {
       console.error('Payment error:', error);
-      toast({ title: 'Payment failed', description: error.message || 'Please try again.', variant: 'destructive' });
+      addToast({ title: 'Payment failed', description: error.message || 'Please try again.', color: 'danger' });
       setIsProcessing(false);
     }
   };
 
   const handleWalletPayment = async (method: WalletMethod) => {
     if (!method) {
-      toast({ title: 'Payment not ready', variant: 'destructive' });
+      addToast({ title: 'Payment not ready', color: 'danger' });
       return;
     }
     try {
       const tokenResult = await method.tokenize();
       if (tokenResult.status !== 'OK') {
         const msg = tokenResult.errors?.[0]?.message || 'Tokenization failed';
-        toast({ title: 'Payment error', description: msg, variant: 'destructive' });
+        addToast({ title: 'Payment error', description: msg, color: 'danger' });
         return;
       }
       await processPayment(tokenResult.token);
@@ -180,35 +180,35 @@ const Payment = () => {
     
     // Validate customer info
     if (!customerName || !customerEmail || !customerPhone) {
-      toast({
+      addToast({
         title: "Missing information",
         description: "Please fill in all customer information",
-        variant: "destructive",
+        color: "danger",
       });
       return;
     }
     
     // Validate delivery address for delivery orders
     if (deliveryMethod === 'delivery' && !deliveryAddress) {
-      toast({
+      addToast({
         title: "Missing address",
         description: "Please provide your delivery address",
-        variant: "destructive",
+        color: "danger",
       });
       return;
     }
     
     try {
       if (!card) {
-        toast({ title: 'Payment not ready', variant: 'destructive' });
-      return;
-    }
+        addToast({ title: 'Payment not ready', color: 'danger' });
+        return;
+      }
       const tokenResult = await card.tokenize();
       if (tokenResult.status !== 'OK') {
         const msg = tokenResult.errors?.[0]?.message || 'Tokenization failed';
-        toast({ title: 'Payment error', description: msg, variant: 'destructive' });
-      return;
-    }
+        addToast({ title: 'Payment error', description: msg, color: 'danger' });
+        return;
+      }
       await processPayment(tokenResult.token);
     } catch (error: any) {
       console.error('Payment error:', error);

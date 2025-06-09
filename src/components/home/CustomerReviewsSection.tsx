@@ -76,14 +76,13 @@ const CustomerReviewsSection = () => {
   );
 
   return (
-    <section className="py-20 bg-desi-orange/5 relative overflow-visible">
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute inset-0" style={{
-          backgroundImage: 'radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0)',
-          backgroundSize: '40px 40px'
-        }}></div>
-      </div>
+    <section className="py-16 bg-gradient-to-b from-desi-cream via-white/80 to-white relative overflow-hidden">
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"
+      />
 
       <div className="container mx-auto px-4 md:px-6 relative">
         <motion.div 

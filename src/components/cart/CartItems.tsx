@@ -1,10 +1,6 @@
-import { Trash2, Plus, Minus, Edit } from 'lucide-react';
-import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { Trash2, Plus, Minus, Edit, ShoppingBag } from 'lucide-react';
 import { useState } from 'react';
-import { ShoppingBag } from 'lucide-react';
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Textarea } from '@heroui/react';
 
 interface CartItem {
   id: number;
@@ -142,17 +138,15 @@ const CartItems = ({ items, onRemove, onUpdateQuantity, onUpdateInstructions }: 
         ))}
       </div>
 
-      {/* Edit Instructions Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-md bg-white">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-display pb-2">
-              Special Instructions
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
+      {/* Edit Instructions Modal */}
+      <Modal isOpen={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} size="sm">
+        <ModalContent className="sm:max-w-md bg-white">
+          <ModalHeader>
+            <h2 className="text-xl font-display pb-2">Special Instructions</h2>
+          </ModalHeader>
+          <ModalBody className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label htmlFor="instructions">Add special preparation instructions:</Label>
+              <label htmlFor="instructions" className="block text-sm font-medium text-gray-700">Add special preparation instructions:</label>
               <Textarea
                 id="instructions"
                 placeholder="Any special preparation instructions? (e.g., less spicy, no cilantro)"
@@ -161,17 +155,17 @@ const CartItems = ({ items, onRemove, onUpdateQuantity, onUpdateInstructions }: 
                 className="min-h-[80px]"
               />
             </div>
-            <div className="pt-4 flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
+            <ModalFooter className="pt-4 flex justify-end space-x-2">
+              <Button variant="flat" onPress={() => setIsEditDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button onClick={handleSaveInstructions} className="bg-desi-orange hover:bg-desi-orange/90 text-white">
+              <Button onPress={handleSaveInstructions} className="bg-desi-orange hover:bg-desi-orange/90 text-white">
                 Save Instructions
               </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+            </ModalFooter>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </div>
   );
 };

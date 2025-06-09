@@ -5,23 +5,20 @@ import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag, Edit } from 'lucide-react'
 import { useCart } from '@/context/CartContext';
 import { useScrollToTop } from '@/hooks/useScrollToTop';
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { toast } from '@/components/ui/use-toast';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+  Modal,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  Button,
+  Textarea,
+  Badge
+} from '@heroui/react';
+import { motion } from 'framer-motion';
+import { fadeInUp } from '@/utils/motion.variants';
 import CartSummary from '@/components/cart/CartSummary';
 import CartItems from '@/components/cart/CartItems';
 import ReturningCustomer from '@/components/cart/ReturningCustomer';
-import { motion } from 'framer-motion';
-import { fadeInUp } from '@/utils/motion.variants';
-import { Badge } from '@/components/ui/badge';
 
 const Cart = () => {
   useScrollToTop();
@@ -67,8 +64,8 @@ const Cart = () => {
           <div className="flex items-center space-x-4">
             <Button
               variant="ghost"
-              size="icon"
-              onClick={() => router.back()}
+              size="sm"
+              onPress={() => router.back()}
               className="text-desi-orange"
             >
               <ArrowLeft className="h-6 w-6" />
@@ -94,7 +91,7 @@ const Cart = () => {
         >
           {/* Loyalty Banner always visible, less vertical padding */}
           <div className="flex justify-center mb-8">
-            <Badge variant="outline" className="bg-orange-100 text-orange-800 text-base px-4 py-1 rounded-xl font-medium">
+            <Badge variant="flat" className="bg-orange-100 text-orange-800 text-base px-4 py-1 rounded-xl font-medium">
               Earn 1 loyalty point for every $1 spent. Accumulate 100 points to redeem $10 off your order!
             </Badge>
         </div>
@@ -122,36 +119,34 @@ const Cart = () => {
         </motion.div>
       </section>
 
-      {/* Edit Instructions Dialog */}
-      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
-        <DialogContent className="sm:max-w-md rounded-xl">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-display">
-              Special Instructions
-            </DialogTitle>
-          </DialogHeader>
-          <div className="space-y-4 py-2">
+      {/* Edit Instructions Modal */}
+      <Modal isOpen={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} size="sm">
+        <ModalContent className="sm:max-w-md rounded-xl">
+          <ModalHeader>
+            <h2 className="text-xl font-display">Special Instructions</h2>
+          </ModalHeader>
+          <ModalBody className="space-y-4 py-2">
             <div className="space-y-2">
-              <Label htmlFor="instructions">Add special preparation instructions:</Label>
+              <label htmlFor="instructions" className="block text-sm font-medium text-gray-700">Add special preparation instructions:</label>
               <Textarea
                 id="instructions"
                 placeholder="Any special preparation instructions? (e.g., less spicy, no cilantro)"
                 value={editItem?.instructions || ''}
-                onChange={(e) => editItem && setEditItem({...editItem, instructions: e.target.value})}
+                onChange={(e) => editItem && setEditItem({ ...editItem, instructions: e.target.value })}
                 className="min-h-[80px] rounded-xl border-gray-300 focus:border-desi-orange focus:ring-2 focus:ring-desi-orange/20"
               />
             </div>
-            <div className="pt-4 flex justify-end space-x-2">
-              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)} className="rounded-xl">
+            <ModalFooter className="pt-4 flex justify-end space-x-2">
+              <Button variant="flat" onPress={() => setIsEditDialogOpen(false)} className="rounded-xl">
                 Cancel
               </Button>
-              <Button onClick={handleSaveInstructions} className="bg-desi-orange hover:bg-desi-orange/90 text-white rounded-xl">
+              <Button onPress={handleSaveInstructions} className="bg-desi-orange hover:bg-desi-orange/90 text-white rounded-xl">
                 Save Instructions
               </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+            </ModalFooter>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
     </>
   );
 };

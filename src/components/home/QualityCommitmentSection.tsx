@@ -26,9 +26,14 @@ const FoodTruckExperience = () => {
   ];
 
   return (
-    <section className="py-20 bg-desi-cream relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-white via-desi-cream/80 to-desi-cream relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"></div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"
+      />
       
       <div className="container mx-auto px-4 md:px-6 relative">
         <motion.div
@@ -55,7 +60,7 @@ const FoodTruckExperience = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300"
+              className="bg-white p-8 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 hover:scale-105"
             >
               <div className="flex justify-center mb-4">
                 {feature.icon}
@@ -84,7 +89,7 @@ const FoodTruckExperience = () => {
           <a
             href="/locations"
             className="inline-flex items-center justify-center px-6 py-3 bg-desi-orange hover:bg-desi-orange/90 text-white rounded-full 
-              font-medium transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+              font-medium transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5 transition-transform duration-300 hover:scale-105"
           >
             View Our Schedule
           </a>
@@ -123,9 +128,14 @@ const SignatureDishes = () => {
   ];
 
   return (
-    <section className="py-20 bg-desi-cream relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-white via-desi-cream/80 to-desi-cream relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"></div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"
+      />
       
       <div className="container mx-auto px-4 md:px-6 relative">
         <motion.div
@@ -255,9 +265,14 @@ const DailySpecials = () => {
   ];
 
   return (
-    <section className="py-20 bg-desi-cream relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-white via-desi-cream/80 to-desi-cream relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"></div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"
+      />
       
       <div className="container mx-auto px-4 md:px-6 relative">
         <motion.div
@@ -372,9 +387,14 @@ const CustomerReviews = () => {
   ];
 
   return (
-    <section className="py-20 bg-desi-cream relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-white via-desi-cream/80 to-desi-cream relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"></div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"
+      />
       
       <div className="container mx-auto px-4 md:px-6 relative">
         <motion.div
@@ -477,9 +497,14 @@ const CateringAndEvents = () => {
   ];
 
   return (
-    <section className="py-20 bg-desi-cream relative overflow-hidden">
+    <section className="py-20 bg-gradient-to-b from-white via-desi-cream/80 to-desi-cream relative overflow-hidden">
       {/* Background decoration */}
-      <div className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"></div>
+      <motion.div
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"
+      />
       
       <div className="container mx-auto px-4 md:px-6 relative">
         <motion.div

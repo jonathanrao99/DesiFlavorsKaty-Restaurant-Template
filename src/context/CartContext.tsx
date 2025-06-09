@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { toast } from '@/components/ui/use-toast';
+import { addToast } from '@heroui/react';
 
 export interface CartItem {
   id: number;
@@ -63,7 +63,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           updatedItems[existingItemIndex].specialInstructions = item.specialInstructions;
         }
         
-        toast({
+        addToast({
           title: 'Item quantity updated',
           description: `${item.name} quantity updated to ${updatedItems[existingItemIndex].quantity}`,
         });
@@ -83,7 +83,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           imageSrc: item.imageSrc
         };
         
-        toast({
+        addToast({
           title: 'Item added to cart',
           description: `${item.name} has been added to your cart`,
         });
@@ -97,7 +97,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCartItems(prevItems => {
       const itemToRemove = prevItems.find(item => item.id === id);
       if (itemToRemove) {
-        toast({
+        addToast({
           title: 'Item removed',
           description: `${itemToRemove.name} has been removed from your cart`,
         });
@@ -127,7 +127,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     );
     
     const itemName = cartItems.find(item => item.id === id)?.name || 'Item';
-    toast({
+    addToast({
       title: 'Instructions updated',
       description: `Special instructions for ${itemName} have been updated`,
     });
@@ -135,7 +135,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
   const clearCart = () => {
     setCartItems([]);
-    toast({
+    addToast({
       title: 'Cart cleared',
       description: 'All items have been removed from your cart',
     });

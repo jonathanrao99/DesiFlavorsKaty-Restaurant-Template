@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;600&family=Yeseva+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600&display=swap');
+
+/* Google Font classes */
+.font-yeseva {
+  font-family: 'Yeseva One', serif;
+}
+
+.font-josefin {
+  font-family: 'Josefin Sans', sans-serif;
+}
+
+.font-source-pro {
+  font-family: 'Source Sans Pro', sans-serif;
+}
+
 /* Custom styles for biryani positioning */
 .traditional-recipes-section {
   position: relative;

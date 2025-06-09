@@ -2,7 +2,7 @@ import { ShoppingCart, ImageIcon, ArrowRight } from 'lucide-react';
 import { MenuItem } from '@/hooks/useMenuItems';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@/components/ui/button';
+import { Button } from '@heroui/react';
 import { cn } from '@/lib/utils';
 
 interface OrderItemCardProps {

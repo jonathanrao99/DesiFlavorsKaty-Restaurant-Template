@@ -4,9 +4,10 @@ import { MenuItem } from '@/hooks/useMenuItems';
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { Button } from '@/components/ui/button';
+import { InteractiveHoverButton } from '@/components/magicui/interactive-hover-button';
 import OrderDialog from '@/components/order/OrderDialog';
 import { fadeInUp } from '@/utils/motion.variants';
+import { SpinningText } from '@/components/magicui/spinning-text';
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -40,10 +41,19 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
         variants={fadeInUp}
         initial="hidden"
         animate="visible"
-        className="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg h-[400px] flex flex-col"
+        className="relative bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg h-[400px] flex flex-col"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
+        {(() => {
+          const name = item.name.toLowerCase();
+          const highlight = ['chicken dum biryani', 'butter chicken', 'samosa'].some(k => name.includes(k));
+          return highlight ? (
+            <SpinningText className="text-desi-orange bg-transparent text-[0.6rem] z-20">
+              bestseller • bestseller •
+            </SpinningText>
+          ) : null;
+        })()}
         <div className="relative h-56 w-full">
           {imageLoading && (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -102,16 +112,12 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
                 <ArrowRight className="w-4 h-4 text-gray-400" />
               </span>
             ) : (
-            <div
-              onClick={() => setIsDialogOpen(true)}
-              className="text-desi-orange hover:text-desi-orange/80 transition-colors flex items-center space-x-1 font-medium cursor-pointer text-base"
-                tabIndex={0}
-                role="button"
-                aria-disabled={false}
-            >
-              <span>Order Now</span>
-              <ArrowRight className="w-4 h-4" />
-            </div>
+              <InteractiveHoverButton
+                onClick={() => setIsDialogOpen(true)}
+                className="bg-white text-desi-orange hover:bg-desi-orange hover:text-white"
+              >
+                Order Now
+              </InteractiveHoverButton>
             )}
           </div>
         </div>

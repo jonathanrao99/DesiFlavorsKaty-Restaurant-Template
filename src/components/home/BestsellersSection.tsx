@@ -3,6 +3,7 @@ import { ChevronRight, Star } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState, useEffect } from 'react';
 import BestsellerCard from '@/components/BestsellerCard';
+import { SpinningText } from '@/components/magicui/spinning-text';
 import { fadeInUp } from '@/utils/motion.variants';
 import MagneticButton from '@/components/MagneticButton';
 import AnimatedCardGrid, { AnimatedCard } from '@/components/AnimatedCardGrid';
@@ -53,12 +54,21 @@ const BestsellersSection = () => {
   return (
     <section 
       ref={sectionRef}
-      className="pt-8 pb-16 md:pt-12 md:pb-20 lg:pt-16 lg:pb-24 bg-gradient-to-b from-white to-orange-50 relative overflow-hidden"
+      className="pt-8 pb-16 md:pt-12 md:pb-20 lg:pt-16 lg:pb-24 bg-gradient-to-b from-transparent via-orange-50 to-white relative overflow-hidden"
     >
-      {/* Decorative elements */}
-      <div className="absolute top-0 left-0 w-24 h-24 bg-desi-orange/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-      <div className="absolute bottom-0 right-0 w-48 h-48 bg-desi-orange/5 rounded-full translate-x-1/3 translate-y-1/3"></div>
-      <div className="absolute top-1/4 right-10 w-12 h-12 bg-desi-orange/10 rounded-full"></div>
+      {/* Decorative elements with parallax */}
+      <motion.div 
+        className="absolute top-0 left-0 w-24 h-24 bg-desi-orange/5 rounded-full -translate-x-1/2 -translate-y-1/2"
+        style={{ y: scrollYProgress ? scrollYProgress.get() * 20 : 0 }}
+      />
+      <motion.div 
+        className="absolute bottom-0 right-0 w-48 h-48 bg-desi-orange/5 rounded-full translate-x-1/3 translate-y-1/3"
+        style={{ y: scrollYProgress ? -scrollYProgress.get() * 20 : 0 }}
+      />
+      <motion.div 
+        className="absolute top-1/4 right-10 w-12 h-12 bg-desi-orange/10 rounded-full"
+        style={{ y: scrollYProgress ? scrollYProgress.get() * 10 : 0 }}
+      />
       
       <motion.div 
         className="absolute left-10 bottom-20 w-3 h-3 rounded-full bg-desi-orange/40"
@@ -153,7 +163,17 @@ const BestsellersSection = () => {
             <AnimatedCardGrid columns={{ sm: 1, md: 2, lg: 3 }} gap={8} staggerDelay={0.15}>
               {bestsellers.map((item, index) => (
                 <AnimatedCard key={index}>
-                  <BestsellerCard {...item} />
+                  <motion.div
+                    whileHover={{ scale: 1.04, boxShadow: '0 4px 32px #ffb34733' }}
+                    transition={{ type: 'spring', stiffness: 200 }}
+                  >
+                    <div className="relative">
+                      <SpinningText className="text-black bg-transparent text-[0.6rem]">
+                        bestseller • bestseller • bestseller •
+                      </SpinningText>
+                      <BestsellerCard {...item} />
+                    </div>
+                  </motion.div>
                 </AnimatedCard>
               ))}
             </AnimatedCardGrid>
@@ -169,7 +189,7 @@ const BestsellersSection = () => {
             className="mt-10 md:mt-12 text-center"
           >
             <Link href="/menu">
-              <MagneticButton className="inline-flex items-center text-desi-orange hover:text-desi-orange/80 font-medium transition-colors group">
+              <MagneticButton className="inline-flex items-center text-desi-orange hover:text-desi-orange/80 font-medium transition-colors group transition-transform duration-300 hover:scale-105">
                 <span className="border-b border-desi-orange/30 group-hover:border-desi-orange/80 transition-colors pb-1">View Full Menu</span>
                 <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform duration-300" />
               </MagneticButton>

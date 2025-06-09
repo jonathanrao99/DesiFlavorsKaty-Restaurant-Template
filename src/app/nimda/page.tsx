@@ -1,8 +1,8 @@
 'use client';
 import { useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { InputOTP } from '@/components/ui/input-otp';
-import { Button } from '@/components/ui/button';
+import { InputOtp } from '@heroui/input-otp';
+import { Button } from '@heroui/react';
 import { Confetti } from '@/components/magicui/confetti';
 import { motion } from 'framer-motion';
 
@@ -136,29 +136,12 @@ export default function NimdaAuthPage() {
           )}
           <h2 className="text-2xl font-display font-bold text-center text-desi-orange">Admin Login</h2>
 
-          <InputOTP
-            maxLength={6}
+          <InputOtp
+            length={6}
             value={code}
-            onChange={handleOTPChange}
+            onValueChange={handleOTPChange}
             containerClassName="justify-center"
             className="rounded-xl"
-            render={({ slots }) => (
-              <div className="flex items-center gap-2">
-                {slots.map((slot, i) => (
-                  <div
-                    key={i}
-                    className={`relative flex h-12 w-12 items-center justify-center border border-gray-300 text-xl font-mono rounded-xl shadow-sm transition-all duration-300 ease-in-out bg-white ${slot.isActive ? 'ring-2 ring-desi-orange border-desi-orange scale-105' : ''}`}
-                  >
-                    {slot.char ? '*' : ''}
-                    {slot.hasFakeCaret && (
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="h-4 w-px bg-black animate-caret-blink" />
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            )}
           />
 
           {error && (
