@@ -28,13 +28,12 @@ const MenuHeader = () => {
         className="absolute inset-0 z-0 will-change-transform"
         transition={{ type: 'spring', stiffness: 100, damping: 30 }}
       >
-        <div className="absolute inset-0 bg-black/60 z-10"></div>
+        <div className="absolute inset-0 bg-black/40 z-10"></div>
         <Image
           src="/biryani.png"
           alt="Desi Flavors Biryani"
-          layout="fill"
-          objectFit="cover"
-          className="transform-gpu"
+          fill
+          className="transform-gpu object-cover"
           priority
         />
       </motion.div>
@@ -60,7 +59,7 @@ const MenuHeader = () => {
             transition={{ duration: 0.7, delay: 0.5 }}
             className="mb-6 md:mb-8"
           >
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight leading-tight">
+            <h1 className="text-4xl md:text-4xl lg:text-7xl font-against font-bold tracking-tight leading-tight">
               <span className="text-white block">Explore Our Menu</span>
             </h1>
           </motion.div>
@@ -96,13 +95,13 @@ const MenuHeader = () => {
             className="flex flex-wrap items-center justify-center gap-6"
           >
             <Link href="https://www.order.store/store/desi-flavors-katy-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <Image src="/ubereats.png" alt="Uber Eats" width={140} height={40} objectFit="contain" />
+              <Image src="/ubereats.png" alt="Uber Eats" width={140} height={40} className="object-contain" />
             </Link>
             <Link href="http://menus.fyi/10883320" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <Image src="/Grubhub.webp" alt="Grubhub" width={140} height={40} objectFit="contain" />
+              <Image src="/Grubhub.webp" alt="Grubhub" width={140} height={40} className="object-contain" />
             </Link>
             <Link href="https://order.online/business/desi-flavors-katy-14145277" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <Image src="/Doordash.webp" alt="DoorDash" width={140} height={40} objectFit="contain" />
+              <Image src="/Doordash.webp" alt="DoorDash" width={140} height={40} className="object-contain" />
             </Link>
           </motion.div>
         </div>

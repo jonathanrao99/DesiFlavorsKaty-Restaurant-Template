@@ -36,7 +36,9 @@ export async function GET() {
   // 1. Fetch menu items from Supabase
   const { data: items, error } = await supabase
     .from('menu_items')
-    .select('*');
+    .select(
+      'id, name, description, price, isvegetarian, isspicy, category, menu_img, sold_out, square_variation_id'
+    );
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   if (!items) return NextResponse.json([], { status: 200 });
 
@@ -60,5 +62,10 @@ export async function GET() {
     isSoldOut: !!item.sold_out || (item.square_variation_id ? !squareAvailability[item.square_variation_id] : false)
   }));
 
-  return NextResponse.json(merged);
+  return NextResponse.json(merged, {
+    status: 200,
+    headers: {
+      'Cache-Control': 'public, max-age=300, stale-while-revalidate=59'
+    }
+  });
 } 

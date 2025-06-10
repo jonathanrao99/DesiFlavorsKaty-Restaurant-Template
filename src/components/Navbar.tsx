@@ -61,6 +61,12 @@ const Navbar = () => {
     }
   }, [cartItems]);
 
+  // Prevent hydration mismatch for cart badge
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    setHasMounted(true);
+  }, []);
+
   // Count total items in cart
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
   
@@ -70,7 +76,7 @@ const Navbar = () => {
         <nav className="hidden md:flex items-center space-x-8 flex-1 justify-start">
           <Link 
             href="/menu" 
-            className={`font-display font-semibold uppercase tracking-wider text-lg px-2 py-1 rounded transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-gray-900 hover:text-desi-orange'}`}
+            className={`font-against font-semibold uppercase tracking-wider text-lg px-2 py-1 rounded transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-gray-900 hover:text-desi-orange'}`}
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('/menu');
@@ -80,7 +86,7 @@ const Navbar = () => {
           </Link>
           <Link 
             href="/catering" 
-            className={`font-display font-semibold uppercase tracking-wider text-lg px-2 py-1 rounded transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-gray-900 hover:text-desi-orange'}`}
+            className={`font-against font-semibold uppercase tracking-wider text-lg px-2 py-1 rounded transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-gray-900 hover:text-desi-orange'}`}
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('/catering');
@@ -100,8 +106,8 @@ const Navbar = () => {
               handleNavClick('/');
             }}
           >
-            <span className="font-samarkan text-3xl text-desi-orange">Desi</span>
-            <span className={`font-butler text-2xl font-bold ml-2 tracking-wide transition-colors duration-300 ${!isScrolled ? 'text-white' : 'text-gray-900'}`}>Flavors Katy</span>
+            <span className="font-samarkan text-4xl text-desi-orange">Desi</span>
+            <span className={`font-against text-2xl font-bold ml-2 tracking-wide transition-colors duration-300 ${!isScrolled ? 'text-white' : 'text-gray-900'}`}>Flavors Katy</span>
           </Link>
         </div>
 
@@ -109,7 +115,7 @@ const Navbar = () => {
         <nav className="hidden md:flex items-center space-x-8 flex-1 justify-end">
           <Link 
             href="/blog" 
-            className={`font-display font-semibold uppercase tracking-wider text-lg px-2 py-1 rounded transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-gray-900 hover:text-desi-orange'}`}
+            className={`font-against font-semibold uppercase tracking-wider text-lg px-2 py-1 rounded transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-gray-900 hover:text-desi-orange'}`}
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('/blog');
@@ -119,7 +125,7 @@ const Navbar = () => {
           </Link>
           <Link 
             href="/about" 
-            className={`font-display font-semibold uppercase tracking-wider text-lg px-2 py-1 rounded transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-gray-900 hover:text-desi-orange'}`}
+            className={`font-against font-semibold uppercase tracking-wider text-lg px-2 py-1 rounded transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-gray-900 hover:text-desi-orange'}`}
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('/about');
@@ -132,7 +138,7 @@ const Navbar = () => {
               size={20} 
               className={`transition-all duration-300 group-hover:-rotate-12 group-hover:text-desi-orange ${isCartBouncing ? 'animate-bounce' : ''} ${!isScrolled ? 'text-white' : 'text-gray-900'}`}
             />
-            {itemCount > 0 && <span className="absolute -top-2 -right-2 bg-desi-orange text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            {hasMounted && itemCount > 0 && <span className="absolute -top-2 -right-2 bg-desi-orange text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 {itemCount}
               </span>}
           </Link>
@@ -145,7 +151,7 @@ const Navbar = () => {
               size={20} 
               className={`transition-colors duration-300 ${!isScrolled ? 'text-white' : 'text-desi-black'} ${isCartBouncing ? 'animate-bounce' : ''}`}
             />
-            {itemCount > 0 && <span className="absolute -top-2 -right-2 bg-desi-orange text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            {hasMounted && itemCount > 0 && <span className="absolute -top-2 -right-2 bg-desi-orange text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 {itemCount}
               </span>}
           </Link>

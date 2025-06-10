@@ -1,5 +1,7 @@
 import { motion } from 'framer-motion';
 import { BookOpen, Leaf, Star } from 'lucide-react';
+import Image from 'next/image';
+import { Card, CardHeader, CardBody } from '@heroui/react';
 
 const pillars = [
   {
@@ -25,15 +27,21 @@ export default function DesiExperienceSection() {
       {/* Soft gradient background with faint spice overlay */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute inset-0 bg-gradient-to-tr from-desi-orange/10 via-white/60 to-yellow-100/40" />
-        <img
+        <Image
           src="/Ingredients/mint-removebg-preview.png"
           alt="Spice watermark"
+          width={112}
+          height={112}
           className="absolute top-8 left-16 w-28 opacity-10 select-none pointer-events-none"
+          loading="lazy"
         />
-        <img
+        <Image
           src="/Ingredients/cinamon-removebg-preview.png"
           alt="Spice watermark"
+          width={128}
+          height={128}
           className="absolute bottom-8 right-16 w-32 opacity-10 select-none pointer-events-none"
+          loading="lazy"
         />
       </div>
       <div className="relative z-10 w-full max-w-5xl mx-auto px-4 py-20 flex flex-col items-center text-center">
@@ -58,14 +66,19 @@ export default function DesiExperienceSection() {
           {pillars.map((pillar, i) => (
             <motion.div
               key={pillar.title}
-              className="bg-white rounded-2xl px-8 py-10 shadow-lg flex flex-col items-center text-center border border-desi-orange/10 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300"
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 + i * 0.12, type: 'spring' }}
             >
-              <div className="mb-4">{pillar.icon}</div>
-              <div className="text-xl font-semibold text-desi-black mb-2">{pillar.title}</div>
-              <div className="text-gray-700 text-base">{pillar.desc}</div>
+              <Card className="rounded-2xl px-8 py-10 shadow-lg border border-desi-orange/10 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 flex flex-col items-center text-center bg-white">
+                <CardHeader className="mb-4 flex flex-col items-center">
+                  {pillar.icon}
+                </CardHeader>
+                <CardBody>
+                  <div className="text-xl font-semibold text-desi-black mb-2">{pillar.title}</div>
+                  <div className="text-gray-700 text-base">{pillar.desc}</div>
+                </CardBody>
+              </Card>
             </motion.div>
           ))}
         </div>
@@ -78,7 +91,7 @@ export default function DesiExperienceSection() {
         >
           <div className="text-desi-orange font-semibold text-lg mb-2">See what our customers say</div>
           <div className="bg-white/90 border border-desi-orange/10 rounded-xl px-6 py-4 shadow text-gray-700 max-w-xl italic">
-            “Desi Flavors never disappoints! The food is always fresh and the staff is so welcoming.”
+            "Desi Flavors never disappoints! The food is always fresh and the staff is so welcoming."
           </div>
           {/* <a href="#reviews" className="mt-4 inline-block text-desi-orange font-medium hover:underline transition-colors">Read Reviews</a> */}
         </motion.div>
@@ -86,3 +99,4 @@ export default function DesiExperienceSection() {
     </section>
   );
 } 
+ 

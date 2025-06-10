@@ -48,21 +48,21 @@ export default function MenuClient() {
   }, [addToCart]);
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
+      return (
+        <div className="flex items-center justify-center min-h-[400px]">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
+        </div>
+      );
+    }
+    if (error) {
+      return (
+        <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-red-500">Error loading menu items: {error}</div>
-      </div>
-    );
-  }
+        </div>
+      );
+    }
 
-  return (
+      return (
     <div className="min-h-screen bg-desi-cream">
       <div className="container mx-auto px-4 py-8">
         {/* Filter Pills and Search */}
@@ -70,19 +70,19 @@ export default function MenuClient() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => setVegetarianOnly(!vegetarianOnly)}
-              className={`px-3 py-1 rounded-full border transition ${vegetarianOnly ? 'bg-green-500 border-green-500 text-white' : 'bg-white border-green-500 text-green-500'}`}
+              className={`px-3 py-1 rounded-full border transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${vegetarianOnly ? 'bg-green-500 border-green-500 text-white' : 'bg-white border-green-500 text-green-500'}`}
             >
-              Vegetarian
+              <span role="img" aria-label="Vegetarian">🥦</span> Vegetarian
             </button>
             <button
               onClick={() => setSpicyOnly(!spicyOnly)}
-              className={`px-3 py-1 rounded-full border transition ${spicyOnly ? 'bg-red-500 border-red-500 text-white' : 'bg-white border-red-500 text-red-500'}`}
+              className={`px-3 py-1 rounded-full border transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${spicyOnly ? 'bg-red-500 border-red-500 text-white' : 'bg-white border-red-500 text-red-500'}`}
             >
-              Spicy
+              <span role="img" aria-label="Spicy">🔥</span> Spicy
             </button>
             <button
               onClick={() => setUnder10Only(!under10Only)}
-              className={`${under10Only ? 'bg-desi-orange text-white border-desi-orange' : 'bg-white border-desi-orange text-desi-orange'} px-3 py-1 rounded-full border transition`}
+              className={`px-3 py-1 rounded-full border transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${under10Only ? 'bg-desi-orange border-desi-orange text-white' : 'bg-white border-desi-orange text-desi-orange'}`}
             >
               Under $10
             </button>
@@ -93,7 +93,7 @@ export default function MenuClient() {
               value={searchFilter}
               onChange={e => setSearchFilter(e.target.value)}
               placeholder="Search..."
-              className="pr-10 pl-3 py-1 border border-gray-300 rounded-full focus:outline-none"
+              className="pr-10 pl-3 py-1 border border-desi-orange rounded-full focus:outline-none focus:ring-2 focus:ring-desi-orange transition-colors"
             />
             <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-desi-orange cursor-pointer" />
           </div>
@@ -105,7 +105,7 @@ export default function MenuClient() {
               title={category}
               classNames={{
                 base: 'border-0 rounded-none',
-                heading: 'w-full text-left font-bold py-4 px-0 bg-transparent no-underline hover:text-desi-orange focus:outline-none',
+                heading: 'w-full text-left font-against font-bold py-0.5 md:py-1 px-0 text-base md:text-xl bg-transparent no-underline hover:text-desi-orange focus:outline-none',
                 content: 'px-0 pb-4 pt-0'
               }}
             >

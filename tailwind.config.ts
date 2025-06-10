@@ -69,12 +69,20 @@ export default {
     				cream: '#FFF8F0',
     				gray: '#2F2F2F',
     				'light-orange': '#FFB085'
+    			},
+    			chart: {
+    				'1': 'hsl(var(--chart-1))',
+    				'2': 'hsl(var(--chart-2))',
+    				'3': 'hsl(var(--chart-3))',
+    				'4': 'hsl(var(--chart-4))',
+    				'5': 'hsl(var(--chart-5))'
     			}
     		},
     		borderRadius: {
     			lg: 'var(--radius)',
     			md: 'calc(var(--radius) - 2px)',
-    			sm: 'calc(var(--radius) - 4px)'
+    			sm: 'calc(var(--radius) - 4px)',
+    			half: '50%'
     		},
     		fontFamily: {
     			sans: [
@@ -160,6 +168,14 @@ export default {
     				'20%,50%': {
     					opacity: '0'
     				}
+    			},
+    			'gradient-x': {
+    				'0%, 100%': {
+    					backgroundPosition: '0% 50%'
+    				},
+    				'50%': {
+    					backgroundPosition: '100% 50%'
+    				}
     			}
     		},
     		animation: {
@@ -170,9 +186,10 @@ export default {
     			'scale-up': 'scale-up 0.5s ease-out forwards',
     			float: 'float 6s ease-in-out infinite',
     			'pulse-subtle': 'pulse-subtle 3s ease-in-out infinite',
-    			'caret-blink': 'caret-blink 1.25s ease-out infinite'
+    			'caret-blink': 'caret-blink 1.25s ease-out infinite',
+    			'gradient-x': 'gradient-x 8s ease infinite'
     		}
     	}
     },
-	plugins: [animatePlugin],
+	plugins: [animatePlugin, require("tailwindcss-animate")],
 } satisfies Config;

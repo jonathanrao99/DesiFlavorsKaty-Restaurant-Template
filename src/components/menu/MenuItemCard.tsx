@@ -8,6 +8,7 @@ import { InteractiveHoverButton } from '@/components/magicui/interactive-hover-b
 import OrderDialog from '@/components/order/OrderDialog';
 import { fadeInUp } from '@/utils/motion.variants';
 import { SpinningText } from '@/components/magicui/spinning-text';
+import Image from 'next/image';
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -41,7 +42,7 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
         variants={fadeInUp}
         initial="hidden"
         animate="visible"
-        className="relative bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg h-[400px] flex flex-col"
+        className="relative bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 transform hover:shadow-lg hover:scale-110 h-[400px] flex flex-col"
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
@@ -65,16 +66,15 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
               <ImageIcon className="h-12 w-12 text-gray-400" />
             </div>
           ) : imageUrl ? (
-            <img
+            <Image
               src={imageUrl}
               alt={item.name}
-              className={`w-full h-full object-cover transition-all duration-500 ${
-                imageLoading ? 'opacity-0' : 'opacity-100'
-              }`}
+              fill
+              className={`w-full h-full object-cover transition-all duration-500 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
               onLoad={handleImageLoad}
               onError={handleImageError}
               loading="lazy"
-              decoding="async"
+              sizes="(max-width: 768px) 100vw, 33vw"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
@@ -86,21 +86,21 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
         <div className="p-4 flex flex-col flex-grow">
           <div className="flex-grow">
             <div className="flex justify-between items-start">
-              <h3 className="text-xl font-semibold text-gray-900">{item.name}</h3>
-              <span className="text-desi-orange font-medium text-lg">{item.price}</span>
+              <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
+              <span className="text-desi-orange font-medium text-base">{item.price}</span>
             </div>
-            <p className="text-gray-600 text-sm line-clamp-2 mt-1">{item.description}</p>
+            <p className="text-gray-600 text-xs line-clamp-2 mt-1">{item.description}</p>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-1">
               {item.isvegetarian && (
-                <span className="px-2 py-0.5 bg-green-50 text-green-700 text-sm rounded-full font-medium border border-green-100">
+                <span className="px-2 py-0.5 bg-green-50 text-green-700 text-xs rounded-full font-medium border border-green-100">
                   Vegetarian
                 </span>
               )}
               {item.isspicy && (
-                <span className="px-2 py-0.5 bg-red-50 text-red-700 text-sm rounded-full font-medium border border-red-100">
+                <span className="px-2 py-0.5 bg-red-50 text-red-700 text-xs rounded-full font-medium border border-red-100">
                   Spicy
                 </span>
               )}
@@ -114,7 +114,7 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
             ) : (
               <InteractiveHoverButton
                 onClick={() => setIsDialogOpen(true)}
-                className="bg-white text-desi-orange hover:bg-desi-orange hover:text-white"
+                className="bg-white text-desi-orange hover:bg-desi-orange hover:text-white text-sm"
               >
                 Order Now
               </InteractiveHoverButton>

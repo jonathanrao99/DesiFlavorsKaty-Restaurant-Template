@@ -201,14 +201,14 @@ const Payment = () => {
     try {
       if (!card) {
         addToast({ title: 'Payment not ready', color: 'danger' });
-        return;
-      }
+      return;
+    }
       const tokenResult = await card.tokenize();
       if (tokenResult.status !== 'OK') {
         const msg = tokenResult.errors?.[0]?.message || 'Tokenization failed';
         addToast({ title: 'Payment error', description: msg, color: 'danger' });
-        return;
-      }
+      return;
+    }
       await processPayment(tokenResult.token);
     } catch (error: any) {
       console.error('Payment error:', error);

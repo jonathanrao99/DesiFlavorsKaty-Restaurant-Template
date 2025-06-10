@@ -1,5 +1,5 @@
-
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 
 interface ImageProps {
   src: string;
@@ -62,12 +62,14 @@ const ImageGallery = ({ images, className = '' }: ImageGalleryProps) => {
               backgroundColor: '#f8f8f8' 
             }}
           >
-            <img
+            <Image
               src={image.src}
               alt={image.alt}
+              fill
               className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
               onLoad={() => handleImageLoaded(image.src)}
               loading="lazy"
+              sizes="(max-width: 768px) 100vw, 25vw"
             />
           </div>
         ))}

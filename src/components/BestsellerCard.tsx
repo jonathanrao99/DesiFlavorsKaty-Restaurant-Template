@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
+import Image from 'next/image';
 
 interface BestsellerCardProps {
   title: string;
@@ -45,13 +46,14 @@ const BestsellerCard = ({
         {!imageLoaded && (
           <div className="absolute inset-0 bg-gray-200 animate-pulse" />
         )}
-        <img 
-          src={imageSrc} 
-          alt={title} 
-          className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-110 ${
-            imageLoaded ? 'opacity-100' : 'opacity-0'
-          }`}
+        <Image
+          src={imageSrc}
+          alt={title}
+          fill
+          className={`object-cover transition-all duration-500 group-hover:scale-110 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setImageLoaded(true)}
+          loading="lazy"
+          sizes="(max-width: 768px) 100vw, 33vw"
         />
         {/* Hover Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

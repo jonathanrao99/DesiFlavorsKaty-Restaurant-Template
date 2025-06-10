@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MenuItem } from '@/hooks/useMenuItems';
 import { X, Plus, Minus, ShoppingCart, Image as ImageIcon } from 'lucide-react';
+import Image from 'next/image';
 
 interface OrderDialogProps {
   item: MenuItem;
@@ -47,13 +48,13 @@ const OrderDialog = ({ item, onClose, onAddToCart }: OrderDialogProps) => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+        className="fixed inset-0 bg-gray-500/50 z-50 flex items-center justify-center"
       >
         <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
-          className="bg-white rounded-xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row"
+          className="relative bg-white rounded-xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row"
         >
           {/* Close Button */}
           <button
@@ -75,15 +76,16 @@ const OrderDialog = ({ item, onClose, onAddToCart }: OrderDialogProps) => {
                 <ImageIcon className="h-6 w-6 text-gray-300" />
               </div>
             ) : item.menu_img ? (
-              <img
+              <Image
                 src={item.menu_img}
                 alt={item.name}
-                className={`w-full h-full object-cover transition-all duration-500 ${
+                fill
+                className={`object-cover transition-all duration-500 ${
                   imageLoading ? 'opacity-0' : 'opacity-100'
                 }`}
-                onLoad={handleImageLoad}
+                onLoadingComplete={handleImageLoad}
                 onError={handleImageError}
-                loading="lazy"
+                sizes="(max-width: 768px) 100vw, 40vw"
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center bg-gray-50">

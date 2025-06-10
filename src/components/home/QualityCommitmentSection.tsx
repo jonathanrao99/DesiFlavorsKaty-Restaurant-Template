@@ -1,5 +1,6 @@
 import { Truck, Clock, MapPin, Star, Utensils, Tag, Quote, Calendar, Users, PartyPopper, ChefHat } from 'lucide-react';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const FoodTruckExperience = () => {
   const features = [
@@ -166,10 +167,13 @@ const SignatureDishes = () => {
             >
               {/* Image Container */}
               <div className="relative h-48 overflow-hidden">
-                <img
+                <Image
                   src={dish.image}
                   alt={dish.name}
                   className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                  width={200}
+                  height={200}
+                  loading="lazy"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 
@@ -426,10 +430,13 @@ const CustomerReviews = () => {
               
               <div className="flex items-center mb-6">
                 <div className="w-12 h-12 rounded-full overflow-hidden mr-4">
-                  <img
+                  <Image
                     src={review.image}
                     alt={review.name}
                     className="w-full h-full object-cover"
+                    width={48}
+                    height={48}
+                    loading="lazy"
                   />
                 </div>
                 <div>
