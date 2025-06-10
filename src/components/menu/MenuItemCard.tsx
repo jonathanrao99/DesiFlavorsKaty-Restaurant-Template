@@ -4,7 +4,7 @@ import { MenuItem } from '@/hooks/useMenuItems';
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { ShineBorder } from '@/registry/magicui/shine-border';
+import { ShineBorder } from '@/components/magicui/shine-border';
 import OrderDialog from '@/components/order/OrderDialog';
 import { fadeInUp } from '@/utils/motion.variants';
 import { SpinningText } from '@/components/magicui/spinning-text';
