@@ -4,7 +4,7 @@ import { MenuItem } from '@/hooks/useMenuItems';
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { InteractiveHoverButton } from '@/components/magicui/interactive-hover-button';
+import { ShineBorder } from '@/registry/magicui/shine-border';
 import OrderDialog from '@/components/order/OrderDialog';
 import { fadeInUp } from '@/utils/motion.variants';
 import { SpinningText } from '@/components/magicui/spinning-text';
@@ -42,10 +42,16 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
         variants={fadeInUp}
         initial="hidden"
         animate="visible"
-        className="relative bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 transform hover:shadow-lg hover:scale-110 h-[400px] flex flex-col"
+        className="relative bg-white rounded-2xl shadow-md overflow-hidden transition-all duration-300 transform hover:shadow-lg hover:scale-115 h-[400px] flex flex-col cursor-pointer"
+        onClick={() => setIsDialogOpen(true)}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
+        {(() => {
+          const name = item.name.toLowerCase();
+          const highlight = ['chicken dum biryani', 'butter chicken', 'samosa'].some(k => name.includes(k));
+          return highlight ? <ShineBorder shineColor="#FF6B35" borderWidth={2} /> : null;
+        })()}
         {(() => {
           const name = item.name.toLowerCase();
           const highlight = ['chicken dum biryani', 'butter chicken', 'samosa'].some(k => name.includes(k));
@@ -109,15 +115,14 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
             {item.isSoldOut ? (
               <span className="flex items-center space-x-1 text-gray-400 font-medium text-base select-none">
                 <span>Sold Out</span>
-                <ArrowRight className="w-4 h-4 text-gray-400" />
               </span>
             ) : (
-              <InteractiveHoverButton
-                onClick={() => setIsDialogOpen(true)}
-                className="bg-white text-desi-orange hover:bg-desi-orange hover:text-white text-sm"
+              <button
+                onClick={e => { e.stopPropagation(); handleAddToCart(item); }}
+                className="py-1 px-3 bg-desi-orange text-white rounded-md text-sm font-medium transition-colors hover:bg-desi-orange/90"
               >
-                Order Now
-              </InteractiveHoverButton>
+                Add to Cart
+              </button>
             )}
           </div>
         </div>
