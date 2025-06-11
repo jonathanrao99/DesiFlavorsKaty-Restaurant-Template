@@ -53,14 +53,16 @@ export default function ReturningCustomer() {
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mt-6">
-      <h3 className="font-semibold text-lg mb-2">Returning customer?</h3>
-      <div className="flex gap-2 mb-2">
-        <Input
-          placeholder="Enter phone or email"
-          value={lookup}
-          onChange={e => setLookup(e.target.value)}
-          className="w-2/3 rounded-xl"
-        />
+      <h3 className="font-playfair font-semibold text-lg mb-2">Returning customer?</h3>
+      <div className="flex items-center gap-2 mb-2">
+        <div className="flex-1">
+          <Input
+            placeholder="Enter phone or email"
+            value={lookup}
+            onChange={e => setLookup(e.target.value)}
+            className="block w-full rounded-xl border border-gray-300 shadow-sm focus:ring-2 focus:ring-desi-orange focus:outline-none transition-all px-.5 py-.8"
+          />
+        </div>
         <Button
           onClick={handleLookup}
           className="bg-orange-500 text-black hover:bg-black hover:text-orange-500 transition-colors rounded-xl px-6"

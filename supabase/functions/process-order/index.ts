@@ -64,6 +64,72 @@ serve(async (req) => {
       throw new Error(responseBody.errors?.map((e: any) => e.detail).join(", ") || "Square API error");
     }
     console.log("Square order created:", responseBody.order.id);
+    // If this is a delivery order, create a DoorDash delivery
+    if (record.order_type === 'delivery' && record.delivery_address) {
+      // Generate DoorDash JWT
+      async function generateJWT() {
+        const developer_id = Deno.env.get('DD_DEVELOPER_ID');
+        const key_id = Deno.env.get('DD_KEY_ID');
+        const signing_secret = Deno.env.get('DD_SIGNING_SECRET');
+        if (!developer_id || !key_id || !signing_secret) throw new Error('Missing DoorDash credentials');
+        const header = { alg: 'HS256', typ: 'JWT', 'dd-ver': 'DD-JWT-V1' };
+        const iat = Math.floor(Date.now() / 1000);
+        const exp = iat + 300;
+        const payload = { aud: 'doordash', iss: developer_id, kid: key_id, iat, exp };
+        const encoder = new TextEncoder();
+        const base64url = (data) => btoa(String.fromCharCode(...new Uint8Array(data)))
+          .replace(/\+/g, '-')
+          .replace(/\//g, '_')
+          .replace(/=+$/, '');
+        const headerBase64 = base64url(encoder.encode(JSON.stringify(header)));
+        const payloadBase64 = base64url(encoder.encode(JSON.stringify(payload)));
+        const dataToSign = `${headerBase64}.${payloadBase64}`;
+        const b64 = signing_secret.replace(/-/g, '+').replace(/_/g, '/');
+        const padded = b64 + '='.repeat((4 - (b64.length % 4)) % 4);
+        const secretBytes = Uint8Array.from(atob(padded), (c) => c.charCodeAt(0));
+        const key = await crypto.subtle.importKey('raw', secretBytes, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+        const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(dataToSign));
+        return `${dataToSign}.${base64url(signature)}`;
+      }
+      const ddToken = await generateJWT();
+      // Build DoorDash delivery payload
+      const external_delivery_id = crypto.randomUUID();
+      const deliveryPayload = {
+        external_delivery_id,
+        locale: 'en-US',
+        order_fulfillment_method: 'standard',
+        pickup_address: Deno.env.get('STORE_ADDRESS'),
+        dropoff_address: record.delivery_address,
+        dropoff_phone_number: record.customer_phone,
+        order_value: Math.round(record.total_amount * 100),
+      };
+      // Create delivery
+      const ddRes = await fetch('https://openapi.doordash.com/drive/v2/deliveries', {
+        method: 'POST',
+        headers: { ...corsHeaders, 'Content-Type': 'application/json', Authorization: `Bearer ${ddToken}` },
+        body: JSON.stringify(deliveryPayload),
+      });
+      const ddJson = await ddRes.json();
+      if (!ddRes.ok) throw new Error(ddJson.error || JSON.stringify(ddJson));
+      console.log('DoorDash delivery created:', ddJson.external_delivery_id);
+      // Update Square order with delivery info for staff reference
+      await fetch(`https://connect.squareup.com/v2/orders/${responseBody.order.id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${SQUARE_ACCESS_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          order: {
+            metadata: {
+              delivery_id: ddJson.external_delivery_id,
+              tracking_url: ddJson.tracking_url || ''
+            }
+          }
+        })
+      });
+      console.log('Square order updated with delivery metadata');
+    }
     // Twilio voice call notification (SMS temporarily disabled)
     const TWILIO_ACCOUNT_SID = Deno.env.get('TWILIO_ACCOUNT_SID');
     const TWILIO_AUTH_TOKEN = Deno.env.get('TWILIO_AUTH_TOKEN');

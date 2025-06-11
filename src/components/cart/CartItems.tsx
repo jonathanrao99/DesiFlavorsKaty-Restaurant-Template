@@ -52,7 +52,7 @@ const CartItems = ({ items, onRemove, onUpdateQuantity, onUpdateInstructions }: 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="p-6 border-b border-gray-200 bg-gray-50">
-        <h2 className="font-display font-medium text-lg">Item Details</h2>
+        <h2 className="font-playfair font-medium text-lg">Item Details</h2>
       </div>
       
       <div className="divide-y divide-gray-200">
@@ -62,7 +62,7 @@ const CartItems = ({ items, onRemove, onUpdateQuantity, onUpdateInstructions }: 
               <div className="flex flex-col">
                 <div className="flex items-start">
                   <div>
-                    <h3 className="font-display font-medium text-lg flex items-center">
+                    <h3 className="font-playfair font-medium text-lg flex items-center">
                       {item.name}
                       {item.isVegetarian && (
                         <span className="ml-2 px-2.5 py-1 bg-green-100 text-green-800 text-xs rounded-full font-medium">

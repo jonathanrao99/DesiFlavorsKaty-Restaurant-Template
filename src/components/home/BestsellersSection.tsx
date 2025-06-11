@@ -117,7 +117,7 @@ const BestsellersSection = () => {
             transition={{ duration: 0.7 }}
             className="text-center mb-12 md:mb-16"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 font-display leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 font-against leading-tight">
               <motion.span
                 variants={fadeInUp}
                 initial="hidden"
@@ -127,16 +127,6 @@ const BestsellersSection = () => {
                 className="block mb-2"
               >
                 Our Bestsellers
-              </motion.span>
-              <motion.span
-                variants={fadeInUp}
-                initial="hidden"
-                whileInView="visible"
-                transition={{ delay: 0.5, duration: 0.5 }}
-                viewport={{ once: true }}
-                className="block text-desi-orange"
-              >
-                Customer Favorites
               </motion.span>
             </h2>
             <motion.p 
@@ -159,7 +149,7 @@ const BestsellersSection = () => {
             whileInView="visible"
             viewport={{ once: true }}
             transition={{ duration: 0.8, type: "spring" }}
-            className="mt-12 md:mt-16"
+            className="mt-8 md:mt-12"
           >
             <AnimatedCardGrid columns={{ sm: 1, md: 2, lg: 3 }} gap={8} staggerDelay={0.15}>
               {bestsellers.map((item, index) => (

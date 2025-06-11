@@ -11,6 +11,8 @@ import OrderSummary from '@/components/payment/OrderSummary';
 import PaymentSuccessPage from '@/components/payment/PaymentSuccessPage';
 import PaymentMethodSelector from '@/components/payment/PaymentMethodSelector';
 import Script from 'next/script';
+import { parsePhoneNumberFromString } from 'libphonenumber-js';
+import SquareCardContainer from '@/components/payment/SquareCardContainer';
 
 // Digital wallet types
 type WalletMethod = any;
@@ -40,57 +42,15 @@ const Payment = () => {
   const [customerPhone, setCustomerPhone] = useState('');
   const [deliveryAddress, setDeliveryAddress] = useState('');
 
-  // Initialize Square card
-  useEffect(() => {
-    const initSquare = async () => {
-      if (typeof window === 'undefined') return;
-      try {
-        await loadSquare();
-        const payments = (window as any).Square.payments(process.env.NEXT_PUBLIC_SQUARE_APP_ID!, process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID!);
-        const card = await payments.card();
-        await card.attach('#card-container');
-        setCard(card);
-        // build digital wallet payment request
-        const totalAmount = getCartTotal() + (deliveryMethod === 'delivery' ? 3.99 : 0) + getCartTotal() * 0.0825;
-        const paymentRequest = payments.paymentRequest({
-          countryCode: 'US',
-          currencyCode: 'USD',
-          total: { amount: totalAmount.toFixed(2), label: 'Total' },
-          requestBillingContact: true
-        });
-        // initialize digital wallets
-        const applePay = await payments.applePay(paymentRequest);
-        const googlePay = await payments.googlePay(paymentRequest);
-        const cashApp = await payments.cashApp(paymentRequest);
-        setApplePayMethod(applePay);
-        setGooglePayMethod(googlePay);
-        setCashAppMethod(cashApp);
-      } catch (e) {
-        console.error('Square initialize error', e);
-      }
-    };
-    initSquare();
-  }, []);
-
-  // Helper to load Square SDK
-  const loadSquare = () => {
-    return new Promise<void>((resolve) => {
-      if (document.getElementById('square-js')) {
-        return resolve();
-      }
-      const script = document.createElement('script');
-      script.id = 'square-js';
-      script.src = 'https://sandbox.web.squarecdn.com/v1/square.js';
-      script.onload = () => resolve();
-      document.head.appendChild(script);
-    });
-  };
+  // New state for delivery fee
+  const [deliveryFee, setDeliveryFee] = useState<number | null>(null);
+  const [feeLoading, setFeeLoading] = useState(false);
+  const [feeError, setFeeError] = useState<string | null>(null);
 
   // Calculate order totals
   const subtotal = getCartTotal();
   const tax = subtotal * 0.0825; // 8.25% tax rate
-  const deliveryFee = deliveryMethod === 'delivery' ? 3.99 : 0;
-  const total = subtotal + tax + deliveryFee;
+  const total = subtotal + tax + (deliveryMethod === 'delivery' && deliveryFee ? deliveryFee : 0);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -114,6 +74,44 @@ const Payment = () => {
       }
     }
   }, []);
+
+  // Helper to format phone number to E.164
+  const getE164Phone = (phone: string) => {
+    const digits = phone.replace(/\D/g, '');
+    const parsed = parsePhoneNumberFromString(digits, 'US');
+    return parsed ? parsed.number : null;
+  };
+
+  useEffect(() => {
+    const fetchFee = async () => {
+      if (
+        deliveryMethod === 'delivery' &&
+        deliveryAddress.trim() &&
+        customerPhone.replace(/\D/g, '').length === 10
+      ) {
+        setFeeLoading(true);
+        setFeeError(null);
+        setDeliveryFee(null);
+        try {
+          const phoneE164 = getE164Phone(customerPhone);
+          if (!phoneE164) throw new Error('Invalid phone number');
+          const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL}/calculate-fee`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ address: deliveryAddress, dropoffPhoneNumber: phoneE164 }),
+          });
+          const data = await res.json();
+          if (!res.ok) throw new Error(data.error || 'Fee error');
+          setDeliveryFee(data.fee);
+        } catch (err: any) {
+          setFeeError(err.message || 'Unable to calculate delivery fee');
+        } finally {
+          setFeeLoading(false);
+        }
+      }
+    };
+    fetchFee();
+  }, [deliveryAddress, customerPhone, deliveryMethod]);
 
   // Shared function: send nonce to backend, save order, clear cart
   const processPayment = async (sourceId: string) => {
@@ -243,6 +241,9 @@ const Payment = () => {
             {/* Payment Method Selector */}
             <PaymentMethodSelector value={selectedMethod} onChange={setSelectedMethod} />
 
+            {/* Square Card Form */}
+            <SquareCardContainer onCardReady={setCard} />
+
             {/* Payment Form and Actions */}
             <PaymentForm 
               cardName={cardName}
@@ -283,10 +284,16 @@ const Payment = () => {
               cartItems={cartItems}
               subtotal={subtotal}
               tax={tax}
-              deliveryFee={deliveryFee}
+              deliveryFee={deliveryMethod === 'delivery' ? (deliveryFee ?? 0) : 0}
               total={total}
               deliveryMethod={deliveryMethod}
             />
+            {feeLoading && deliveryMethod === 'delivery' && (
+              <div className="text-sm text-gray-600 mt-2">Calculating delivery fee…</div>
+            )}
+            {feeError && deliveryMethod === 'delivery' && (
+              <div className="text-sm text-red-600 mt-2">{feeError}</div>
+            )}
           </div>
         </div>
       </div>

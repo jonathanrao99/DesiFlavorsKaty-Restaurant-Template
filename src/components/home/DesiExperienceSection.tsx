@@ -32,7 +32,7 @@ export default function DesiExperienceSection() {
           alt="Spice watermark"
           width={112}
           height={112}
-          className="absolute top-8 left-16 w-28 opacity-10 select-none pointer-events-none"
+          className="absolute top-8 left-16 w-28 h-auto opacity-10 select-none pointer-events-none"
           loading="lazy"
         />
         <Image
@@ -40,13 +40,13 @@ export default function DesiExperienceSection() {
           alt="Spice watermark"
           width={128}
           height={128}
-          className="absolute bottom-8 right-16 w-32 opacity-10 select-none pointer-events-none"
+          className="absolute bottom-8 right-16 w-32 h-auto opacity-10 select-none pointer-events-none"
           loading="lazy"
         />
       </div>
       <div className="relative z-10 w-full max-w-5xl mx-auto px-4 py-20 flex flex-col items-center text-center">
         <motion.h2
-          className="text-3xl md:text-5xl font-display font-bold mb-4 text-desi-black"
+          className="text-3xl md:text-4xl font-display font-bold mb-4 text-desi-black"
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, type: 'spring' }}

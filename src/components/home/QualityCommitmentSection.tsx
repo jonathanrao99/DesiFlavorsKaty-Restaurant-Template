@@ -1,6 +1,7 @@
 import { Truck, Clock, MapPin, Star, Utensils, Tag, Quote, Calendar, Users, PartyPopper, ChefHat } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { motion, useScroll } from 'framer-motion';
 import Image from 'next/image';
+import { useRef, useState, useEffect } from 'react';
 
 const FoodTruckExperience = () => {
   const features = [
@@ -480,6 +481,15 @@ const CustomerReviews = () => {
 };
 
 const CateringAndEvents = () => {
+  const sectionRef = useRef(null);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ["start end", "end start"] });
+
+  useEffect(() => {
+    const timer = setTimeout(() => { setHasAnimated(true); }, 1000);
+    return () => clearTimeout(timer);
+  }, []);
+
   const services = [
     {
       icon: <Calendar className="w-8 h-8 text-desi-orange" />,
@@ -504,13 +514,38 @@ const CateringAndEvents = () => {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white via-desi-cream/80 to-desi-cream relative overflow-hidden">
+    <section ref={sectionRef} className="pt-8 pb-16 md:pt-12 md:pb-20 lg:pt-16 lg:pb-24 bg-gradient-to-b from-transparent via-orange-50 to-white relative overflow-hidden">
       {/* Background decoration */}
       <motion.div
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
         transition={{ duration: 1 }}
         className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"
+      />
+      {/* Decorative elements with parallax */}
+      <motion.div 
+        className="absolute top-0 left-0 w-24 h-24 bg-desi-orange/5 rounded-full -translate-x-1/2 -translate-y-1/2"
+        style={{ y: scrollYProgress ? scrollYProgress.get() * 20 : 0 }}
+      />
+      <motion.div 
+        className="absolute bottom-0 right-0 w-48 h-48 bg-desi-orange/5 rounded-full translate-x-1/3 translate-y-1/3"
+        style={{ y: scrollYProgress ? -scrollYProgress.get() * 20 : 0 }}
+      />
+      <motion.div 
+        className="absolute top-1/4 right-10 w-12 h-12 bg-desi-orange/10 rounded-full"
+        style={{ y: scrollYProgress ? scrollYProgress.get() * 10 : 0 }}
+      />
+      <motion.div 
+        className="absolute left-10 bottom-20 w-3 h-3 rounded-full bg-desi-orange/40"
+        animate={hasAnimated ? { y: 0, opacity: 0.6 } : { y: [0, -15, 0], opacity: [0.4, 0.8, 0.4] }}
+        transition={{ duration: 3, repeat: hasAnimated ? 0 : Infinity, ease: "easeInOut" }}
+        viewport={{ once: true }}
+      />
+      <motion.div 
+        className="absolute right-1/3 top-40 w-4 h-4 rounded-full bg-desi-orange/30"
+        animate={hasAnimated ? { y: 0, opacity: 0.5 } : { y: [0, -20, 0], opacity: [0.3, 0.7, 0.3] }}
+        transition={{ duration: 4, repeat: hasAnimated ? 0 : Infinity, ease: "easeInOut", delay: 1 }}
+        viewport={{ once: true }}
       />
       
       <div className="container mx-auto px-4 md:px-6 relative">

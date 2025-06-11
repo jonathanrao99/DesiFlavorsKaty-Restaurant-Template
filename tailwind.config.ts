@@ -90,6 +90,10 @@ export default {
     				'sans-serif'
     			],
     			display: [
+    				'Against2',
+    				'cursive'
+    			],
+    			playfair: [
     				'Playfair Display',
     				'serif'
     			]

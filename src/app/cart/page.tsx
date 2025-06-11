@@ -11,8 +11,7 @@ import {
   ModalBody,
   ModalFooter,
   Button,
-  Textarea,
-  Badge
+  Textarea
 } from '@heroui/react';
 import { motion } from 'framer-motion';
 import { fadeInUp } from '@/utils/motion.variants';
@@ -27,9 +26,11 @@ const Cart = () => {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editItem, setEditItem] = useState<{id: number, instructions: string} | null>(null);
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    setIsMounted(true);
   }, []);
 
   const openEditDialog = (id: number, instructions: string = '') => {
@@ -73,7 +74,7 @@ const Cart = () => {
             <div>
               <h1 className="text-5xl font-display font-bold text-desi-orange leading-tight">Shopping Cart</h1>
               <p className="mt-2 text-lg text-gray-600">
-                {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'} in your cart
+                {isMounted ? `${cartItems.length} ${cartItems.length === 1 ? 'item' : 'items'} in your cart` : null}
               </p>
             </div>
           </div>
@@ -91,31 +92,33 @@ const Cart = () => {
         >
           {/* Loyalty Banner always visible, less vertical padding */}
           <div className="flex justify-center mb-8">
-            <Badge variant="flat" className="bg-orange-100 text-orange-800 text-base px-4 py-1 rounded-xl font-medium">
+            <span className="inline-block bg-orange-100 text-orange-800 text-base px-4 py-1 rounded-xl font-medium">
               Earn 1 loyalty point for every $1 spent. Accumulate 100 points to redeem $10 off your order!
-            </Badge>
-        </div>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-            {/* Cart Items and Returning Customer */}
-          <div className="lg:col-span-2">
-            <CartItems 
-              items={cartItems}
-              onRemove={removeFromCart}
-              onUpdateQuantity={updateQuantity}
-              onUpdateInstructions={updateSpecialInstructions}
-            />
+            </span>
           </div>
+          {isMounted && (
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+              {/* Cart Items and Returning Customer */}
+              <div className="lg:col-span-2">
+                <CartItems 
+                  items={cartItems}
+                  onRemove={removeFromCart}
+                  onUpdateQuantity={updateQuantity}
+                  onUpdateInstructions={updateSpecialInstructions}
+                />
+              </div>
 
-            {/* Order Summary and Checkout */}
-            <div className="mt-0">
-              <CartSummary
-                items={cartItems}
-                deliveryMethod={deliveryMethod}
-                setDeliveryMethod={setDeliveryMethod}
-              />
-              <ReturningCustomer />
+              {/* Order Summary and Checkout */}
+              <div className="mt-0">
+                <CartSummary
+                  items={cartItems}
+                  deliveryMethod={deliveryMethod}
+                  setDeliveryMethod={setDeliveryMethod}
+                />
+                <ReturningCustomer />
+              </div>
             </div>
-          </div>
+          )}
         </motion.div>
       </section>
 

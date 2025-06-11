@@ -13,51 +13,58 @@ serve(async (req) => {
   }
 
   try {
-    const { address } = await req.json();
+    const { address, dropoffPhoneNumber } = await req.json();
+    console.log('calculate-fee received body:', { address, dropoffPhoneNumber });
     if (!address) throw new Error('No address provided');
+    if (!dropoffPhoneNumber) throw new Error('No dropoffPhoneNumber provided');
 
-    // Parse store coordinates from env
-    const STORE_LAT = parseFloat(Deno.env.get('STORE_LAT') || '');
-    const STORE_LON = parseFloat(Deno.env.get('STORE_LON') || '');
-    if (isNaN(STORE_LAT) || isNaN(STORE_LON)) {
-      throw new Error('Missing store coordinates in env');
+    // Calculate delivery fee via DoorDash Drive Create Quote API
+    async function generateJWT() {
+      const developer_id = Deno.env.get('DD_DEVELOPER_ID');
+      const key_id = Deno.env.get('DD_KEY_ID');
+      const signing_secret = Deno.env.get('DD_SIGNING_SECRET');
+      if (!developer_id || !key_id || !signing_secret) throw new Error('Missing DoorDash credentials');
+      const header = { alg: 'HS256', typ: 'JWT', 'dd-ver': 'DD-JWT-V1' };
+      const iat = Math.floor(Date.now() / 1000);
+      const exp = iat + 300;
+      const payload = { aud: 'doordash', iss: developer_id, kid: key_id, iat, exp };
+      const encoder = new TextEncoder();
+      const base64url = (data: ArrayBuffer | Uint8Array) => btoa(String.fromCharCode(...new Uint8Array(data)))
+        .replace(/\+/g, '-')
+        .replace(/\//g, '_')
+        .replace(/=+$/, '');
+      const headerBase64 = base64url(encoder.encode(JSON.stringify(header)));
+      const payloadBase64 = base64url(encoder.encode(JSON.stringify(payload)));
+      const dataToSign = `${headerBase64}.${payloadBase64}`;
+      // Decode base64url-encoded signing secret to raw bytes
+      const b64 = signing_secret.replace(/-/g, '+').replace(/_/g, '/');
+      const padded = b64 + '='.repeat((4 - (b64.length % 4)) % 4);
+      const secretBytes = Uint8Array.from(atob(padded), c => c.charCodeAt(0));
+      const key = await crypto.subtle.importKey('raw', secretBytes, { name: 'HMAC', hash: 'SHA-256' }, false, ['sign']);
+      const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(dataToSign));
+      const signatureBase64 = base64url(signature);
+      return `${dataToSign}.${signatureBase64}`;
     }
-
-    // Geocode helper via Nominatim
-    async function geocode(addr: string) {
-      const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(addr)}`;
-      const res = await fetch(url);
-      const list = await res.json();
-      if (!Array.isArray(list) || !list.length) {
-        throw new Error('Invalid address');
-      }
-      return { lat: parseFloat(list[0].lat), lon: parseFloat(list[0].lon) };
-    }
-
-    // Get coordinates
-    const dest = await geocode(address);
-
-    // Get route via public OSRM
-    const osrmRes = await fetch(
-      `http://router.project-osrm.org/route/v1/driving/${STORE_LON},${STORE_LAT};${dest.lon},${dest.lat}?overview=false`
-    );
-    const osrmData = await osrmRes.json();
-    if (osrmData.code !== 'Ok' || !Array.isArray(osrmData.routes) || !osrmData.routes.length) {
-      throw new Error('Cannot deliver to this location');
-    }
-    const meters = osrmData.routes[0].distance;
-    const miles = meters / 1609.34;
-    const milesRounded = Math.ceil(miles);
-
-    // Compute fees
-    const feeUber = 4.99 + milesRounded;
-    const feeDoor = 6.99 + milesRounded;
-    const fee = Math.min(feeUber, feeDoor);
-
-    return new Response(JSON.stringify({ fee: Number(fee.toFixed(2)) }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      status: 200,
+    const token = await generateJWT();
+    const external_delivery_id = crypto.randomUUID();
+    const quotePayload = {
+      external_delivery_id,
+      locale: 'en-US',
+      order_fulfillment_method: 'standard',
+      pickup_address: Deno.env.get('STORE_ADDRESS'),
+      dropoff_address: address,
+      dropoffPhoneNumber,
+    };
+    console.log('calculate-fee quotePayload:', quotePayload);
+    const quoteRes = await fetch('https://openapi.doordash.com/drive/v2/quotes', {
+      method: 'POST',
+      headers: { ...corsHeaders, 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify(quotePayload),
     });
+    const quoteJson = await quoteRes.json();
+    if (!quoteRes.ok) throw new Error(quoteJson.error || JSON.stringify(quoteJson));
+    const fee = Number((quoteJson.fee / 100).toFixed(2));
+    return new Response(JSON.stringify({ fee }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 });
   } catch (error: any) {
     console.error('Delivery fee calculation error:', error.message);
     return new Response(JSON.stringify({ error: error.message }), {

@@ -69,6 +69,9 @@ const Navbar = () => {
 
   // Count total items in cart
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
+  // Always use dark text on the cart page
+  const isCartPage = pathname === '/cart';
+  const useDarkText = isScrolled || isCartPage;
   
   return <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'}`}>
       <div className="container mx-auto px-4 md:px-6 flex items-center justify-between">
@@ -76,7 +79,7 @@ const Navbar = () => {
         <nav className="hidden md:flex items-center space-x-8 flex-1 justify-start">
           <Link 
             href="/menu" 
-            className={`font-against font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-gray-900 hover:text-desi-orange'}`}
+            className={`font-against font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${useDarkText ? 'text-gray-900 hover:text-desi-orange' : 'text-white hover:text-desi-orange'}`}
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('/menu');
@@ -86,7 +89,7 @@ const Navbar = () => {
           </Link>
           <Link 
             href="/catering" 
-            className={`font-against font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-gray-900 hover:text-desi-orange'}`}
+            className={`font-against font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${useDarkText ? 'text-gray-900 hover:text-desi-orange' : 'text-white hover:text-desi-orange'}`}
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('/catering');
@@ -107,7 +110,7 @@ const Navbar = () => {
             }}
           >
             <span className="font-samarkan text-4xl text-desi-orange">Desi</span>
-            <span className={`font-against text-2xl font-bold ml-2 tracking-wide transition-colors duration-300 ${!isScrolled ? 'text-white' : 'text-gray-900'}`}>Flavors Katy</span>
+            <span className={`font-against text-2xl font-bold ml-2 tracking-wide transition-colors duration-300 ${useDarkText ? 'text-gray-900' : 'text-white'}`}>Flavors Katy</span>
           </Link>
         </div>
 
@@ -115,7 +118,7 @@ const Navbar = () => {
         <nav className="hidden md:flex items-center space-x-8 flex-1 justify-end">
           <Link 
             href="/blog" 
-            className={`font-against font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-gray-900 hover:text-desi-orange'}`}
+            className={`font-against font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${useDarkText ? 'text-gray-900 hover:text-desi-orange' : 'text-white hover:text-desi-orange'}`}
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('/blog');
@@ -125,7 +128,7 @@ const Navbar = () => {
           </Link>
           <Link 
             href="/about" 
-            className={`font-against font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-gray-900 hover:text-desi-orange'}`}
+            className={`font-against font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${useDarkText ? 'text-gray-900 hover:text-desi-orange' : 'text-white hover:text-desi-orange'}`}
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('/about');
@@ -136,7 +139,7 @@ const Navbar = () => {
           <Link href="/cart" className="font-medium relative group">
             <ShoppingCart 
               size={20} 
-              className={`transition-all duration-300 group-hover:-rotate-12 group-hover:text-desi-orange ${isCartBouncing ? 'animate-bounce' : ''} ${!isScrolled ? 'text-white' : 'text-gray-900'}`}
+              className={`transition-all duration-300 group-hover:-rotate-12 group-hover:text-desi-orange ${isCartBouncing ? 'animate-bounce' : ''} ${useDarkText ? 'text-gray-900' : 'text-white'}`}
             />
             {hasMounted && itemCount > 0 && <span className="absolute -top-2 -right-2 bg-desi-orange text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 {itemCount}
@@ -149,14 +152,14 @@ const Navbar = () => {
           <Link href="/cart" className="relative mr-2">
             <ShoppingCart 
               size={20} 
-              className={`transition-colors duration-300 ${!isScrolled ? 'text-white' : 'text-desi-black'} ${isCartBouncing ? 'animate-bounce' : ''}`}
+              className={`transition-colors duration-300 ${useDarkText ? 'text-desi-black' : 'text-white'} ${isCartBouncing ? 'animate-bounce' : ''}`}
             />
             {hasMounted && itemCount > 0 && <span className="absolute -top-2 -right-2 bg-desi-orange text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                 {itemCount}
               </span>}
           </Link>
           <button 
-            className={`transition-colors duration-300 ${!isScrolled ? 'text-white hover:text-desi-orange' : 'text-desi-black hover:text-desi-orange'}`} 
+            className={`transition-colors duration-300 ${useDarkText ? 'text-desi-black hover:text-desi-orange' : 'text-white hover:text-desi-orange'}`} 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
             aria-label="Toggle menu"
           >
