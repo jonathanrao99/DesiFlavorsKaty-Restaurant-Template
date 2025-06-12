@@ -26,9 +26,10 @@ serve(async (req) => {
 
     // Read store details from environment
     const pickup_address = Deno.env.get('STORE_ADDRESS');
-    const pickup_phone_number = Deno.env.get('STORE_PHONE_NUMBER');
+    // Support legacy env or fallback to Twilio from phone number
+    const pickup_phone_number = Deno.env.get('STORE_PHONE_NUMBER') ?? Deno.env.get('TWILIO_FROM_PHONE');
     if (!pickup_address) throw new Error('Missing STORE_ADDRESS in env');
-    if (!pickup_phone_number) throw new Error('Missing STORE_PHONE_NUMBER in env');
+    if (!pickup_phone_number) throw new Error('Missing STORE_PHONE_NUMBER or TWILIO_FROM_PHONE in env');
 
     // Function to generate JWT for DoorDash
     async function generateJWT() {
