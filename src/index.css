@@ -252,3 +252,16 @@ html {
     }
   }
 }
+
+@layer utilities {
+  /* Ensure Google Places autocomplete dropdown appears above all other elements */
+  .pac-container {
+    z-index: 10000 !important;
+  }
+
+  /* Ensure new PlaceAutocompleteElement spans full width */
+  gmp-place-autocomplete {
+    width: 100% !important;
+    display: block;
+  }
+}

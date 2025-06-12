@@ -8,25 +8,29 @@ const corsHeaders = {
 };
 
 serve(async (req) => {
-  // Debug env vars
-  console.log('Supabase calculate-fee STORE_ADDRESS:', Deno.env.get('STORE_ADDRESS'));
-  console.log('Supabase calculate-fee DD credentials:', {
-    developer_id: Deno.env.get('DD_DEVELOPER_ID'),
-    key_id: Deno.env.get('DD_KEY_ID'),
-    hasSigningSecret: !!Deno.env.get('DD_SIGNING_SECRET')
-  });
-
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const { address, dropoffPhoneNumber } = await req.json();
-    console.log('calculate-fee received body:', { address, dropoffPhoneNumber });
-    if (!address) throw new Error('No address provided');
-    if (!dropoffPhoneNumber) throw new Error('No dropoffPhoneNumber provided');
+    const {
+      external_delivery_id,
+      dropoff_address,
+      dropoff_phone_number
+    } = await req.json();
 
-    // Calculate delivery fee via DoorDash Drive Create Quote API
+    // Validate required fields
+    if (!external_delivery_id) throw new Error('Missing external_delivery_id');
+    if (!dropoff_address) throw new Error('Missing dropoff_address');
+    if (!dropoff_phone_number) throw new Error('Missing dropoff_phone_number');
+
+    // Read store details from environment
+    const pickup_address = Deno.env.get('STORE_ADDRESS');
+    const pickup_phone_number = Deno.env.get('STORE_PHONE_NUMBER');
+    if (!pickup_address) throw new Error('Missing STORE_ADDRESS in env');
+    if (!pickup_phone_number) throw new Error('Missing STORE_PHONE_NUMBER in env');
+
+    // Function to generate JWT for DoorDash
     async function generateJWT() {
       const developer_id = Deno.env.get('DD_DEVELOPER_ID');
       const key_id = Deno.env.get('DD_KEY_ID');
@@ -53,32 +57,34 @@ serve(async (req) => {
       const signatureBase64 = base64url(signature);
       return `${dataToSign}.${signatureBase64}`;
     }
+
     const token = await generateJWT();
-    const external_delivery_id = crypto.randomUUID();
-    const quotePayload = {
+
+    // Build delivery payload
+    const deliveryPayload = {
       external_delivery_id,
-      locale: 'en-US',
-      order_fulfillment_method: 'standard',
-      pickup_address: Deno.env.get('STORE_ADDRESS'),
-      dropoff_address: address,
-      dropoff_phone_number: dropoffPhoneNumber,
+      pickup_address,
+      pickup_phone_number,
+      dropoff_address,
+      dropoff_phone_number
     };
-    console.log('calculate-fee quotePayload:', quotePayload);
-    const quoteRes = await fetch('https://openapi.doordash.com/drive/v2/quotes', {
+
+    // Call DoorDash Create Delivery endpoint
+    const deliveryRes = await fetch('https://openapi.doordash.com/drive/v2/deliveries', {
       method: 'POST',
       headers: { ...corsHeaders, 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-      body: JSON.stringify(quotePayload),
+      body: JSON.stringify(deliveryPayload),
     });
-    const quoteJson = await quoteRes.json();
-    if (!quoteRes.ok) throw new Error(quoteJson.error || JSON.stringify(quoteJson));
-    const fee = Number((quoteJson.fee / 100).toFixed(2));
-    // Return fee and external_delivery_id for scheduling
-    return new Response(
-      JSON.stringify({ fee, external_delivery_id }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
-    );
+    const deliveryJson = await deliveryRes.json();
+    if (!deliveryRes.ok) throw new Error(deliveryJson.error || JSON.stringify(deliveryJson));
+
+    // Return the full delivery response
+    return new Response(JSON.stringify(deliveryJson), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 200,
+    });
   } catch (error: any) {
-    console.error('Delivery fee calculation error:', error.message);
+    console.error('Delivery scheduling error:', error.message);
     return new Response(JSON.stringify({ error: error.message }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 500,

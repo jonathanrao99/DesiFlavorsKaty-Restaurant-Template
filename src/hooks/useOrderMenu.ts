@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MenuItem } from '@/types/menu';
 import { useMenuItems } from './useMenuItems';
-import { addToast } from '@heroui/react';
+import { toast } from 'sonner';
 import { useCart } from '@/context/CartContext';
 
 export const useOrderMenu = () => {
@@ -52,10 +52,7 @@ export const useOrderMenu = () => {
       addToCart(itemToAdd);
       setIsDialogOpen(false);
       
-      addToast({
-        title: "Added to cart",
-        description: `${quantity} x ${selectedItem.name} added to your cart`,
-      });
+      toast.success(`${quantity} x ${selectedItem.name} added to your cart`);
     }
   };
   

@@ -41,7 +41,8 @@ export const submitOrder = async (orderData: OrderData) => {
     if (error || !data?.[0]) throw error || new Error('No data returned');
 
     // Directly invoke your Edge Function:
-    await fetch(
+    console.log('Submitting order record to process-order Edge Function:', data[0]);
+    const processRes = await fetch(
       `${process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL}/process-order`,
       {
         method: 'POST',
@@ -53,7 +54,7 @@ export const submitOrder = async (orderData: OrderData) => {
         body: JSON.stringify({ record: data[0] }),
       }
     );
-
+    console.log('process-order response status:', processRes.status);
     return { success: true, orderId: data[0].id };
   } catch (error) {
     console.error('Error submitting order:', error);

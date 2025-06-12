@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
-import { addToast } from '@heroui/react';
+import { toast } from 'sonner';
 import { submitOrder } from '@/services/orderService';
 import PaymentForm from '@/components/payment/PaymentForm';
 import OrderSummary from '@/components/payment/OrderSummary';
@@ -12,7 +12,6 @@ import PaymentSuccessPage from '@/components/payment/PaymentSuccessPage';
 import PaymentMethodSelector from '@/components/payment/PaymentMethodSelector';
 import Script from 'next/script';
 import { parsePhoneNumberFromString } from 'libphonenumber-js';
-import SquareCardContainer from '@/components/payment/SquareCardContainer';
 
 // Digital wallet types
 type WalletMethod = any;
@@ -31,18 +30,15 @@ const Payment = () => {
   
   // Form state
   const [cardName, setCardName] = useState('');
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [billingZip, setBillingZip] = useState('');
   
   // Customer info state
   const [customerName, setCustomerName] = useState('');
   const [customerEmail, setCustomerEmail] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [deliveryAddress, setDeliveryAddress] = useState('');
+  const [externalDeliveryId, setExternalDeliveryId] = useState<string | null>(null);
 
-  // New state for delivery fee
+  // New state for delivery
   const [deliveryFee, setDeliveryFee] = useState<number | null>(null);
   const [feeLoading, setFeeLoading] = useState(false);
   const [feeError, setFeeError] = useState<string | null>(null);
@@ -58,11 +54,7 @@ const Payment = () => {
     // Redirect if cart is empty
     if (cartItems.length === 0 && !paymentSuccess) {
       router.push('/cart');
-      addToast({
-        title: "Cart is empty",
-        description: "Please add items to your cart before proceeding to payment",
-        color: "danger",
-      });
+      toast.error('Cart is empty: Please add items to your cart before proceeding to payment');
     }
   }, [cartItems.length, router, paymentSuccess, deliveryMethod, getCartTotal]);
 
@@ -97,12 +89,17 @@ const Payment = () => {
           if (!phoneE164) throw new Error('Invalid phone number');
           const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL}/calculate-fee`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+              'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`
+            },
             body: JSON.stringify({ address: deliveryAddress, dropoffPhoneNumber: phoneE164 }),
           });
           const data = await res.json();
           if (!res.ok) throw new Error(data.error || 'Fee error');
           setDeliveryFee(data.fee);
+          setExternalDeliveryId(data.external_delivery_id);
         } catch (err: any) {
           setFeeError(err.message || 'Unable to calculate delivery fee');
         } finally {
@@ -123,8 +120,18 @@ const Payment = () => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ sourceId, amount: total, idempotencyKey }),
       });
-      const paymentJson = await paymentRes.json();
-      if (!paymentRes.ok) throw new Error(paymentJson.error || 'Payment failed');
+      let paymentJson: any;
+      if (paymentRes.ok) {
+        paymentJson = await paymentRes.json();
+      } else {
+        // Attempt to parse JSON error message
+        try {
+          const err = await paymentRes.json();
+          throw new Error(err.error || 'Payment failed');
+        } catch (_parseErr) {
+          throw new Error('Payment failed');
+        }
+      }
       const paymentId = paymentJson.id || paymentJson.payment?.id;
       // Build order data
       const orderData = {
@@ -142,28 +149,51 @@ const Payment = () => {
       };
       const submitResult = await submitOrder(orderData);
       if (!submitResult.success) throw new Error('Failed to save order');
+      // Schedule DoorDash delivery if applicable
+      if (deliveryMethod === 'delivery' && externalDeliveryId) {
+        try {
+          const phoneE164 = getE164Phone(customerPhone);
+          await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL}/schedule-delivery`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
+              'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+            },
+            body: JSON.stringify({
+              external_delivery_id: externalDeliveryId,
+              dropoff_address: deliveryAddress,
+              dropoff_phone_number: phoneE164,
+            }),
+          });
+        } catch (err) {
+          console.error('Delivery scheduling error:', err);
+        }
+      }
       clearCart(); setPaymentSuccess(true); localStorage.removeItem('deliveryMethod');
       setTimeout(() => {
         router.push('/');
-        addToast({ title: 'Order placed successfully!', description: 'Thank you for your order. Your food will be ready soon!' });
+        toast.success('Order placed successfully! Thank you for your order. Your food will be ready soon!');
       }, 3000);
     } catch (error: any) {
       console.error('Payment error:', error);
-      addToast({ title: 'Payment failed', description: error.message || 'Please try again.', color: 'danger' });
+      // Customize toast description: avoid repeating 'Payment failed'
+      const desc = error.message && error.message !== 'Payment failed' ? error.message : 'Please try again.';
+      toast.error(desc);
       setIsProcessing(false);
     }
   };
 
   const handleWalletPayment = async (method: WalletMethod) => {
     if (!method) {
-      addToast({ title: 'Payment not ready', color: 'danger' });
+      toast.error('Payment not ready');
       return;
     }
     try {
       const tokenResult = await method.tokenize();
       if (tokenResult.status !== 'OK') {
         const msg = tokenResult.errors?.[0]?.message || 'Tokenization failed';
-        addToast({ title: 'Payment error', description: msg, color: 'danger' });
+        toast.error(msg);
         return;
       }
       await processPayment(tokenResult.token);
@@ -178,41 +208,50 @@ const Payment = () => {
     
     // Validate customer info
     if (!customerName || !customerEmail || !customerPhone) {
-      addToast({
-        title: "Missing information",
-        description: "Please fill in all customer information",
-        color: "danger",
-      });
+      toast.error('Missing information: Please fill in all customer information');
       return;
     }
     
     // Validate delivery address for delivery orders
     if (deliveryMethod === 'delivery' && !deliveryAddress) {
-      addToast({
-        title: "Missing address",
-        description: "Please provide your delivery address",
-        color: "danger",
-      });
+      toast.error('Missing address: Please provide your delivery address');
       return;
     }
     
     try {
       if (!card) {
-        addToast({ title: 'Payment not ready', color: 'danger' });
-      return;
-    }
+        toast.error('Payment not ready');
+        return;
+      }
       const tokenResult = await card.tokenize();
       if (tokenResult.status !== 'OK') {
         const msg = tokenResult.errors?.[0]?.message || 'Tokenization failed';
-        addToast({ title: 'Payment error', description: msg, color: 'danger' });
-      return;
-    }
+        toast.error(msg);
+        return;
+      }
       await processPayment(tokenResult.token);
     } catch (error: any) {
       console.error('Payment error:', error);
       // processPayment handles toast/reset
     }
   };
+
+  // Initialize wallet methods when selected
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const payments = (window as any).Square?.payments(
+      process.env.NEXT_PUBLIC_SQUARE_APP_ID!,
+      process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID!
+    );
+    if (!payments) return;
+    if (selectedMethod === 'applePay') {
+      payments.applePay({ country: 'US', currency: 'USD' }).then(setApplePayMethod).catch(console.error);
+    } else if (selectedMethod === 'googlePay') {
+      payments.googlePay({ country: 'US', currency: 'USD' }).then(setGooglePayMethod).catch(console.error);
+    } else if (selectedMethod === 'cashApp') {
+      payments.cashAppPay({ country: 'US', currency: 'USD' }).then(setCashAppMethod).catch(console.error);
+    }
+  }, [selectedMethod]);
 
   if (paymentSuccess) {
     return (
@@ -241,21 +280,11 @@ const Payment = () => {
             {/* Payment Method Selector */}
             <PaymentMethodSelector value={selectedMethod} onChange={setSelectedMethod} />
 
-            {/* Square Card Form */}
-            <SquareCardContainer onCardReady={setCard} />
-
             {/* Payment Form and Actions */}
             <PaymentForm 
               cardName={cardName}
               setCardName={setCardName}
-              cardNumber={cardNumber}
-              setCardNumber={setCardNumber}
-              expiryDate={expiryDate}
-              setExpiryDate={setExpiryDate}
-              cvv={cvv}
-              setCvv={setCvv}
-              billingZip={billingZip}
-              setBillingZip={setBillingZip}
+              onCardReady={setCard}
               customerName={customerName}
               setCustomerName={setCustomerName}
               customerEmail={customerEmail}

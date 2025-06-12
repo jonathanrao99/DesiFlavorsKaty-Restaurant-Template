@@ -1,6 +1,6 @@
 'use client';
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { addToast } from '@heroui/react';
+import { toast } from 'sonner';
 
 export interface CartItem {
   id: number;
@@ -63,10 +63,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           updatedItems[existingItemIndex].specialInstructions = item.specialInstructions;
         }
         
-        addToast({
-          title: 'Item quantity updated',
-          description: `${item.name} quantity updated to ${updatedItems[existingItemIndex].quantity}`,
-        });
+        toast.success(`${item.name} quantity updated to ${updatedItems[existingItemIndex].quantity}`);
         
         return updatedItems;
       } else {
@@ -83,10 +80,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
           imageSrc: item.imageSrc
         };
         
-        addToast({
-          title: 'Item added to cart',
-          description: `${item.name} has been added to your cart`,
-        });
+        toast.success(`${item.name} has been added to your cart`);
         
         return [...prevItems, newItem];
       }
@@ -97,10 +91,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     setCartItems(prevItems => {
       const itemToRemove = prevItems.find(item => item.id === id);
       if (itemToRemove) {
-        addToast({
-          title: 'Item removed',
-          description: `${itemToRemove.name} has been removed from your cart`,
-        });
+        toast.success(`${itemToRemove.name} has been removed from your cart`);
       }
       return prevItems.filter(item => item.id !== id);
     });
@@ -127,18 +118,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     );
     
     const itemName = cartItems.find(item => item.id === id)?.name || 'Item';
-    addToast({
-      title: 'Instructions updated',
-      description: `Special instructions for ${itemName} have been updated`,
-    });
+    toast.success(`Special instructions for ${itemName} have been updated`);
   };
 
   const clearCart = () => {
     setCartItems([]);
-    addToast({
-      title: 'Cart cleared',
-      description: 'All items have been removed from your cart',
-    });
+    toast.success('All items have been removed from your cart');
   };
 
   const getCartTotal = () => {

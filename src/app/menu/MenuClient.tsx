@@ -6,11 +6,12 @@ import { useMenuItems } from '@/hooks/useMenuItems';
 import { useCart } from '@/context/CartContext';
 import { useSearchParams } from 'next/navigation';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
-import { addToast, Accordion, AccordionItem } from '@heroui/react';
+import { Accordion, AccordionItem } from '@heroui/react';
 import MenuItemCard from '@/components/menu/MenuItemCard';
 import OrderDialog from '@/components/order/OrderDialog';
 import type { MenuItem } from '@/hooks/useMenuItems';
 import { Search } from 'lucide-react';
+import { toast } from 'sonner';
 
 export default function MenuClient() {
   const { menuItems, loading, error, categories } = useMenuItems();
@@ -44,7 +45,7 @@ export default function MenuClient() {
       isVegetarian: item.isvegetarian,
       isSpicy: item.isspicy,
     });
-    addToast({ title: 'Added to cart', description: `${item.name} has been added to your cart.` });
+    toast.success(`${item.name} has been added to your cart.`);
   }, [addToCart]);
 
   if (loading) {

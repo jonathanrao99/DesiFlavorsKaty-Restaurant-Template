@@ -1,3 +1,5 @@
+"use client";
+import { useState, useEffect } from 'react';
 import { CheckCircle } from 'lucide-react';
 import { CartItem } from '@/context/CartContext';
 
@@ -18,6 +20,10 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
   total,
   deliveryMethod
 }) => {
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => { setHasMounted(true); }, []);
+  if (!hasMounted) return null;
+
   return (
     <div className="bg-white rounded-2xl shadow-md p-6 sticky top-24 transition-shadow duration-300 ease-in-out hover:shadow-lg animate-fade-in">
       <h2 className="font-display font-bold text-lg mb-4 pb-2 border-b text-black">Order Summary</h2>

@@ -23,6 +23,15 @@ const Cart = () => {
   useScrollToTop();
   const { cartItems, removeFromCart, updateQuantity, updateSpecialInstructions, clearCart, getCartTotal } = useCart();
   const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'delivery'>('delivery');
+  useEffect(() => {
+    const stored = localStorage.getItem('deliveryMethod');
+    if (stored === 'pickup' || stored === 'delivery') {
+      setDeliveryMethod(stored);
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem('deliveryMethod', deliveryMethod);
+  }, [deliveryMethod]);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editItem, setEditItem] = useState<{id: number, instructions: string} | null>(null);
   const router = useRouter();

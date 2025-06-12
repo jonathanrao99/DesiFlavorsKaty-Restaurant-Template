@@ -4,7 +4,7 @@
         "command": "npx",
         "args": ["square-mcp-server", "start"],
         "env": {
-          "ACCESS_TOKEN": "EAAAl1RK7lxm-LDUlNQiO8e0EK7qNgziKDfniLJYa3YedLcLjFGxfykbbrRdlXkk",
+          "ACCESS_TOKEN": "EAAAl0KDt4gEgPPXeIvFUdCTSAfFhHH6mS66HEcNxeHKkaYI2TxLUVN_QhKXug2l",
           "SANDBOX": "true"
         }
       }
