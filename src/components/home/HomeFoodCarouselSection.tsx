@@ -5,16 +5,17 @@ import Image from 'next/image';
 const media = [
   { type: 'image', src: '/HomeCarousel/IMG-20250610-WA0023.jpg', alt: 'Fresh Indian Food 1' },
   { type: 'image', src: '/HomeCarousel/IMG-20250610-WA0008.jpg', alt: 'Fresh Indian Food 2' },
+  { type: 'video', src: '/HomeCarousel/VID-20250610-WA0082.mp4', alt: 'Cooking Video 1' },
+  { type: 'video', src: '/HomeCarousel/VID-20250609-WA0014.mp4', alt: 'Cooking Video 3' },
   { type: 'image', src: '/HomeCarousel/IMG-20250610-WA0003.jpg', alt: 'Fresh Indian Food 3' },
   { type: 'image', src: '/HomeCarousel/IMG-20250609-WA0007.jpg', alt: 'Fresh Indian Food 4' },
   { type: 'image', src: '/HomeCarousel/IMG-20250609-WA0005.jpg', alt: 'Fresh Indian Food 5' },
   { type: 'image', src: '/HomeCarousel/IMG-20250603-WA0007.jpg', alt: 'Fresh Indian Food 6' },
-  { type: 'video', src: '/HomeCarousel/VID-20250610-WA0084.mp4', alt: 'Cooking Video 1' },
   { type: 'video', src: '/HomeCarousel/VID-20250610-WA0076.mp4', alt: 'Cooking Video 2' },
-  { type: 'video', src: '/HomeCarousel/VID-20250609-WA0014.mp4', alt: 'Cooking Video 3' },
   { type: 'video', src: '/HomeCarousel/VID-20250609-WA0011.mp4', alt: 'Cooking Video 4' },
+  { type: 'video', src: '/HomeCarousel/VID-20250609-WA0073.mp4', alt: 'Cooking Video 6' },
   { type: 'video', src: '/HomeCarousel/VID-20250609-WA0009.mp4', alt: 'Cooking Video 5' },
-  { type: 'video', src: '/HomeCarousel/VID-20250609-WA0002.mp4', alt: 'Cooking Video 6' },
+  { type: 'video', src: '/HomeCarousel/VID-20250609-WA0080.mp4', alt: 'Cooking Video 5' },
 ];
 
 export default function HomeFoodCarouselSection() {
@@ -22,6 +23,8 @@ export default function HomeFoodCarouselSection() {
   const [direction, setDirection] = useState(0); // -1 for left, 1 for right
   const [inView, setInView] = useState(false);
   const sectionRef = useRef(null);
+  const videoRef = useRef(null);
+  const fadeAudioInterval = useRef(null);
 
   // Intersection Observer to detect if section is in view
   useEffect(() => {
@@ -33,19 +36,55 @@ export default function HomeFoodCarouselSection() {
     return () => observer.disconnect();
   }, []);
 
-  // Auto-advance carousel every 4 seconds
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      setDirection(1);
-      setCurrent((prev) => (prev + 1) % media.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+  // Fade in/out audio for video
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    let targetVolume = inView ? 1 : 0;
+    let step = inView ? 0.05 : -0.05;
+    clearInterval(fadeAudioInterval.current);
+    fadeAudioInterval.current = setInterval(() => {
+      if (!video) return;
+      let newVolume = video.volume + step;
+      if ((step > 0 && newVolume >= targetVolume) || (step < 0 && newVolume <= targetVolume)) {
+        video.volume = targetVolume;
+        clearInterval(fadeAudioInterval.current);
+      } else {
+        video.volume = Math.max(0, Math.min(1, newVolume));
+      }
+    }, 50);
+    return () => clearInterval(fadeAudioInterval.current);
+  }, [inView, current]);
+
+  // Auto-advance: images for 4s, videos on ended
+  useEffect(() => {
+    let timeout;
+    const video = videoRef.current;
+    if (media[current].type === 'image') {
+      timeout = setTimeout(() => {
+        setDirection(1);
+        setCurrent((prev) => (prev + 1) % media.length);
+      }, 4000);
+    } else if (video) {
+      video.currentTime = 0;
+      video.play();
+      const onEnded = () => {
+        setDirection(1);
+        setCurrent((prev) => (prev + 1) % media.length);
+      };
+      video.addEventListener('ended', onEnded);
+      return () => {
+        video.removeEventListener('ended', onEnded);
+      };
+    }
+    return () => clearTimeout(timeout);
+  }, [current]);
 
   const handlePrev = () => {
     setDirection(-1);
     setCurrent((prev) => (prev - 1 + media.length) % media.length);
   };
+
   const handleNext = () => {
     setDirection(1);
     setCurrent((prev) => (prev + 1) % media.length);
@@ -84,10 +123,10 @@ export default function HomeFoodCarouselSection() {
                   />
                 ) : (
                   <video
+                    ref={videoRef}
                     src={media[current].src}
                     autoPlay
                     muted={!inView ? true : false}
-                    loop
                     playsInline
                     className="object-cover w-full h-full"
                     title={media[current].alt}
@@ -95,13 +134,15 @@ export default function HomeFoodCarouselSection() {
                 )}
               </motion.div>
             </AnimatePresence>
-            {/* Manual Controls */}
-            <button onClick={handlePrev} aria-label="Previous" className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-yellow-400/90 text-yellow-700 hover:text-white rounded-full p-2 shadow transition-colors z-20 border border-yellow-200">
-              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
-            </button>
-            <button onClick={handleNext} aria-label="Next" className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-yellow-400/90 text-yellow-700 hover:text-white rounded-full p-2 shadow transition-colors z-20 border border-yellow-200">
-              <svg width="24" height="24" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
-            </button>
+            {/* Controls at bottom of carousel */}
+            <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-4 z-20">
+              <button onClick={handlePrev} aria-label="Previous" className="bg-white/80 hover:bg-yellow-400/90 text-yellow-700 hover:text-white rounded-full p-3 shadow transition-colors">
+                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
+              </button>
+              <button onClick={handleNext} aria-label="Next" className="bg-white/80 hover:bg-yellow-400/90 text-yellow-700 hover:text-white rounded-full p-3 shadow transition-colors">
+                <svg width="28" height="28" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
+              </button>
+            </div>
           </div>
         </div>
         {/* Text */}
@@ -113,12 +154,9 @@ export default function HomeFoodCarouselSection() {
         >
           {/* Decorative bg behind text */}
           <div className="absolute -left-10 -top-10 w-32 h-32 bg-gradient-to-br from-yellow-100/40 via-orange-100/20 to-white/0 rounded-full blur-2xl opacity-60 -z-10" />
-          <h3 className="text-3xl md:text-4xl font-bold text-desi-black mb-4 drop-shadow-sm">Made Fresh, Tastes Like Home</h3>
+          <h3 className="text-3xl md:text-4xl font-display font-bold text-desi-black mb-4 drop-shadow-sm">Made Fresh, Tastes Like Home</h3>
           <p className="text-lg md:text-xl text-gray-700 mb-4 font-medium">
             Savor the magic of India in every bite. Our chefs blend tradition and creativity, using only the freshest ingredients and hand-ground spices. From the sizzle of the pan to the aroma of our kitchen, every dish is a celebration of flavor, warmth, and home.
-          </p>
-          <p className="text-base md:text-lg text-yellow-700 font-semibold">
-            Experience premium Indian cuisine, made with love and served with pride.
           </p>
         </motion.div>
       </div>

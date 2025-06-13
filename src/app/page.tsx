@@ -54,8 +54,8 @@ const Index = () => {
       </motion.button>
 
       <HeroSection />
-      <BestsellersSection />
       <HomeFoodCarouselSection />
+      <BestsellersSection />
       <QualityCommitmentSection />
       <CustomerReviewsSection />
       <ConnectSection />
