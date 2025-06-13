@@ -32,10 +32,8 @@ const BestsellerCard = ({
   };
 
   return (
-    <div 
-      className={`group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2 ${
-        isSpecial ? 'border-2 border-desi-orange' : ''
-      }`}
+    <div
+      className="group bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-500 transform hover:-translate-y-2"
       style={{ 
         opacity: 0, 
         animation: 'fade-in 0.5s ease-out forwards', 
@@ -58,11 +56,6 @@ const BestsellerCard = ({
         {/* Hover Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         
-        {isSpecial && (
-          <div className="absolute top-3 right-3 bg-desi-orange text-white text-xs font-bold px-2 py-1 rounded-full z-10">
-            Bestseller
-          </div>
-        )}
       </div>
       
       <div className="p-4">

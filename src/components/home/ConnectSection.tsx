@@ -52,7 +52,7 @@ const ConnectSection = () => {
               type="fadeIn"
               className="text-left"
             >
-              <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold font-display text-white mb-4">
                 Connect With Us
               </h2>
               <p className="text-gray-300 max-w-2xl">

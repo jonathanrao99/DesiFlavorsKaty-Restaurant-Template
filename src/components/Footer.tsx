@@ -155,17 +155,18 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="text-center mb-4 md:mb-6">
+        <div className="text-center mt-10 mb-4 md:mb-6">
           <Link href="/" className="inline-block">
             <h2 className="flex items-center justify-center w-[85vw] mx-auto">
-              <span className="font-samarkan text-[10vw] md:text-[8vw] text-desi-orange leading-none">Desi</span>
-              <span className="font-against text-[10vw] md:text-[9vw] font-bold ml-2 tracking-tight text-white leading-none">Flavors Katy</span>
+              <span className="font-samarkan text-[10vw] md:text-[12vw] text-desi-orange leading-none">Desi </span>
+              <span className="font-against text-[6vw] md:text-[8vw] font-bold ml-2 tracking-tight text-white leading-none">Flavors Katy</span>
             </h2>
           </Link>
         </div>
-        <div className="border-t border-gray-800 mt-10 pt-8 text-center text-gray-400 text-sm">
-          <p>© {currentYear} Desi Flavors Katy. All rights reserved.</p>
-        </div>
+        <div className="border-t border-gray-800 mt-2 pt-5 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
+      <p className="mb-2 md:mb-0">Designed by Jonathan Thota</p>
+  <p>© {currentYear} Desi Flavors Katy. All rights reserved.</p>
+</div>
       </div>
     </footer>;
 };

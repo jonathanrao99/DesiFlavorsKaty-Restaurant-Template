@@ -158,7 +158,7 @@ const BestsellersSection = () => {
                     whileHover={{ scale: 1.04, boxShadow: '0 4px 32px #ffb34733' }}
                     transition={{ type: 'spring', stiffness: 200 }}
                   >
-                    <Card className="rounded-2xl overflow-hidden shadow-lg border border-desi-orange/10 hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 bg-white">
+                    <Card className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 bg-white">
                       <CardBody className="p-0">
                         <div className="relative">
                           <SpinningText className="text-desi-orange bg-transparent text-[0.6rem]">

@@ -3,19 +3,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 
 const media = [
-  { type: 'image', src: '/HomeCarousel/IMG-20250610-WA0023.jpg', alt: 'Fresh Indian Food 1' },
   { type: 'image', src: '/HomeCarousel/IMG-20250610-WA0008.jpg', alt: 'Fresh Indian Food 2' },
-  { type: 'video', src: '/HomeCarousel/VID-20250610-WA0082.mp4', alt: 'Cooking Video 1' },
-  { type: 'video', src: '/HomeCarousel/VID-20250609-WA0014.mp4', alt: 'Cooking Video 3' },
-  { type: 'image', src: '/HomeCarousel/IMG-20250610-WA0003.jpg', alt: 'Fresh Indian Food 3' },
-  { type: 'image', src: '/HomeCarousel/IMG-20250609-WA0007.jpg', alt: 'Fresh Indian Food 4' },
-  { type: 'image', src: '/HomeCarousel/IMG-20250609-WA0005.jpg', alt: 'Fresh Indian Food 5' },
-  { type: 'image', src: '/HomeCarousel/IMG-20250603-WA0007.jpg', alt: 'Fresh Indian Food 6' },
+  { type: 'image', src: '/HomeCarousel/IMG-20250610-WA0023.jpg', alt: 'Fresh Indian Food 3' },
   { type: 'video', src: '/HomeCarousel/VID-20250610-WA0076.mp4', alt: 'Cooking Video 2' },
-  { type: 'video', src: '/HomeCarousel/VID-20250609-WA0011.mp4', alt: 'Cooking Video 4' },
-  { type: 'video', src: '/HomeCarousel/VID-20250609-WA0073.mp4', alt: 'Cooking Video 6' },
+  { type: 'video', src: '/HomeCarousel/VID-20250610-WA0080.mp4', alt: 'Cooking Video 1' },
+  { type: 'image', src: '/HomeCarousel/IMG-20250609-WA0005.jpg', alt: 'Fresh Indian Food 5' },
   { type: 'video', src: '/HomeCarousel/VID-20250609-WA0009.mp4', alt: 'Cooking Video 5' },
-  { type: 'video', src: '/HomeCarousel/VID-20250609-WA0080.mp4', alt: 'Cooking Video 5' },
+  { type: 'image', src: '/HomeCarousel/IMG-20250609-WA0007.jpg', alt: 'Fresh Indian Food 4' },
+  { type: 'image', src: '/HomeCarousel/IMG-20250603-WA0007.jpg', alt: 'Fresh Indian Food 6' },
+  { type: 'video', src: '/HomeCarousel/VID-20250610-WA0082.mp4', alt: 'Cooking Video 3' },
+  { type: 'video', src: '/HomeCarousel/VID-20250609-WA0014.mp4', alt: 'Cooking Video 4' },
 ];
 
 export default function HomeFoodCarouselSection() {
