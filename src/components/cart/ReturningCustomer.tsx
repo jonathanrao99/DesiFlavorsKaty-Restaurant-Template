@@ -53,7 +53,7 @@ export default function ReturningCustomer() {
 
   return (
     <div className="bg-white rounded-xl shadow-lg p-6 mt-6">
-      <h3 className="font-playfair font-semibold text-lg mb-2">Returning customer?</h3>
+      <h3 className="font-playfair text-lg mb-2">Returning customer?</h3>
       <div className="flex items-center gap-2 mb-2">
         <div className="flex-1">
           <Input

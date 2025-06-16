@@ -5,6 +5,7 @@ import { useState, useRef, useEffect } from 'react';
 import { fadeInUp } from '@/utils/motion.variants';
 import MagneticButton from '@/components/MagneticButton';
 import AnimatedCardGrid, { AnimatedCard } from '@/components/AnimatedCardGrid';
+import Image from 'next/image';
 
 // Custom X icon component
 const XIcon = ({ size = 20, className = "" }: { size?: number, className?: string }) => (
@@ -42,6 +43,12 @@ const About = () => {
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"]
+  });
+
+  // Values section scroll effect for parallax decorations
+  const { scrollYProgress: valuesScrollY } = useScroll({
+    target: sectionRefs[2],
+    offset: ["start end", "end start"]
   });
 
   // Use spring physics for smooth animation
@@ -160,12 +167,15 @@ const About = () => {
       {/* Our Story Section */}
       <section 
         ref={sectionRefs[1]}
-        className="py-20 bg-desi-cream relative overflow-hidden"
+        className="py-20 bg-gradient-to-b from-transparent via-orange-50 to-white relative overflow-hidden"
       >
-        {/* Background decoration */}
-        <div className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-gray-50/50 to-transparent"></div>
+        {/* HomeCarousel-style decorative background */}
+        <Image src="/Ingredients/mint-removebg-preview.png" alt="Mint" width={80} height={80} className="absolute top-8 left-8 opacity-10 rotate-12 select-none pointer-events-none z-0" />
+        <Image src="/Ingredients/cinamon-removebg-preview.png" alt="Cinnamon" width={90} height={90} className="absolute bottom-8 right-8 opacity-10 -rotate-12 select-none pointer-events-none z-0" />
+        <svg className="absolute right-1 top-1/4 w-40 h-40 opacity-10 z-0" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="48" stroke="#FFD700" strokeWidth="4" fill="none" /><path d="M50 10 Q60 30 50 50 Q40 70 50 90" stroke="#FFD700" strokeWidth="2" fill="none" /></svg>
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-gradient-to-br from-yellow-200/30 via-yellow-100/10 to-orange-100/0 blur-2xl opacity-40 z-0" />
         
-        <div className="container mx-auto px-4 max-w-6xl relative">
+        <div className="container mx-auto px-4 max-w-6xl relative z-10">
             <motion.div
             variants={fadeInUp}
             initial="hidden"
@@ -178,19 +188,19 @@ const About = () => {
               Our Culinary Journey
               </h2>
               <div className="h-1 w-20 bg-desi-orange mb-6"></div>
-            <p className="max-w-3xl text-gray-600 text-lg">
-              The story of how we brought authentic Indian flavors from our family kitchen to the vibrant streets of Katy
+            <p className="max-w-4xl text-gray-600 text-lg">
+              Authentic Indian flavors, straight from our kitchen to Katy.
               </p>
             </motion.div>
 
           <div className="grid md:grid-cols-2 gap-16 items-center">
             <div className="order-2 md:order-1">
-              <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-6">From Home Kitchen to Food Truck</h3>
-              <p className="text-gray-700 mb-6 text-lg md:text-xl">
+              <h3 className="text-xl md:text-2xl font-display font-semibold mb-6">From Home Kitchen to Food Truck</h3>
+              <p className="text-gray-800 mb-6 text-lg md:text-xl">
                 When we moved to Katy, we noticed something was missing - authentic Indian cuisine that reminded us of home. That's when we decided to bring our passion for Indian food to this vibrant community.
               </p>
-              <p className="text-gray-700 text-lg md:text-xl">
-                In February 2025, we launched Desi Flavors with a simple mission: to serve exceptional Indian dishes that combine traditional recipes with modern culinary expertise. Every recipe we serve is a piece of our heritage, crafted with the same love and care that has been passed down through generations.
+              <p className="text-gray-800 text-lg md:text-xl">
+                In February 2025, we launched <span className="font-bold"><span className="text-desi-orange font-samarkan text-2xl">Desi</span> Flavors</span> with a simple mission: to serve exceptional Indian dishes that combine traditional recipes with modern culinary expertise. Every recipe we serve is a piece of our heritage, crafted with the same love and care that has been passed down through generations.
               </p>
             </div>
             
@@ -199,7 +209,7 @@ const About = () => {
                 <img
                   src="/Truck/truck-3.jpg"
                   alt="Desi Flavors Food Preparation"
-                  className="w-full h-auto rounded-lg shadow-lg"
+                  className="w-full h-auto rounded-xl shadow-lg"
                 />
               </div>
             </div>
@@ -210,41 +220,23 @@ const About = () => {
       {/* Values Section */}
       <section 
         ref={sectionRefs[2]}
-        className="py-20 bg-gradient-to-b from-white to-orange-50 relative overflow-hidden"
+        className="py-20 bg-gradient-to-b from-transparent via-orange-50 to-white relative overflow-hidden"
       >
-        {/* Decorative elements */}
-        <div className="absolute top-0 left-0 w-24 h-24 bg-desi-orange/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
-        <div className="absolute bottom-0 right-0 w-48 h-48 bg-desi-orange/5 rounded-full translate-x-1/3 translate-y-1/3"></div>
-        <div className="absolute top-1/4 right-10 w-12 h-12 bg-desi-orange/10 rounded-full"></div>
-        
-        <motion.div 
-          className="absolute left-10 bottom-20 w-3 h-3 rounded-full bg-desi-orange/40"
-          animate={{ 
-            y: [0, -15, 0],
-            opacity: [0.4, 0.8, 0.4]
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          viewport={{ once: true }}
-        ></motion.div>
-        
-          <motion.div
-          className="absolute right-1/3 top-40 w-4 h-4 rounded-full bg-desi-orange/30"
-          animate={{ 
-            y: [0, -20, 0],
-            opacity: [0.3, 0.7, 0.3]
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 1
-          }}
-            viewport={{ once: true }}
-        ></motion.div>
+        {/* Parallax decorative elements from Bestsellers Section */}
+        <motion.div
+          className="absolute top-0 left-0 w-24 h-24 bg-desi-orange/5 rounded-full -translate-x-1/2 -translate-y-1/2"
+          style={{ y: valuesScrollY.get() * 20 }}
+        />
+        <motion.div
+          className="absolute bottom-0 right-0 w-48 h-48 bg-desi-orange/5 rounded-full translate-x-1/3 translate-y-1/3"
+          style={{ y: -valuesScrollY.get() * 20 }}
+        />
+        <motion.div
+          className="absolute top-1/4 left-10 w-12 h-12 bg-desi-orange/10 rounded-full"
+          style={{ y: valuesScrollY.get() * 10 }}
+        />
+        <motion.div className="absolute left-10 bottom-20 w-3 h-3 rounded-full bg-desi-orange/40" animate={{ y: [0, -15, 0], opacity: [0.4, 0.8, 0.4] }} transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }} viewport={{ once: true }} />
+        <motion.div className="absolute right-1/3 top-40 w-4 h-4 rounded-full bg-desi-orange/30" animate={{ y: [0, -20, 0], opacity: [0.3, 0.7, 0.3] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 1 }} viewport={{ once: true }} />
         
         <div className="container mx-auto px-4 max-w-6xl relative">
           <motion.div 
@@ -311,15 +303,14 @@ const About = () => {
             ))}
           </div>
           
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
             <div className="md:flex">
               {/* Text Column */}
               <div className="md:w-1/2 p-8 md:p-12 flex flex-col justify-center">
-                <h3 className="text-2xl font-bold text-gray-900 mb-6">Our Quality Commitment</h3>
-                <p className="text-gray-700 mb-6">
+                <h3 className="text-3xl font-bold font-display mb-6">Our Quality Commitment</h3>
+                <p className="text-gray-900 mb-6 text-lg">
                   Every dish at Desi Flavors is prepared with care, using hand-selected ingredients and authentic spices to create the perfect balance of flavors.
                 </p>
-                <ul className="space-y-4">
+                <ul className="space-y-4 font-bold">
                   {[
                     "House-made masala blends crafted daily",
                     "Locally sourced vegetables for freshness",
@@ -343,7 +334,6 @@ const About = () => {
                 />
               </div>
             </div>
-          </div>
         </div>
       </section>
 
@@ -373,42 +363,29 @@ const About = () => {
             </p>
           </motion.div>
           
-            <motion.div
+          <motion.div
             variants={fadeInUp}
             initial="hidden"
             whileInView="visible"
-              viewport={{ once: true }}
+            viewport={{ once: true }}
             transition={{ duration: 0.5 }}
             className="mt-16 flex justify-center"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <AnimatedCard className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col items-center">
-                <div className="w-48 h-48 rounded-full overflow-hidden mt-6 mb-4 border-4 border-desi-orange/20">
-                  <img src="/placeholder.svg" alt="Jaladevi Thota" className="w-full h-full object-cover" />
+            <div className="max-w-2xl mx-auto">
+              <AnimatedCard className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col items-center min-h-[600px] mb-10">
+                <div className="w-72 h-72 rounded-full overflow-hidden mt-8 mb-4 border-4 border-desi-orange/20">
+                  <img src="/Truck/IMG-20250610-WA0005.jpg" alt="Founders" className="w-full h-full object-cover" />
                 </div>
-                <div className="p-6 text-center">
-                  <h3 className="text-xl font-display font-bold text-desi-black mb-1">Jaladevi Thota</h3>
-                  <p className="text-desi-orange font-medium mb-3">Head Chef & Founder</p>
-                  <p className="text-gray-600">
-                    With over 20 years of experience in authentic Indian cuisine, Jaladevi brings her family recipes and culinary expertise to Desi Flavors. Her passion for traditional flavors and attention to detail ensures every dish is prepared with love and authenticity.
-                </p>
-              </div>
-              </AnimatedCard>
-
-              <AnimatedCard className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col items-center">
-                <div className="w-48 h-48 rounded-full overflow-hidden mt-6 mb-4 border-4 border-desi-orange/20">
-                  <img src="/placeholder.svg" alt="Venu Thota" className="w-full h-full object-cover" />
-                </div>
-                <div className="p-6 text-center">
-                  <h3 className="text-xl font-display font-bold text-desi-black mb-1">Venu Thota</h3>
-                  <p className="text-desi-orange font-medium mb-3">Co-Founder & Manager</p>
-                  <p className="text-gray-600">
-                    Venu manages the business operations and ensures every customer receives exceptional service. His vision for bringing authentic Indian flavors to Katy has made Desi Flavors a beloved destination for food enthusiasts.
+                <div className="px-6 pt-6 pb-4 text-center">
+                  <h3 className="text-xl font-display font-bold text-desi-black mb-1">Jaladevi & Venu Thota</h3>
+                  <p className="text-desi-orange font-medium mb-3">Founders</p>
+                  <p className="text-desi-black">
+                    With over 20 years of experience in authentic Indian cuisine, Jaladevi brings her family recipes and culinary expertise to Desi Flavors. Venu manages the business operations and ensures every customer receives exceptional service. Together, their vision for authentic Indian flavors has made Desi Flavors a beloved destination for food enthusiasts in Katy.
                   </p>
                 </div>
               </AnimatedCard>
-              </div>
-            </motion.div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

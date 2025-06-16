@@ -91,7 +91,7 @@ const HeroSection = () => {
             transition={{ delay: 0.15 }}
             className="mb-8 md:mb-10"
           >
-            <p className="text-xl md:text-2xl text-white leading-relaxed max-w-2xl mx-auto">
+            <p className="text-xl font-bold md:text-2xl text-white leading-relaxed max-w-2xl mx-auto">
               Experience homestyle Indian cuisine with our specialty biryanis and traditional favorites, crafted with authentic recipes.
             </p>
           </motion.div>
