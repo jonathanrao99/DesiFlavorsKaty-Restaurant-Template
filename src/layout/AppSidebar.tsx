@@ -85,9 +85,9 @@ const AppSidebar: React.FC = () => {
           className="p-1 rounded-full hover:bg-gray-200"
         >
           {isExpanded ? (
-            <ChevronLeftIcon className="w-5 h-5 text-gray-600" />
+            <img src={ChevronLeftIcon.src ?? ChevronLeftIcon} alt="Collapse sidebar" className="w-5 h-5 text-gray-600" />
           ) : (
-            <ArrowRightIcon className="w-5 h-5 text-gray-600" />
+            <img src={ArrowRightIcon.src ?? ArrowRightIcon} alt="Expand sidebar" className="w-5 h-5 text-gray-600" />
           )}
         </button>
       </div>

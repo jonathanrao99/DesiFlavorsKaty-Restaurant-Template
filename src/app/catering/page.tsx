@@ -69,7 +69,12 @@ const Catering = () => {
       }, 4000);
     } else if (video) {
       video.currentTime = 0;
-      video.play();
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.warn('Video autoplay failed:', error);
+        });
+      }
       const onEnded = () => {
         setDirection(1);
         setCurrent((prev) => (prev + 1) % media.length);

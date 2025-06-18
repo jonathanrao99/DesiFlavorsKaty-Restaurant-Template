@@ -108,8 +108,8 @@ export default function NimdaAuthPage() {
   };
 
   return (
-    <>
-      <header className="bg-desi-cream shadow-none transition-colors duration-300">
+    <div className="flex flex-col h-screen bg-desi-cream">
+      <header className="shadow-none transition-colors duration-300">
         <div className="container mx-auto px-4 py-4 flex items-center justify-center">
           <div className="flex items-center gap-2">
             <span className="font-samarkan text-3xl text-desi-orange">Desi</span>
@@ -117,7 +117,7 @@ export default function NimdaAuthPage() {
           </div>
         </div>
       </header>
-      <div className="min-h-screen flex items-center justify-center bg-desi-cream px-4">
+      <div className="flex-1 flex items-center justify-center px-4">
         <main
           className="relative bg-white border border-gray-100 px-8 py-12 rounded-3xl shadow-lg overflow-hidden w-full max-w-md flex flex-col gap-8 items-center animate-fade-in transition-all duration-300 hover:shadow-xl"
         >
@@ -138,10 +138,11 @@ export default function NimdaAuthPage() {
 
           <InputOtp
             length={6}
+            type="password"
             value={code}
             onValueChange={handleOTPChange}
-            containerClassName="justify-center"
-            className="rounded-xl"
+            containerClassName="flex justify-center space-x-4"
+            className="w-14 h-14 text-center border border-gray-300 rounded-lg bg-white focus:outline-none focus:border-desi-orange focus:ring-1 focus:ring-desi-orange"
           />
 
           {error && (
@@ -201,6 +202,6 @@ export default function NimdaAuthPage() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
