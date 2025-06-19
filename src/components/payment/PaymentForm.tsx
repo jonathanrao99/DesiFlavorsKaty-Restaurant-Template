@@ -22,13 +22,14 @@ interface PaymentFormProps {
   setCustomerPhone: (value: string) => void;
   deliveryAddress: string;
   setDeliveryAddress: (value: string) => void;
+  onAddressSelect: () => void;
+  onAddressInput: () => void;
   deliveryMethod: string;
-  selectedMethod: 'card' | 'applePay' | 'googlePay' | 'cashApp';
-  handleApplePay: () => void;
-  handleGooglePay: () => void;
-  handleCashApp: () => void;
   isProcessing: boolean;
   handleSubmit: (e: React.FormEvent) => void;
+  deliveryFee: number | null;
+  feeLoading: boolean;
+  amount: string;
 }
 
 // Declare google on window for TypeScript
@@ -50,13 +51,14 @@ const PaymentForm = ({
   setCustomerPhone,
   deliveryAddress,
   setDeliveryAddress,
+  onAddressSelect,
+  onAddressInput,
   deliveryMethod,
-  selectedMethod,
-  handleApplePay,
-  handleGooglePay,
-  handleCashApp,
   isProcessing,
-  handleSubmit
+  handleSubmit,
+  deliveryFee,
+  feeLoading,
+  amount
 }: PaymentFormProps) => {
   const [customerNameError, setCustomerNameError] = useState('');
   const [customerEmailError, setCustomerEmailError] = useState('');
@@ -122,16 +124,23 @@ const PaymentForm = ({
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     setDeliveryAddress(e.target.value);
     setAutoCompleteValue(e.target.value);
+    onAddressInput();
   };
 
   const handleSelectSuggestion = (description: string) => {
     setDeliveryAddress(description);
     clearSuggestions();
     setDeliveryAddressError('');
+    onAddressSelect();
   };
 
   return (
     <div>
+      {/* Disable browser autofill hack: hidden dummy fields */}
+      <div style={{ position: 'absolute', top: '-999px', left: '-999px', opacity: 0, height: 0, overflow: 'hidden' }}>
+        <input type="text" name="fakeusernameremembered" autoComplete="off" />
+        <input type="password" name="fakepasswordremembered" autoComplete="off" />
+      </div>
       <div className="bg-white rounded-2xl shadow-lg overflow-visible p-6 animate-fade-in">
         <h1 className="text-2xl font-display font-bold mb-4">Customer Information</h1>
 
@@ -141,6 +150,9 @@ const PaymentForm = ({
             <label htmlFor="customerName" className="block text-sm font-medium text-gray-700">Full Name</label>
             <Input
               id="customerName"
+              autoComplete="off"
+              readOnly
+              onFocus={(e) => e.currentTarget.removeAttribute('readonly')}
               aria-invalid={!!customerNameError}
               aria-describedby={customerNameError ? 'customerName-error' : undefined}
               placeholder="John Smith"
@@ -163,6 +175,9 @@ const PaymentForm = ({
             <label htmlFor="customerEmail" className="block text-sm font-medium text-gray-700">Email Address</label>
             <Input
               id="customerEmail"
+              autoComplete="off"
+              readOnly
+              onFocus={(e) => e.currentTarget.removeAttribute('readonly')}
               aria-invalid={!!customerEmailError}
               aria-describedby={customerEmailError ? 'customerEmail-error' : undefined}
               type="email"
@@ -187,6 +202,9 @@ const PaymentForm = ({
             <label htmlFor="customerPhone" className="block text-sm font-medium text-gray-700">Phone Number</label>
             <Input
               id="customerPhone"
+              autoComplete="off"
+              readOnly
+              onFocus={(e) => e.currentTarget.removeAttribute('readonly')}
               aria-invalid={!!customerPhoneError}
               aria-describedby={customerPhoneError ? 'customerPhone-error' : undefined}
               placeholder="(123) 456-7890"
@@ -207,123 +225,96 @@ const PaymentForm = ({
               </p>
             )}
           </div>
-          {deliveryMethod === 'delivery' && (
-            <div className="space-y-2 relative">
-              <label htmlFor="deliveryAddress" className="block text-sm font-medium text-gray-700">Delivery Address</label>
-              <input
-                id="deliveryAddress"
-                placeholder="123 Main St, City, State, ZIP"
-                value={deliveryAddress}
-                onChange={handleInput}
-                required
-                aria-invalid={!!deliveryAddressError}
-                aria-describedby={deliveryAddressError ? 'deliveryAddress-error' : undefined}
-                className="rounded-md border-gray-300 shadow-sm transition-all focus:ring-2 focus:ring-desi-orange focus:outline-none w-full"
-                disabled={!ready}
-                ref={inputRef}
-              />
-              {/* Render suggestions via portal to overlay above all UI */}
-              {dropdownStyles && suggestionStatus === 'OK' && createPortal(
-                <ul
-                  style={{
-                    position: 'absolute',
-                    top: dropdownStyles.top,
-                    left: dropdownStyles.left,
-                    width: dropdownStyles.width,
-                    background: '#fff',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: 4,
-                    boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
-                    zIndex: 10000,
-                    maxHeight: 240,
-                    overflowY: 'auto'
-                  }}
-                >
-                  {suggestionData.map((suggestion) => {
-                    const { place_id, structured_formatting } = suggestion;
-                    return (
-                      <li
-                        key={place_id}
-                        onClick={() => handleSelectSuggestion(suggestion.description)}
-                        style={{ padding: '8px 12px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                        onMouseEnter={(e) => (e.currentTarget.style.background = '#f3f4f6')}
-                        onMouseLeave={(e) => (e.currentTarget.style.background = 'white')}
-                      >
-                        <span style={{ fontWeight: 500 }}>{structured_formatting.main_text}</span>
-                        <small style={{ marginLeft: 8, color: '#6b7280' }}>{structured_formatting.secondary_text}</small>
-                      </li>
-                    );
-                  })}
-                </ul>,
-                document.body
-              )}
-              {deliveryAddressError && (
-                <p id="deliveryAddress-error" role="alert" className="mt-1 text-sm text-red-500">
-                  {deliveryAddressError}
-                </p>
-              )}
-              {/* Inline fee errors are now shown as toasts instead of inline messages */}
-            </div>
-          )}
+          <div className="space-y-2 relative">
+            <label htmlFor="deliveryAddress" className="block text-sm font-medium text-gray-700">Delivery Address</label>
+            <input
+              id="deliveryAddress"
+              autoComplete="off"
+              readOnly
+              onFocus={(e) => e.currentTarget.removeAttribute('readonly')}
+              placeholder="123 Main St, City, State, ZIP"
+              value={deliveryAddress}
+              onChange={handleInput}
+              required
+              aria-invalid={!!deliveryAddressError}
+              aria-describedby={deliveryAddressError ? 'deliveryAddress-error' : undefined}
+              className="rounded-md border-gray-300 shadow-sm transition-all focus:ring-2 focus:ring-desi-orange focus:outline-none w-full"
+              ref={inputRef}
+            />
+            {/* Render suggestions via portal to overlay above all UI */}
+            {dropdownStyles && suggestionStatus === 'OK' && createPortal(
+              <ul
+                style={{
+                  position: 'absolute',
+                  top: dropdownStyles.top,
+                  left: dropdownStyles.left,
+                  width: dropdownStyles.width,
+                  background: '#fff',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: 4,
+                  boxShadow: '0 4px 16px rgba(0,0,0,0.12)',
+                  zIndex: 10000,
+                  maxHeight: 240,
+                  overflowY: 'auto'
+                }}
+              >
+                {suggestionData.map((suggestion) => {
+                  const { place_id, structured_formatting } = suggestion;
+                  return (
+                    <li
+                      key={place_id}
+                      onClick={() => handleSelectSuggestion(suggestion.description)}
+                      style={{ padding: '8px 12px', cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = '#f3f4f6')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'white')}
+                    >
+                      <span style={{ fontWeight: 500 }}>{structured_formatting.main_text}</span>
+                      <small style={{ marginLeft: 8, color: '#6b7280' }}>{structured_formatting.secondary_text}</small>
+                    </li>
+                  );
+                })}
+              </ul>,
+              document.body
+            )}
+            {deliveryAddressError && (
+              <p id="deliveryAddress-error" role="alert" className="mt-1 text-sm text-red-500">
+                {deliveryAddressError}
+              </p>
+            )}
+          </div>
         </div>
 
         {/* Payment Method Specific Section */}
-        {selectedMethod === 'card' && (
-          <form onSubmit={handleSubmit} className="space-y-6 animate-fade-in-delay">
-            {/* Card Details */}
-            <h1 className="text-2xl font-display font-bold mb-4 mt-4">Card Details</h1>
-            {/* Name on Card */}
-            <div className="space-y-2">
-              <label htmlFor="cardName" className="block text-sm font-medium text-gray-700">Name on Card</label>
-              <div className="relative">
-                <Input
-                  id="cardName"
-                  placeholder="John Smith"
-                  value={cardName}
-                  onChange={(e) => setCardName(e.target.value)}
-                  className="pl-10 rounded-md border-gray-300 shadow-sm transition-all focus:ring-2 focus:ring-desi-orange focus:outline-none"
-                  required
-                />
-                <User size={16} className="absolute left-3 top-3 text-gray-500" />
-              </div>
-            </div>
-            <SquareCardContainer method="card" onCardReady={onCardReady} />
-            <Button
-              type="submit"
-              disabled={!isCustomerValid || isProcessing}
-              className="w-full bg-desi-orange hover:bg-desi-orange/90 text-white py-6 text-lg rounded-xl transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {isProcessing ? 'Processing…' : 'Checkout'}
-            </Button>
-          </form>
-        )}
-        {selectedMethod === 'applePay' && (
-          <div className="flex flex-col items-center justify-center w-full my-8">
-            <div className="w-full flex justify-center">
-              <div className="w-full max-w-md flex items-center justify-center min-h-[80px]">
-                <SquareCardContainer method="applePay" onWalletReady={handleApplePay} />
-              </div>
+        <form onSubmit={handleSubmit} autoComplete="off" className="space-y-6 animate-fade-in-delay">
+          {/* Card Details */}
+          <h1 className="text-2xl font-display font-bold mb-4 mt-4">Card Details</h1>
+          {/* Name on Card */}
+          <div className="space-y-2">
+            <label htmlFor="cardName" className="block text-sm font-medium text-gray-700">Name on Card</label>
+            <div className="relative">
+              <Input
+                id="cardName"
+                autoComplete="off"
+                readOnly
+                onFocus={(e) => e.currentTarget.removeAttribute('readonly')}
+                placeholder="John Smith"
+                value={cardName}
+                onChange={(e) => setCardName(e.target.value)}
+                className="pl-10 rounded-md border-gray-300 shadow-sm transition-all focus:ring-2 focus:ring-desi-orange focus:outline-none"
+                required
+              />
+              <User size={16} className="absolute left-3 top-3 text-gray-500" />
             </div>
           </div>
-        )}
-        {selectedMethod === 'googlePay' && (
-          <div className="flex flex-col items-center justify-center w-full my-8">
-            <div className="w-full flex justify-center">
-              <div className="w-full max-w-md flex items-center justify-center min-h-[80px]">
-                <SquareCardContainer method="googlePay" onWalletReady={handleGooglePay} />
-              </div>
-            </div>
-          </div>
-        )}
-        {selectedMethod === 'cashApp' && (
-          <div className="flex flex-col items-center justify-center w-full my-8">
-            <div className="w-full flex justify-center">
-              <div className="w-full max-w-md flex items-center justify-center min-h-[80px]">
-                <SquareCardContainer method="cashApp" onWalletReady={handleCashApp} />
-              </div>
-            </div>
-          </div>
-        )}
+          <SquareCardContainer method="card" onCardReady={onCardReady} amount={amount} />
+          <Button
+            type="submit"
+            disabled={!isCustomerValid || isProcessing}
+            className="w-full bg-desi-orange hover:bg-desi-orange/90 text-white py-6 text-lg rounded-xl transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {isProcessing ? 'Processing…' : 'Checkout'}
+          </Button>
+        </form>
       </div>
     </div>
   );

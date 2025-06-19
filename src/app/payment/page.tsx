@@ -2,7 +2,7 @@
 'use client';
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { toast } from 'sonner';
@@ -24,13 +24,9 @@ const Payment = () => {
   const router = useRouter();
   const { cartItems, getCartTotal, clearCart } = useCart();
   const [card, setCard] = useState<any>(null);
-  const [applePayMethod, setApplePayMethod] = useState<WalletMethod>(null);
-  const [googlePayMethod, setGooglePayMethod] = useState<WalletMethod>(null);
-  const [cashAppMethod, setCashAppMethod] = useState<WalletMethod>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [deliveryMethod, setDeliveryMethod] = useState<'pickup'|'delivery'>('pickup');
-  const [selectedMethod, setSelectedMethod] = useState<'card'|'applePay'|'googlePay'|'cashApp'>('card');
   
   // Form state
   const [cardName, setCardName] = useState('');
@@ -44,6 +40,7 @@ const Payment = () => {
   // New state for delivery
   const [deliveryFee, setDeliveryFee] = useState<number | null>(null);
   const [feeLoading, setFeeLoading] = useState(false);
+  const [addressSelected, setAddressSelected] = useState(false);
 
   // Calculate order totals
   const subtotal = getCartTotal();
@@ -77,46 +74,41 @@ const Payment = () => {
   };
 
   useEffect(() => {
-    const fetchFee = async () => {
-      if (
-        deliveryMethod === 'delivery' &&
-        deliveryAddress.trim() &&
-        customerPhone.replace(/\D/g, '').length === 10
-      ) {
-        setFeeLoading(true);
+    if (deliveryMethod !== 'delivery') return;
+    const digits = customerPhone.replace(/\D/g, '').length;
+    if (!deliveryAddress.trim() || digits < 10) return;
+    setFeeLoading(true);
+    setDeliveryFee(null);
+    const timer = setTimeout(async () => {
+      try {
+        const phoneE164 = getE164Phone(customerPhone);
+        if (!phoneE164) throw new Error('Invalid phone number');
+        const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL}/calculate-fee`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+            'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
+          },
+          body: JSON.stringify({ address: deliveryAddress, dropoffPhoneNumber: phoneE164 }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Fee error');
+        setDeliveryFee(data.fee);
+      } catch (err: any) {
+        toast.error("Sorry, we don't deliver to that address yet — we're expanding to your region soon!");
         setDeliveryFee(null);
-        try {
-          const phoneE164 = getE164Phone(customerPhone);
-          if (!phoneE164) throw new Error('Invalid phone number');
-          const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL}/calculate-fee`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-              'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`
-            },
-            body: JSON.stringify({ address: deliveryAddress, dropoffPhoneNumber: phoneE164 }),
-          });
-          const data = await res.json();
-          if (!res.ok) throw new Error(data.error || 'Fee error');
-          setDeliveryFee(data.fee);
-        } catch (err: any) {
-          // Show user-friendly toast instead of inline error
-          toast.error("Sorry, we don't deliver to that address yet — we're expanding to your region soon!");
-          // You can keep feeError null or undefined if needed for logic
-          setDeliveryFee(null);
-        } finally {
-          setFeeLoading(false);
-        }
+      } finally {
+        setFeeLoading(false);
       }
-    };
-    fetchFee();
+    }, 2000);
+    return () => clearTimeout(timer);
   }, [deliveryAddress, customerPhone, deliveryMethod]);
 
-  // Shared function: send nonce to backend, save order, clear cart
   const processPayment = async (sourceId: string) => {
     setIsProcessing(true);
     try {
+      console.log('Processing payment with sourceId:', sourceId);
       const idempotencyKey = crypto.randomUUID();
       const paymentRes = await fetch('/api/create-payment', {
         method: 'POST',
@@ -126,16 +118,24 @@ const Payment = () => {
       let paymentJson: any;
       if (paymentRes.ok) {
         paymentJson = await paymentRes.json();
+        console.log('Payment successful:', paymentJson);
       } else {
         // Attempt to parse JSON error message
         try {
           const err = await paymentRes.json();
+          console.error('Payment API error:', err);
           throw new Error(err.error || 'Payment failed');
         } catch (_parseErr) {
+          console.error('Failed to parse error:', _parseErr);
           throw new Error('Payment failed');
         }
       }
       const paymentId = paymentJson.id || paymentJson.payment?.id;
+      if (!paymentId) {
+        console.error('No payment ID returned:', paymentJson);
+        throw new Error('Invalid payment response');
+      }
+      
       // Build order data
       const orderData = {
         customer_name: customerName,
@@ -150,39 +150,30 @@ const Payment = () => {
         order_type: deliveryMethod as 'pickup' | 'delivery',
         payment_id: paymentId,
       };
+      console.log('Submitting order:', orderData);
       const submitResult = await submitOrder(orderData);
+      console.log('Order submission result:', submitResult);
       const { success, orderId } = submitResult;
-      if (!success) throw new Error('Failed to save order');
-      clearCart(); setPaymentSuccess(true); localStorage.removeItem('deliveryMethod');
+      if (!success || !orderId) {
+        console.error('Order creation failed:', submitResult);
+        throw new Error('Failed to save order');
+      }
+      
+      // Clear cart and show success
+      clearCart();
+      setPaymentSuccess(true);
+      localStorage.removeItem('deliveryMethod');
+      
+      // Delay redirect to show success message
       setTimeout(() => {
         router.push('/');
         toast.success('Order placed successfully! Thank you for your order. Your food will be ready soon!');
       }, 3000);
     } catch (error: any) {
-      console.error('Payment error:', error);
-      // Customize toast description: avoid repeating 'Payment failed'
+      console.error('Payment/Order error:', error);
       const desc = error.message && error.message !== 'Payment failed' ? error.message : 'Please try again.';
       toast.error(desc);
       setIsProcessing(false);
-    }
-  };
-
-  const handleWalletPayment = async (method: WalletMethod) => {
-    if (!method) {
-      toast.error('Payment not ready');
-      return;
-    }
-    try {
-      const tokenResult = await method.tokenize();
-      if (tokenResult.status !== 'OK') {
-        const msg = tokenResult.errors?.[0]?.message || 'Tokenization failed';
-        toast.error(msg);
-        return;
-      }
-      await processPayment(tokenResult.token);
-    } catch (error: any) {
-      console.error('Wallet payment error:', error);
-      // processPayment will handle toast/reset
     }
   };
 
@@ -219,23 +210,6 @@ const Payment = () => {
     }
   };
 
-  // Initialize wallet methods when selected
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const payments = (window as any).Square?.payments(
-      process.env.NEXT_PUBLIC_SQUARE_APP_ID!,
-      process.env.NEXT_PUBLIC_SQUARE_LOCATION_ID!
-    );
-    if (!payments) return;
-    if (selectedMethod === 'applePay') {
-      payments.applePay({ country: 'US', currency: 'USD' }).then(setApplePayMethod).catch(console.error);
-    } else if (selectedMethod === 'googlePay') {
-      payments.googlePay({ country: 'US', currency: 'USD' }).then(setGooglePayMethod).catch(console.error);
-    } else if (selectedMethod === 'cashApp') {
-      payments.cashAppPay({ country: 'US', currency: 'USD' }).then(setCashAppMethod).catch(console.error);
-    }
-  }, [selectedMethod]);
-
   if (paymentSuccess) {
     return (
       <main className="min-h-screen pt-24 pb-20 bg-gray-50 animate-fade-in">
@@ -265,11 +239,8 @@ const Payment = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start animate-fade-in-delay">
           {/* Payment Form */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Payment Method Selector */}
-            <PaymentMethodSelector value={selectedMethod} onChange={setSelectedMethod} />
-
-            {/* Payment Form and Actions */}
-            <PaymentForm 
+            {/* Card Payment Form */}
+            <PaymentForm
               cardName={cardName}
               setCardName={setCardName}
               onCardReady={setCard}
@@ -281,13 +252,14 @@ const Payment = () => {
               setCustomerPhone={setCustomerPhone}
               deliveryAddress={deliveryAddress}
               setDeliveryAddress={setDeliveryAddress}
+              onAddressSelect={() => setAddressSelected(true)}
+              onAddressInput={() => setAddressSelected(false)}
               deliveryMethod={deliveryMethod}
-              selectedMethod={selectedMethod}
+              deliveryFee={deliveryFee}
+              feeLoading={feeLoading}
               isProcessing={isProcessing}
-              handleApplePay={() => handleWalletPayment(applePayMethod)}
-              handleGooglePay={() => handleWalletPayment(googlePayMethod)}
-              handleCashApp={() => handleWalletPayment(cashAppMethod)}
               handleSubmit={handleSubmit}
+              amount={total.toString()}
             />
 
             <div className="mt-4 text-center text-gray-600 text-sm animate-fade-in-delay">

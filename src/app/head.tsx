@@ -13,6 +13,8 @@ export default function Head() {
         `
       }} />
       <script async defer src={process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL} data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}></script>
+      {/* PWA manifest for Google Pay requirements */}
+      <link rel="manifest" href="/manifest.json" />
     </>
   );
 } 

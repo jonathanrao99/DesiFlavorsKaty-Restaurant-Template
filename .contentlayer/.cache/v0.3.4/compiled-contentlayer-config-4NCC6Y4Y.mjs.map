@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../../../contentlayer.config.ts"],
-  "sourcesContent": ["import { defineDocumentType, makeSource } from 'contentlayer/source-files'\r\n\r\nexport const Blog = defineDocumentType(() => ({\r\n  name: 'Blog',\r\n  filePathPattern: `blog/*.mdx`,\r\n  contentType: 'mdx',\r\n  fields: {\r\n    title: { type: 'string', required: true },\r\n    date: { type: 'date', required: true },\r\n    description: { type: 'string', required: false },\r\n    image: { type: 'string', required: false },\r\n  },\r\n  computedFields: {\r\n    slug: { type: 'string', resolve: (doc) => doc._raw.flattenedPath },\r\n  },\r\n}))\r\n\r\nexport default makeSource({\r\n  contentDirPath: 'content',\r\n  documentTypes: [Blog],\r\n  disableImportAliasWarning: true,\r\n}) "],
-  "mappings": ";AAAA,SAAS,oBAAoB,kBAAkB;AAExC,IAAM,OAAO,mBAAmB,OAAO;AAAA,EAC5C,MAAM;AAAA,EACN,iBAAiB;AAAA,EACjB,aAAa;AAAA,EACb,QAAQ;AAAA,IACN,OAAO,EAAE,MAAM,UAAU,UAAU,KAAK;AAAA,IACxC,MAAM,EAAE,MAAM,QAAQ,UAAU,KAAK;AAAA,IACrC,aAAa,EAAE,MAAM,UAAU,UAAU,MAAM;AAAA,IAC/C,OAAO,EAAE,MAAM,UAAU,UAAU,MAAM;AAAA,EAC3C;AAAA,EACA,gBAAgB;AAAA,IACd,MAAM,EAAE,MAAM,UAAU,SAAS,CAAC,QAAQ,IAAI,KAAK,cAAc;AAAA,EACnE;AACF,EAAE;AAEF,IAAO,8BAAQ,WAAW;AAAA,EACxB,gBAAgB;AAAA,EAChB,eAAe,CAAC,IAAI;AAAA,EACpB,2BAA2B;AAC7B,CAAC;",
-  "names": []
-}
