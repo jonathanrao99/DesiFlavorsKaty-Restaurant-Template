@@ -77,7 +77,15 @@ serve(async (req) => {
       body: JSON.stringify(deliveryPayload),
     });
     const deliveryJson = await deliveryRes.json();
-    if (!deliveryRes.ok) throw new Error(deliveryJson.error || JSON.stringify(deliveryJson));
+    if (!deliveryRes.ok) {
+      if (deliveryJson.code === 'duplicate_delivery_id') {
+        return new Response(JSON.stringify(deliveryJson), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200,
+        });
+      }
+      throw new Error(deliveryJson.error || JSON.stringify(deliveryJson));
+    }
 
     // Return the full delivery response
     return new Response(JSON.stringify(deliveryJson), {

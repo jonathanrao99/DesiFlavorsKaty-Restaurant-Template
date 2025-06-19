@@ -36,7 +36,6 @@ const Payment = () => {
   const [customerEmail, setCustomerEmail] = useState('');
   const [customerPhone, setCustomerPhone] = useState('');
   const [deliveryAddress, setDeliveryAddress] = useState('');
-  const [externalDeliveryId, setExternalDeliveryId] = useState<string | null>(null);
 
   // New state for delivery
   const [deliveryFee, setDeliveryFee] = useState<number | null>(null);
@@ -99,7 +98,6 @@ const Payment = () => {
           const data = await res.json();
           if (!res.ok) throw new Error(data.error || 'Fee error');
           setDeliveryFee(data.fee);
-          setExternalDeliveryId(data.external_delivery_id);
         } catch (err: any) {
           setFeeError(err.message || 'Unable to calculate delivery fee');
         } finally {
@@ -148,11 +146,13 @@ const Payment = () => {
         payment_id: paymentId,
       };
       const submitResult = await submitOrder(orderData);
-      if (!submitResult.success) throw new Error('Failed to save order');
+      const { success, orderId } = submitResult;
+      if (!success) throw new Error('Failed to save order');
       // Schedule DoorDash delivery if applicable
-      if (deliveryMethod === 'delivery' && externalDeliveryId) {
+      if (deliveryMethod === 'delivery') {
         try {
           const phoneE164 = getE164Phone(customerPhone);
+          if (!phoneE164) throw new Error('Invalid phone number');
           await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL}/schedule-delivery`, {
             method: 'POST',
             headers: {
@@ -161,7 +161,7 @@ const Payment = () => {
               'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
             },
             body: JSON.stringify({
-              external_delivery_id: externalDeliveryId,
+              external_delivery_id: String(orderId),
               dropoff_address: deliveryAddress,
               dropoff_phone_number: phoneE164,
             }),

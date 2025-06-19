@@ -72,9 +72,9 @@ serve(async (req) => {
     const quoteJson = await quoteRes.json();
     if (!quoteRes.ok) throw new Error(quoteJson.error || JSON.stringify(quoteJson));
     const fee = Number((quoteJson.fee / 100).toFixed(2));
-    // Return fee and external_delivery_id for scheduling
+    // Return only fee (drop quote-based external_delivery_id)
     return new Response(
-      JSON.stringify({ fee, external_delivery_id }),
+      JSON.stringify({ fee }),
       { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 200 }
     );
   } catch (error: any) {
