@@ -196,4 +196,34 @@ html {
 
 .shake {
   animation: shake 0.5s;
+}
+
+/* Google Places Autocomplete dropdown fixes */
+.place-autocomplete-element-row,
+.place-autocomplete-element-text-div,
+.place-autocomplete-element-place-name,
+.place-autocomplete-element-place-details {
+  background: #fff !important;
+  color: #000 !important;
+  opacity: 1 !important;
+}
+
+.place-autocomplete-element-row {
+  border-bottom: 1px solid #eee !important;
+  border-radius: 0 !important;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12) !important;
+}
+
+.place-autocomplete-element-row:hover,
+.place-autocomplete-element-row[aria-selected="true"] {
+  background: #f3f4f6 !important;
+}
+
+/* Autocomplete container fixes */
+/* Ensure the dropdown container and list items are opaque white */
+gmp-place-autocomplete .dropdown,
+gmp-place-autocomplete .dropdown > ul,
+gmp-place-autocomplete .dropdown > ul > li {
+  background-color: #ffffff !important;
+  opacity: 1 !important;
 } 

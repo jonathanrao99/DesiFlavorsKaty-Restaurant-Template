@@ -13,8 +13,12 @@ import type { MenuItem } from '@/hooks/useMenuItems';
 import { toast } from 'sonner';
 import { Search } from 'lucide-react';
 
-export default function MenuClient() {
-  const { menuItems, loading, error, categories } = useMenuItems();
+type MenuClientProps = {
+  initialMenuItems?: MenuItem[];
+};
+
+export default function MenuClient({ initialMenuItems }: MenuClientProps) {
+  const { menuItems, loading, error, categories } = useMenuItems(initialMenuItems);
   const [vegetarianOnly, setVegetarianOnly] = useState(false);
   const [spicyOnly, setSpicyOnly] = useState(false);
   const [under10Only, setUnder10Only] = useState(false);

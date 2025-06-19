@@ -1,12 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
+import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Lock } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { toast } from 'sonner';
 import { submitOrder } from '@/services/orderService';
-import PaymentForm from '@/components/payment/PaymentForm';
+const PaymentForm = dynamic(() => import('@/components/payment/PaymentForm'), {
+  ssr: false,
+  loading: () => <div className="flex items-center justify-center p-4">Loading payment form…</div>
+});
 import OrderSummary from '@/components/payment/OrderSummary';
 import PaymentSuccessPage from '@/components/payment/PaymentSuccessPage';
 import PaymentMethodSelector from '@/components/payment/PaymentMethodSelector';
@@ -40,7 +44,6 @@ const Payment = () => {
   // New state for delivery
   const [deliveryFee, setDeliveryFee] = useState<number | null>(null);
   const [feeLoading, setFeeLoading] = useState(false);
-  const [feeError, setFeeError] = useState<string | null>(null);
 
   // Calculate order totals
   const subtotal = getCartTotal();
@@ -81,7 +84,6 @@ const Payment = () => {
         customerPhone.replace(/\D/g, '').length === 10
       ) {
         setFeeLoading(true);
-        setFeeError(null);
         setDeliveryFee(null);
         try {
           const phoneE164 = getE164Phone(customerPhone);
@@ -99,7 +101,10 @@ const Payment = () => {
           if (!res.ok) throw new Error(data.error || 'Fee error');
           setDeliveryFee(data.fee);
         } catch (err: any) {
-          setFeeError(err.message || 'Unable to calculate delivery fee');
+          // Show user-friendly toast instead of inline error
+          toast.error("Sorry, we don't deliver to that address yet — we're expanding to your region soon!");
+          // You can keep feeError null or undefined if needed for logic
+          setDeliveryFee(null);
         } finally {
           setFeeLoading(false);
         }
@@ -148,28 +153,6 @@ const Payment = () => {
       const submitResult = await submitOrder(orderData);
       const { success, orderId } = submitResult;
       if (!success) throw new Error('Failed to save order');
-      // Schedule DoorDash delivery if applicable
-      if (deliveryMethod === 'delivery') {
-        try {
-          const phoneE164 = getE164Phone(customerPhone);
-          if (!phoneE164) throw new Error('Invalid phone number');
-          await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL}/schedule-delivery`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY}`,
-              'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-            },
-            body: JSON.stringify({
-              external_delivery_id: String(orderId),
-              dropoff_address: deliveryAddress,
-              dropoff_phone_number: phoneE164,
-            }),
-          });
-        } catch (err) {
-          console.error('Delivery scheduling error:', err);
-        }
-      }
       clearCart(); setPaymentSuccess(true); localStorage.removeItem('deliveryMethod');
       setTimeout(() => {
         router.push('/');
@@ -265,6 +248,11 @@ const Payment = () => {
     <main className="min-h-screen pt-24 pb-20 bg-gray-50 animate-fade-in">
       {/* Load Square Web Payments SDK */}
       <Script src="https://sandbox.web.squarecdn.com/v1/square.js" strategy="beforeInteractive" />
+      {/* Load Google Maps Places API for autocomplete */}
+      <Script
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+        strategy="beforeInteractive"
+      />
       <div className="container mx-auto px-4 md:px-6 pt-4 animate-fade-in-delay">
         <button 
           onClick={() => router.push('/cart')}
@@ -320,9 +308,7 @@ const Payment = () => {
             {feeLoading && deliveryMethod === 'delivery' && (
               <div className="text-sm text-gray-600 mt-2">Calculating delivery fee…</div>
             )}
-            {feeError && deliveryMethod === 'delivery' && (
-              <div className="text-sm text-red-600 mt-2">{feeError}</div>
-            )}
+            {/* Delivery errors are shown as toasts; inline error hidden */}
           </div>
         </div>
       </div>

@@ -112,23 +112,52 @@ serve(async (req) => {
       const ddJson = await ddRes.json();
       if (!ddRes.ok) throw new Error(ddJson.error || JSON.stringify(ddJson));
       console.log('DoorDash delivery created:', ddJson.external_delivery_id);
-      // Update Square order with delivery info for staff reference
-      await fetch(`https://connect.squareup.com/v2/orders/${responseBody.order.id}`, {
-        method: 'PUT',
-        headers: {
-          'Authorization': `Bearer ${SQUARE_ACCESS_TOKEN}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          order: {
-            metadata: {
-              delivery_id: ddJson.external_delivery_id,
-              tracking_url: ddJson.tracking_url || ''
-            }
+      // Update Supabase order with external_delivery_id
+      const SUPABASE_URL = Deno.env.get('SUPABASE_URL');
+      const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY');
+      if (SUPABASE_URL && SERVICE_ROLE_KEY) {
+        const patchRes = await fetch(
+          `${SUPABASE_URL}/rest/v1/orders?id=eq.${record.id}`,
+          {
+            method: 'PATCH',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': SERVICE_ROLE_KEY,
+              'Authorization': `Bearer ${SERVICE_ROLE_KEY}`,
+              'Prefer': 'return=representation'
+            },
+            body: JSON.stringify({ external_delivery_id: ddJson.external_delivery_id })
           }
-        })
-      });
-      console.log('Square order updated with delivery metadata');
+        );
+        if (!patchRes.ok) console.error('Failed to patch external_delivery_id:', await patchRes.text());
+        else console.log('Supabase order updated with external_delivery_id');
+      } else {
+        console.warn('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY; cannot patch external_delivery_id');
+      }
+      // Update Square order metadata with delivery_id and tracking_url
+      try {
+        await fetch(
+          `https://connect.squareup.com/v2/orders/${responseBody.order.id}`,
+          {
+            method: 'PUT',
+            headers: {
+              'Authorization': `Bearer ${SQUARE_ACCESS_TOKEN}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+              order: {
+                metadata: {
+                  delivery_id: ddJson.external_delivery_id,
+                  tracking_url: ddJson.tracking_url || ''
+                }
+              }
+            })
+          }
+        );
+        console.log('Square order updated with delivery metadata');
+      } catch (e) {
+        console.error('Failed to update Square order metadata:', e);
+      }
     }
     // Twilio voice call notification (SMS temporarily disabled)
     const TWILIO_ACCOUNT_SID = Deno.env.get('TWILIO_ACCOUNT_SID');

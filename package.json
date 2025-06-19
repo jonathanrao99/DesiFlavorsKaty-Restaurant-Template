@@ -68,6 +68,7 @@
     "square": "^42.3.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
+    "use-places-autocomplete": "^4.0.1",
     "vaul": "^0.9.3"
   },
   "devDependencies": {

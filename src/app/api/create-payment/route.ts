@@ -26,9 +26,14 @@ export async function POST(req: NextRequest) {
 
   // Process payment with Square SDK
   try {
+    // Choose Square environment based on configuration
+    const env = process.env.SQUARE_ENVIRONMENT === 'production'
+      ? SquareEnvironment.Production
+      : SquareEnvironment.Sandbox;
+    console.log('Using Square environment:', env);
     const squareClient = new SquareClient({
       token: process.env.SQUARE_ACCESS_TOKEN!,
-      environment: SquareEnvironment.Sandbox,
+      environment: env,
     });
 
     // Validate required payment fields

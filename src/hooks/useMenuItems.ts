@@ -52,7 +52,7 @@ const CATEGORY_ORDER = [
 
 type Category = typeof CATEGORY_ORDER[number];
 
-export function useMenuItems() {
+export function useMenuItems(initialData?: MenuItemRow[]) {
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
 
   const { data: menuData, isLoading, error } = useQuery<MenuItemRow[], Error>({
@@ -70,6 +70,7 @@ export function useMenuItems() {
     },
     staleTime: 1000 * 60 * 5, // Consider data fresh for 5 minutes
     gcTime: 1000 * 60 * 30, // Keep in cache for 30 minutes
+    initialData,
   });
 
   // Pre-compute category filters
