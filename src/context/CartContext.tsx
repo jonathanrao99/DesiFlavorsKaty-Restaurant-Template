@@ -22,6 +22,10 @@ interface CartContextType {
   updateSpecialInstructions: (id: number, instructions: string) => void;
   clearCart: () => void;
   getCartTotal: () => number;
+  fulfillmentMethod: 'pickup' | 'delivery';
+  setFulfillmentMethod: (method: 'pickup' | 'delivery') => void;
+  scheduledTime: string;
+  setScheduledTime: (time: string) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -36,10 +40,29 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     return savedCart ? JSON.parse(savedCart) : [];
   });
 
-  // Save cart to localStorage whenever it changes
+  const [fulfillmentMethod, setFulfillmentMethod] = useState<'pickup' | 'delivery'>(() => {
+    if (typeof window === 'undefined') return 'pickup';
+    const savedMethod = window.localStorage.getItem('fulfillmentMethod');
+    return savedMethod === 'delivery' ? 'delivery' : 'pickup';
+  });
+
+  const [scheduledTime, setScheduledTime] = useState<string>(() => {
+    if (typeof window === 'undefined') return 'ASAP';
+    return window.localStorage.getItem('scheduledTime') || 'ASAP';
+  });
+
+  // Save cart and fulfillment options to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cartItems));
   }, [cartItems]);
+
+  useEffect(() => {
+    localStorage.setItem('fulfillmentMethod', fulfillmentMethod);
+  }, [fulfillmentMethod]);
+
+  useEffect(() => {
+    localStorage.setItem('scheduledTime', scheduledTime);
+  }, [scheduledTime]);
 
   const addToCart = (item: Partial<CartItem> & { id: number; name: string; price: string; }) => {
     setCartItems(prevItems => {
@@ -131,7 +154,11 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       updateQuantity,
       updateSpecialInstructions,
       clearCart,
-      getCartTotal
+      getCartTotal,
+      fulfillmentMethod,
+      setFulfillmentMethod,
+      scheduledTime,
+      setScheduledTime
     }}>
       {children}
     </CartContext.Provider>

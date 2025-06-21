@@ -74,7 +74,7 @@ const HeroSection = () => {
             viewport={{ once: true }}
             className="mb-6 md:mb-8"
           >
-            <h1 className="text-3xl md:text-5xl lg:text-6xl font-against font-bold tracking-tight leading-tight">
+            <h1 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight leading-tight">
               <span className="text-white block">Authentic Indian Flavors</span>
               <span className="bg-desi-orange text-transparent bg-clip-text block mt-2 font-bold">
                 On Wheels
@@ -91,7 +91,7 @@ const HeroSection = () => {
             transition={{ delay: 0.15 }}
             className="mb-8 md:mb-10"
           >
-            <p className="text-xl font-bold md:text-2xl text-white leading-relaxed max-w-2xl mx-auto">
+            <p className="text-xl md:text-2xl font-inter text-white leading-relaxed max-w-3xl mx-auto">
               Experience homestyle Indian cuisine with our specialty biryanis and traditional favorites, crafted with authentic recipes.
             </p>
           </motion.div>

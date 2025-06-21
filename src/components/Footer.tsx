@@ -159,7 +159,7 @@ const Footer = () => {
           <Link href="/" className="inline-block">
             <h2 className="flex items-center justify-center w-[85vw] mx-auto">
               <span className="font-samarkan text-[10vw] md:text-[12vw] text-desi-orange leading-none">Desi </span>
-              <span className="font-against text-[6vw] md:text-[8vw] font-bold ml-2 tracking-tight text-white leading-none">FlavorsKaty</span>
+              <span className="font-display text-[6vw] md:text-[8vw] font-bold ml-2 tracking-tight text-white leading-none">FlavorsKaty</span>
             </h2>
           </Link>
         </div>

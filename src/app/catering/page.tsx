@@ -134,13 +134,13 @@ const Catering = () => {
             transition={{ type: 'spring', stiffness: 100, damping: 20, delay: 0.3 }}
             className="text-white"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-against font-bold text-desi-white tracking-tight leading-tight">
-              Catering & Events
+            <p className="text-lg md:text-xl lg:text-2xl font-semibold mb-2 text-desi-orange tracking-widest">Seamless Catering Experience</p>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-desi-white tracking-tight leading-tight">
+              Catering for All Your Events
             </h2>
-            <p className="text-lg md:text-xl mt-6">
+            <p className="mt-4 text-base md:text-lg max-w-2xl mx-auto text-gray-300">
               Elevate your events with exquisite Indian cuisine, crafted with passion and love.
             </p>
-            
           </motion.div>
         </div>
       </section>                                      
@@ -301,8 +301,8 @@ const Catering = () => {
             {/* Get a Quote CTA */}
             <section className="pt-12 pb-12 rounded-xl bg-desi-orange overflow-hidden flex items-center justify-center h-full">
               <div className="relative z-10 max-w-xl mx-auto px-6 md:px-10 text-center space-y-4">
-                <h3 className="text-3xl font-against text-white font-bold">
-                  Have an Event? Get a Quote
+                <h3 className="text-3xl font-display text-white font-bold">
+                  Get a Custom Quote
                 </h3>
                 <p className="text-white text-lg font-semibold leading-relaxed">
                 Contact us today to discuss your catering needs and get a custom quote.

@@ -79,16 +79,17 @@ export default {
     			}
     		},
     		borderRadius: {
-    			lg: 'var(--radius)',
+    			lg: `var(--radius)`,
     			md: 'calc(var(--radius) - 2px)',
     			sm: 'calc(var(--radius) - 4px)',
     			half: '50%'
     		},
     		fontFamily: {
-    			sans: ['var(--font-source-sans-3)', 'sans-serif'],
+    			sans: ['var(--font-sans)', 'sans-serif'],
     			serif: ['var(--font-butler)', 'serif'],
-    			display: ['var(--font-against)', 'cursive'],
+    			display: ['var(--font-display)', 'cursive'],
     			samarkan: ['var(--font-samarkan)', 'cursive'],
+    			mono: ['var(--font-geist-mono)'],
     		},
     		keyframes: {
     			'accordion-down': {

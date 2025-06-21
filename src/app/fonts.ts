@@ -1,10 +1,9 @@
-import { Source_Sans_3 } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import localFont from 'next/font/local';
 
-export const source_sans_3 = Source_Sans_3({
+export const inter = Inter({
   subsets: ['latin'],
-  weight: ['400', '600'],
-  variable: '--font-source-sans-3',
+  variable: '--font-sans',
 });
 
 export const samarkan = localFont({
@@ -12,9 +11,10 @@ export const samarkan = localFont({
   variable: '--font-samarkan',
 });
 
-export const against = localFont({
+export const displayFont = localFont({
   src: '../../public/Fonts/against_2/against-regular.ttf',
-  variable: '--font-against',
+  variable: '--font-display',
+  display: 'swap',
 });
 
 export const butler = localFont({

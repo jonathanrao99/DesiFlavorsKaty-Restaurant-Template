@@ -21,17 +21,18 @@ import ReturningCustomer from '@/components/cart/ReturningCustomer';
 
 const Cart = () => {
   useScrollToTop();
-  const { cartItems, removeFromCart, updateQuantity, updateSpecialInstructions, clearCart, getCartTotal } = useCart();
-  const [deliveryMethod, setDeliveryMethod] = useState<'pickup' | 'delivery'>('delivery');
-  useEffect(() => {
-    const stored = localStorage.getItem('deliveryMethod');
-    if (stored === 'pickup' || stored === 'delivery') {
-      setDeliveryMethod(stored);
-    }
-  }, []);
-  useEffect(() => {
-    localStorage.setItem('deliveryMethod', deliveryMethod);
-  }, [deliveryMethod]);
+  const { 
+    cartItems, 
+    removeFromCart, 
+    updateQuantity, 
+    updateSpecialInstructions, 
+    getCartTotal,
+    fulfillmentMethod,
+    setFulfillmentMethod,
+    scheduledTime,
+    setScheduledTime
+  } = useCart();
+  
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
   const [editItem, setEditItem] = useState<{id: number, instructions: string} | null>(null);
   const router = useRouter();
@@ -55,7 +56,7 @@ const Cart = () => {
     }
   };
 
-  const deliveryFee = deliveryMethod === 'delivery' ? 3.99 : 0;
+  const deliveryFee = fulfillmentMethod === 'delivery' ? 3.99 : 0;
   const subtotal = getCartTotal();
   const tax = subtotal * 0.0825;
   const total = subtotal + tax + deliveryFee;
@@ -121,8 +122,10 @@ const Cart = () => {
               <div className="mt-0">
                 <CartSummary
                   items={cartItems}
-                  deliveryMethod={deliveryMethod}
-                  setDeliveryMethod={setDeliveryMethod}
+                  deliveryMethod={fulfillmentMethod}
+                  setDeliveryMethod={setFulfillmentMethod}
+                  scheduledTime={scheduledTime}
+                  setScheduledTime={setScheduledTime}
                 />
                 <ReturningCustomer />
               </div>

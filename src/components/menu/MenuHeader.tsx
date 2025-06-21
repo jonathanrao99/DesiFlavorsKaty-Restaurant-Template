@@ -59,7 +59,7 @@ const MenuHeader = () => {
             transition={{ duration: 0.7, delay: 0.5 }}
             className="mb-6 md:mb-8"
           >
-            <h1 className="text-4xl md:text-4xl lg:text-7xl font-against font-bold tracking-tight leading-tight">
+            <h1 className="text-4xl md:text-4xl lg:text-7xl font-display font-bold tracking-tight leading-tight">
               <span className="text-white block">Explore Our Menu</span>
             </h1>
           </motion.div>

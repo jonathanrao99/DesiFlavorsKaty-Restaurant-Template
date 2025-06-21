@@ -131,7 +131,7 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
               title={category}
               classNames={{
                 base: 'border-0 rounded-none',
-                heading: 'w-full text-left font-against font-bold py-0.5 md:py-1 px-0 text-base md:text-xl bg-transparent no-underline hover:text-desi-orange focus:outline-none',
+                heading: 'w-full text-left font-display font-bold py-0.5 md:py-1 px-0 text-base md:text-xl bg-transparent no-underline hover:text-desi-orange focus:outline-none',
                 content: 'px-0 pb-4 pt-0'
               }}
             >
