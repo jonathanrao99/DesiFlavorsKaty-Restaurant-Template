@@ -50,7 +50,6 @@ export const AddressAutocomplete = ({ onAddressSelect }: AddressAutocompleteProp
       <CommandInput
         value={value}
         onValueChange={setValue}
-        disabled={!ready}
         placeholder="Start typing your delivery address..."
         className="w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-desi-orange sm:text-sm"
       />
