@@ -148,7 +148,7 @@ const Cart = () => {
                 placeholder="Any special preparation instructions? (e.g., less spicy, no cilantro)"
                 value={editItem?.instructions || ''}
                 onChange={(e) => editItem && setEditItem({ ...editItem, instructions: e.target.value })}
-                className="min-h-[80px] rounded-xl border-gray-300 focus:border-desi-orange focus:ring-2 focus:ring-desi-orange/20"
+                className="min-h-[80px] rounded-xl border border-gray-300 focus:border-desi-orange focus:ring-2 focus:ring-desi-orange/20"
               />
             </div>
             <ModalFooter className="pt-4 flex justify-end space-x-2">

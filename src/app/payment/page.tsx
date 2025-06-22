@@ -25,6 +25,7 @@ const PaymentPage = () => {
   const [deliveryAddress, setDeliveryAddress] = useState('');
   const [deliveryFee, setDeliveryFee] = useState<number | null>(null);
   const [feeLoading, setFeeLoading] = useState(false);
+  const [isClient, setIsClient] = useState(false);
 
   // Calculate order totals
   const subtotal = getCartTotal();
@@ -32,6 +33,7 @@ const PaymentPage = () => {
   const total = subtotal + tax + (fulfillmentMethod === 'delivery' && deliveryFee ? deliveryFee : 0);
 
   useEffect(() => {
+    setIsClient(true);
     // Check for success status from redirect
     if (searchParams.get('status') === 'success') {
       setPaymentSuccess(true);
@@ -168,15 +170,17 @@ const PaymentPage = () => {
                 )}
               </Button>
           </div>
-          <div className="lg:col-span-1">
-            <OrderSummary
-              subtotal={subtotal}
-              tax={tax}
-              deliveryFee={fulfillmentMethod === 'delivery' ? deliveryFee : 0}
-              total={total}
-              feeLoading={feeLoading}
-            />
-          </div>
+          {isClient && (
+            <div className="lg:col-span-1">
+              <OrderSummary
+                subtotal={subtotal}
+                tax={tax}
+                deliveryFee={fulfillmentMethod === 'delivery' ? deliveryFee : 0}
+                total={total}
+                feeLoading={feeLoading}
+              />
+            </div>
+          )}
         </form>
       </div>
     </main>

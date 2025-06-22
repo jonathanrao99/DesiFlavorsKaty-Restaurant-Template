@@ -86,6 +86,11 @@ const CartSummary = ({ items, deliveryMethod, setDeliveryMethod, scheduledTime, 
           <span className="text-gray-600">Tax (8.25%)</span>
           <span>${tax.toFixed(2)}</span>
         </div>
+        {deliveryMethod === 'delivery' && (
+          <div className="text-center text-sm text-gray-500">
+            Delivery will be calculated at checkout
+          </div>
+        )}
         <div className="flex justify-between border-t border-gray-200 pt-3 font-medium text-lg">
           <span>Total</span>
           <span className="text-desi-orange">${total.toFixed(2)}</span>
