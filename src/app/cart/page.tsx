@@ -124,8 +124,6 @@ const Cart = () => {
                   items={cartItems}
                   deliveryMethod={fulfillmentMethod}
                   setDeliveryMethod={setFulfillmentMethod}
-                  scheduledTime={scheduledTime}
-                  setScheduledTime={setScheduledTime}
                 />
                 <ReturningCustomer />
               </div>

@@ -1,25 +1,36 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { Client, Environment } from 'square';
+import { Client, Environment } from 'square/legacy';
 import { v4 as uuidv4 } from 'uuid';
 
-const squareClient = new Client({
-  accessToken: process.env.SQUARE_ACCESS_TOKEN!,
+const client = new Client({
+  bearerAuthCredentials: {
+    accessToken: process.env.SQUARE_ACCESS_TOKEN!,
+  },
   environment:
-    process.env.NODE_ENV === 'production'
+    process.env.SQUARE_ENVIRONMENT?.toLowerCase() === 'production'
       ? Environment.Production
       : Environment.Sandbox,
 });
-const { checkoutApi } = squareClient;
 
 export async function POST(req: NextRequest) {
   try {
-    const { cartItems, fulfillmentMethod, scheduledTime, customerInfo } = await req.json();
+    const { cartItems, fulfillmentMethod, scheduledTime, customerInfo, orderId } = await req.json();
 
     if (!cartItems?.length) {
       return NextResponse.json({ error: 'Cart is empty' }, { status: 400 });
     }
 
-    const response = await checkoutApi.createPaymentLink({
+    let formattedPhone = undefined;
+    if (customerInfo?.phone) {
+      const phoneDigits = customerInfo.phone.replace(/\D/g, '');
+      if (phoneDigits.length === 10) {
+        formattedPhone = `+1${phoneDigits}`;
+      } else if (phoneDigits.length === 11 && phoneDigits.startsWith('1')) {
+        formattedPhone = `+${phoneDigits}`;
+      }
+    }
+
+    const response = await client.checkoutApi.createPaymentLink({
       idempotencyKey: uuidv4(),
       order: {
         locationId: process.env.SQUARE_LOCATION_ID!,
@@ -27,7 +38,7 @@ export async function POST(req: NextRequest) {
           name: item.name,
           quantity: item.quantity.toString(),
           basePriceMoney: {
-            amount: BigInt(Math.round(item.price * 100)),
+            amount: BigInt(Math.round(parseFloat(item.price.replace(/[^0-9.]/g, '')) * 100)),
             currency: 'USD',
           },
         })),
@@ -42,25 +53,45 @@ export async function POST(req: NextRequest) {
           {
             type: fulfillmentMethod === 'delivery' ? 'DELIVERY' : 'PICKUP',
             state: 'PROPOSED',
-            pickupDetails: {
-              pickupAt: scheduledTime,
-              note: `Customer: ${customerInfo.name}`
-            },
+            ...(fulfillmentMethod === 'pickup' && {
+              pickupDetails: {
+                recipient: {
+                  displayName: customerInfo.name,
+                  phoneNumber: formattedPhone,
+                },
+                scheduleType: scheduledTime === 'ASAP' ? 'ASAP' : 'SCHEDULED',
+                ...(scheduledTime !== 'ASAP' && { pickupAt: scheduledTime }),
+                note: `Customer: ${customerInfo.name}`,
+              },
+            }),
+            ...(fulfillmentMethod === 'delivery' && {
+              deliveryDetails: {
+                recipient: {
+                  displayName: customerInfo.name,
+                  phoneNumber: formattedPhone,
+                },
+                ...(scheduledTime !== 'ASAP' && { deliverAt: scheduledTime }),
+              },
+            }),
           },
-        ]
+        ],
+        referenceId: orderId.toString(),
       },
       checkoutOptions: {
         allowTipping: true,
         redirectUrl: `${process.env.NEXT_PUBLIC_BASE_URL}/thank-you`,
         askForShippingAddress: fulfillmentMethod === 'delivery',
       },
-      prePopulatedData: {
-        buyerEmail: customerInfo.email,
-        buyerPhoneNumber: customerInfo.phone,
-      },
     });
 
-    return NextResponse.json(response.result);
+    const responseData = JSON.parse(JSON.stringify(response.result, (key, value) =>
+      typeof value === 'bigint' ? value.toString() : value
+    ));
+
+    return NextResponse.json({
+      url: responseData.paymentLink?.url || responseData.paymentLink?.longUrl,
+      paymentLink: responseData.paymentLink
+    });
   } catch (e: any) {
     console.error('Square API error:', e);
     return NextResponse.json(
