@@ -11,6 +11,7 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', '@heroui/react', 'framer-motion'],
   },
   images: {
+    domains: ['images.unsplash.com'],
     remotePatterns: [
       {
         protocol: 'https',
