@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createHmac } from 'crypto';
-import { Client, Environment } from 'square';
+import { Client, Environment } from 'square/legacy';
 
 const client = new Client({
   bearerAuthCredentials: {
