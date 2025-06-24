@@ -24,7 +24,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
       <header className="relative flex items-center justify-center px-6 py-4 bg-transparent">
         <div className="flex items-center gap-2">
           <span className="font-samarkan text-3xl text-desi-orange">Desi</span>
-          <span className="font-butler text-2xl font-bold tracking-wide text-desi-black">Flavors Katy</span>
+          <span className="font-display text-2xl font-bold tracking-wide text-desi-black">Flavors Katy</span>
         </div>
         <button
           className="absolute right-6 flex items-center gap-2 text-desi-orange hover:text-desi-black font-semibold px-3 py-1 rounded"
