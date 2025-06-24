@@ -42,7 +42,7 @@ export default function HomeFoodCarouselSection() {
     clearInterval(fadeAudioInterval.current);
     fadeAudioInterval.current = setInterval(() => {
       if (!video) return;
-      let newVolume = video.volume + step;
+      const newVolume = video.volume + step;
       if ((step > 0 && newVolume >= targetVolume) || (step < 0 && newVolume <= targetVolume)) {
         video.volume = targetVolume;
         clearInterval(fadeAudioInterval.current);
