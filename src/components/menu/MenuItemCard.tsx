@@ -54,7 +54,7 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
           const highlight = ['chicken dum biryani', 'butter chicken', 'samosa'].some(k => name.includes(k));
           return highlight ? (
             <SpinningText className="text-desi-orange bg-transparent text-[0.6rem] z-20">
-              bestseller • bestseller •
+              bestseller • bestseller • bestseller •
             </SpinningText>
           ) : null;
         })()}
