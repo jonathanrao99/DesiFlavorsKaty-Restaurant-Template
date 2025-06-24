@@ -35,6 +35,15 @@ async function generateDoorDashJWT() {
 
 export async function POST(req: NextRequest) {
   try {
+    // Debug environment variables
+    console.log('Environment check:', {
+      hasSquareToken: !!process.env.SQUARE_ACCESS_TOKEN,
+      hasSquareEnv: !!process.env.SQUARE_ENVIRONMENT,
+      hasSupabaseUrl: !!process.env.NEXT_PUBLIC_SUPABASE_URL,
+      hasSupabaseKey: !!process.env.SUPABASE_SERVICE_ROLE_KEY,
+      hasDoorDashCreds: !!(process.env.DOORDASH_DRIVE_DEVELOPER_ID && process.env.DOORDASH_DRIVE_KEY_ID && process.env.DOORDASH_DRIVE_SIGNING_SECRET)
+    });
+
     const body = await req.json();
     console.log('Square Webhook received:', JSON.stringify(body, null, 2));
 
