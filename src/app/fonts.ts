@@ -7,7 +7,7 @@ export const inter = Inter({
 });
 
 export const samarkan = localFont({
-  src: '../../public/Fonts/samarkan/saman___.ttf',
+  src: '../../public/Fonts/samarkan/SAMAN___.ttf',
   variable: '--font-samarkan',
 });
 
