@@ -1,8 +1,0 @@
-{
-  "crons": [
-    {
-      "path": "/api/create-scheduled-deliveries",
-      "schedule": "*/15 * * * *"
-    }
-  ]
-} 
