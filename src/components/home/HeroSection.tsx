@@ -76,7 +76,7 @@ const HeroSection = () => {
           >
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight leading-tight">
               <span className="text-white block">Authentic Indian Flavors</span>
-              <span className="bg-desi-orange text-transparent bg-clip-text block mt-2 font-bold">
+              <span className="bg-desi-orange bg-clip-text block mt-2 font-bold">
                 On Wheels
               </span>
             </h1>
