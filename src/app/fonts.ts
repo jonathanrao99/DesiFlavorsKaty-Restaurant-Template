@@ -7,17 +7,17 @@ export const inter = Inter({
 });
 
 export const samarkan = localFont({
-  src: '../../public/Fonts/samarkan/saman___.ttf',
+  src: '../fonts/samarkan/saman___.ttf',
   variable: '--font-samarkan',
 });
 
 export const displayFont = localFont({
-  src: '../../public/Fonts/against_2/against-regular.ttf',
+  src: '../fonts/against_2/against-regular.ttf',
   variable: '--font-display',
   display: 'swap',
 });
 
 export const butler = localFont({
-  src: '../../public/Fonts/butler/Butler/butler-light.otf',
+  src: '../fonts/butler/Butler/butler-light.otf',
   variable: '--font-butler',
 }); 
