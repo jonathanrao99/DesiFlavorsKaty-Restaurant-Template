@@ -10,6 +10,7 @@ import OrderSummary from '@/components/payment/OrderSummary';
 import { Button } from '@heroui/react';
 import dynamicComponent from 'next/dynamic';
 import DatePicker from 'react-datepicker';
+const DatePickerAny: any = DatePicker;
 import "react-datepicker/dist/react-datepicker.css";
 import { AddressAutocompleteProps } from '@/components/payment/AddressAutocomplete';
 
@@ -129,6 +130,24 @@ export default function PaymentPageClient() {
             {isClient&&fulfillmentMethod==='delivery'&&<div><label htmlFor="address" className="block text-sm font-medium text-gray-700">Delivery Address</label><AddressAutocomplete value={deliveryAddress} onValueChange={handleDeliveryAddressChange} onAddressSelect={setDeliveryAddress}/></div>}
             <div><label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label><input type="email" id="email" value={customerEmail} onChange={e=>setCustomerEmail(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm"/></div>
             <div><label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label><input type="tel" id="phone" value={customerPhone} onChange={e=>setCustomerPhone(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm"/></div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-2">Pickup/Delivery Time</label><div className="flex items-center space-x-4 mb-3"><label className={`flex items-center space-x-2 ${canOrderASAP?'cursor-pointer':'cursor-not-allowed opacity-50'}`}><input type="radio" name="scheduleType" value="ASAP" checked={scheduleType==='ASAP'} onChange={()=>setScheduleType('ASAP')} className="form-radio text-desi-orange focus:ring-desi-orange" disabled={!canOrderASAP}/><span>ASAP</span></label><label className="flex items-center space-x-2 cursor-pointer"><input type="radio" name="scheduleType" value="scheduled" checked={scheduleType==='scheduled'} onChange={()=>setScheduleType('scheduled')} className="form-radio text-desi-orange focus:ring-desi-orange"/><span>Schedule for later</span></label></div>{!canOrderASAP&&isClient&&<p className="text-xs text-gray-500 -mt-2 mb-3">ASAP orders are only available from 5 PM to 1 AM.</p>}{scheduleType==='scheduled'&&<div className="relative"><DatePicker selected={scheduledTime} onChange={date=>date&&setScheduledTime(date)} showTimeSelect minDate={new Date()} filterTime={filterTime} dateFormat="MMMM d, yyyy h:mm aa" timeIntervals={30} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm pl-10" placeholderText="Select a date and time"/><Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"/></div>}</div><Button type="submit" disabled={isProcessing||cartItems.length===0||(fulfillmentMethod==='delivery'&&(feeLoading||deliveryFee===null))} className="w-full flex items-center justify-center bg-desi-orange hover:bg-desi-orange/90 text-white py-3 px-4 rounded-xl font-medium transition-colors disabled:opacity-70">{isProcessing?'Redirecting...':<><Lock size={16} className="mr-2"/>Proceed to Secure Payment</>}</Button></div>{isClient&&<div className="lg:col-span-1"><OrderSummary subtotal={subtotal} tax={tax} deliveryFee={fulfillmentMethod==='delivery'?deliveryFee:0} total={total} feeLoading={feeLoading}/></div>}</form></div></main>
+            <div><label className="block text-sm font-medium text-gray-700 mb-2">Pickup/Delivery Time</label><div className="flex items-center space-x-4 mb-3"><label className={`flex items-center space-x-2 ${canOrderASAP?'cursor-pointer':'cursor-not-allowed opacity-50'}`}><input type="radio" name="scheduleType" value="ASAP" checked={scheduleType==='ASAP'} onChange={()=>setScheduleType('ASAP')} className="form-radio text-desi-orange focus:ring-desi-orange" disabled={!canOrderASAP}/><span>ASAP</span></label><label className="flex items-center space-x-2 cursor-pointer"><input type="radio" name="scheduleType" value="scheduled" checked={scheduleType==='scheduled'} onChange={()=>setScheduleType('scheduled')} className="form-radio text-desi-orange focus:ring-desi-orange"/><span>Schedule for later</span></label></div>{!canOrderASAP&&isClient&&<p className="text-xs text-gray-500 -mt-2 mb-3">ASAP orders are only available from 5 PM to 1 AM.</p>}{scheduleType==='scheduled'&&(
+              <div className="relative">
+                <DatePickerAny
+                  selected={scheduledTime}
+                  selectsMultiple={false}
+                  onChange={(date: Date | null) => {
+                    if (date) setScheduledTime(date);
+                  }}
+                  showTimeSelect
+                  minDate={new Date()}
+                  filterTime={filterTime}
+                  dateFormat="MMMM d, yyyy h:mm aa"
+                  timeIntervals={30}
+                  className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm pl-10"
+                  placeholderText="Select a date and time"
+                />
+                <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              </div>
+            )}</div><Button type="submit" disabled={isProcessing||cartItems.length===0||(fulfillmentMethod==='delivery'&&(feeLoading||deliveryFee===null))} className="w-full flex items-center justify-center bg-desi-orange hover:bg-desi-orange/90 text-white py-3 px-4 rounded-xl font-medium transition-colors disabled:opacity-70">{isProcessing?'Redirecting...':<><Lock size={16} className="mr-2"/>Proceed to Secure Payment</>}</Button></div>{isClient&&<div className="lg:col-span-1"><OrderSummary subtotal={subtotal} tax={tax} deliveryFee={fulfillmentMethod==='delivery'?deliveryFee:0} total={total} feeLoading={feeLoading}/></div>}</form></div></main>
   );
 } 
