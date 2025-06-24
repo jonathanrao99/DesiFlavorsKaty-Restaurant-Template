@@ -69,10 +69,6 @@ export const AddressAutocomplete = ({ value, onValueChange, onAddressSelect }: A
     }
   }, [status, data]);
 
-  if (loadError) {
-    return <div className="text-red-600 text-sm mt-2">Google Maps Autocomplete could not be loaded. Please disable ad blockers or shields and reload the page.</div>;
-  }
-
   return (
     <div>
       <input

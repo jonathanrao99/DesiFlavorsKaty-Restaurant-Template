@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LogOut } from 'lucide-react';
+import { LogOut } from "lucide-react";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();

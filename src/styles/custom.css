@@ -1,11 +1,3 @@
-@font-face {
-  font-family: 'Samarkan';
-  src: url('/Fonts/samarkan/SAMAN___.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 /* Custom styles for biryani positioning */
 .traditional-recipes-section {
   position: relative;
@@ -158,9 +150,4 @@ gmp-place-autocomplete .dropdown > ul,
 gmp-place-autocomplete .dropdown > ul > li {
   background-color: #ffffff !important;
   opacity: 1 !important;
-}
-
-/* Utility class for Samarkan font */
-.font-samarkan {
-  font-family: 'Samarkan', cursive !important;
 } 
