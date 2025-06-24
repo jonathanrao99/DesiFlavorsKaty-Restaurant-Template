@@ -1,4 +1,3 @@
-// 'use client' directive
 'use client';
 
 import { useEffect, useState } from 'react';
