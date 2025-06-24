@@ -10,20 +10,11 @@ import { Button } from '@heroui/react';
 import dynamic from 'next/dynamic';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { AddressAutocompleteProps } from '@/components/payment/AddressAutocomplete';
 
-const AddressAutocomplete = dynamic(
+const AddressAutocomplete = dynamic<AddressAutocompleteProps>(
   () => import('@/components/payment/AddressAutocomplete').then(mod => mod.AddressAutocomplete),
-  {
-    ssr: false,
-    loading: () => (
-      <input
-        type="text"
-        placeholder="Start typing your delivery address..."
-        disabled
-        className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm"
-      />
-    ),
-  }
+  { ssr: false }
 );
 
 const isWithinOperatingHours = () => {
@@ -161,6 +152,9 @@ const PaymentPage = () => {
     setIsProcessing(true);
 
     try {
+      // Prepare the scheduled time value
+      const finalScheduledTime = scheduleType === 'ASAP' ? 'ASAP' : scheduledTime.toISOString();
+      
       // 1. Create order in our database
       const orderRes = await fetch('/api/orders', {
         method: 'POST',
@@ -168,7 +162,7 @@ const PaymentPage = () => {
         body: JSON.stringify({
           cartItems,
           fulfillmentMethod,
-          scheduledTime,
+          scheduledTime: finalScheduledTime,
           deliveryFee,
           customerInfo: {
             name: customerName,
@@ -188,7 +182,7 @@ const PaymentPage = () => {
         body: JSON.stringify({
           cartItems,
           fulfillmentMethod,
-          scheduledTime,
+          scheduledTime: finalScheduledTime,
           customerInfo: { name: customerName, email: customerEmail, phone: customerPhone, address: deliveryAddress },
           orderId,
         }),
@@ -231,7 +225,7 @@ const PaymentPage = () => {
               <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
               <input type="text" id="name" value={customerName} onChange={(e) => setCustomerName(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm" />
             </div>
-            {fulfillmentMethod === 'delivery' && (
+            {isClient && fulfillmentMethod === 'delivery' && (
               <div>
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700">Delivery Address</label>
                 <AddressAutocomplete

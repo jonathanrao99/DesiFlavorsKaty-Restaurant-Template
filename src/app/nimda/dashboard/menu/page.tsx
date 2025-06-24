@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { useMenuItems } from "@/hooks/useMenuItems";
 import { MenuItem } from "@/hooks/useMenuItems";
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { FiArrowLeft } from 'react-icons/fi';
 import { MinimalToggle } from '@/components/ui/toggle';
 import { supabase } from '@/integrations/supabase/client';
 import './menu-toggle-override.css';
@@ -67,7 +67,7 @@ export default function MenuPage() {
             className="flex items-center gap-2 text-black text-lg px-4 py-2 rounded transition-colors duration-200 hover:text-desi-orange active:text-desi-orange"
             onClick={() => router.push('/nimda/dashboard')}
           >
-            <ArrowLeft className="inline-block w-6 h-6" />
+            <FiArrowLeft className="inline-block w-6 h-6" />
             <span className="font-semibold">Back</span>
           </button>
         </div>

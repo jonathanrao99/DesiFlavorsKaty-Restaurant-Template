@@ -13,9 +13,9 @@ const squareClient = new SquareClient({
 
 // Helper to generate DoorDash JWT using Node crypto
 async function generateDoorDashJWT() {
-  const developer_id = process.env.DD_DEVELOPER_ID;
-  const key_id = process.env.DD_KEY_ID;
-  const signing_secret = process.env.DD_SIGNING_SECRET;
+  const developer_id = process.env.DOORDASH_DRIVE_DEVELOPER_ID;
+  const key_id = process.env.DOORDASH_DRIVE_KEY_ID;
+  const signing_secret = process.env.DOORDASH_DRIVE_SIGNING_SECRET;
   if (!developer_id || !key_id || !signing_secret) throw new Error('Missing DoorDash credentials');
   const header = { alg: 'HS256', typ: 'JWT', 'dd-ver': 'DD-JWT-V1' };
   const iat = Math.floor(Date.now() / 1000);

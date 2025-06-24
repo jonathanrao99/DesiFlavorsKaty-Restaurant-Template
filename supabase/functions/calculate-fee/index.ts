@@ -9,11 +9,10 @@ const corsHeaders = {
 
 serve(async (req) => {
   // Debug env vars
-  console.log('Supabase calculate-fee STORE_ADDRESS:', Deno.env.get('STORE_ADDRESS'));
-  console.log('Supabase calculate-fee DD credentials:', {
-    developer_id: Deno.env.get('DD_DEVELOPER_ID'),
-    key_id: Deno.env.get('DD_KEY_ID'),
-    hasSigningSecret: !!Deno.env.get('DD_SIGNING_SECRET')
+  console.log('Supabase calculate-fee DoorDash credentials:', {
+    developer_id: Deno.env.get('DOORDASH_DRIVE_DEVELOPER_ID'),
+    key_id: Deno.env.get('DOORDASH_DRIVE_KEY_ID'),
+    hasSigningSecret: !!Deno.env.get('DOORDASH_DRIVE_SIGNING_SECRET')
   });
 
   if (req.method === "OPTIONS") {
@@ -28,9 +27,9 @@ serve(async (req) => {
 
     // Calculate delivery fee via DoorDash Drive Create Quote API
     async function generateJWT() {
-      const developer_id = Deno.env.get('DD_DEVELOPER_ID');
-      const key_id = Deno.env.get('DD_KEY_ID');
-      const signing_secret = Deno.env.get('DD_SIGNING_SECRET');
+      const developer_id = Deno.env.get('DOORDASH_DRIVE_DEVELOPER_ID');
+      const key_id = Deno.env.get('DOORDASH_DRIVE_KEY_ID');
+      const signing_secret = Deno.env.get('DOORDASH_DRIVE_SIGNING_SECRET');
       if (!developer_id || !key_id || !signing_secret) throw new Error('Missing DoorDash credentials');
       const header = { alg: 'HS256', typ: 'JWT', 'dd-ver': 'DD-JWT-V1' };
       const iat = Math.floor(Date.now() / 1000);
@@ -59,7 +58,7 @@ serve(async (req) => {
       external_delivery_id,
       locale: 'en-US',
       order_fulfillment_method: 'standard',
-      pickup_address: Deno.env.get('STORE_ADDRESS'),
+      pickup_address: '1989 North Fry Rd, Katy, TX 77494',
       dropoff_address: address,
       dropoff_phone_number: dropoffPhoneNumber,
     };

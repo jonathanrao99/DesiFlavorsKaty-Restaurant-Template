@@ -3,7 +3,7 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { LogOut } from "lucide-react";
+import { FiLogOut } from "react-icons/fi";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -30,7 +30,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
           className="absolute right-6 flex items-center gap-2 text-desi-orange hover:text-desi-black font-semibold px-3 py-1 rounded"
           onClick={handleLogout}
         >
-          <LogOut className="w-5 h-5" />
+          <FiLogOut className="w-5 h-5" />
           Logout
         </button>
       </header>
