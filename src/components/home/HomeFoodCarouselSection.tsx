@@ -37,8 +37,8 @@ export default function HomeFoodCarouselSection() {
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
-    let targetVolume = inView ? 1 : 0;
-    let step = inView ? 0.5 : -0.5;
+    const targetVolume = inView ? 1 : 0;
+    const step = inView ? 0.5 : -0.5;
     clearInterval(fadeAudioInterval.current);
     fadeAudioInterval.current = setInterval(() => {
       if (!video) return;
