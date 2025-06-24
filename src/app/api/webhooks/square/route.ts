@@ -114,14 +114,47 @@ export async function POST(req: NextRequest) {
         try {
           console.log('Creating DoorDash delivery for order:', orderId);
           
+          // Check if this is a scheduled order that should be delayed
+          const now = new Date();
+          let shouldCreateDeliveryNow = true;
+          let deliverAt = undefined;
+          
+          if (order.scheduled_time && order.scheduled_time !== 'ASAP') {
+            const scheduledTime = new Date(order.scheduled_time);
+            const timeDiffHours = (scheduledTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+            
+            console.log(`Scheduled time: ${scheduledTime.toISOString()}, Current time: ${now.toISOString()}, Diff: ${timeDiffHours.toFixed(2)} hours`);
+            
+            // If scheduled more than 2 hours in advance, don't create delivery yet
+            if (timeDiffHours > 2) {
+              console.log('Order scheduled too far in advance. Will create delivery closer to scheduled time.');
+              shouldCreateDeliveryNow = false;
+              
+              // Update order status to 'scheduled' instead of 'pending'
+              await fetch(updateUrl, {
+                method: 'PATCH',
+                headers: {
+                  apikey: SERVICE_KEY,
+                  authorization: `Bearer ${SERVICE_KEY}`,
+                  'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ 
+                  status: 'scheduled'
+                })
+              });
+            } else {
+              // Close enough to scheduled time, set deliver_at
+              deliverAt = scheduledTime.toISOString();
+            }
+          }
+          
+          if (!shouldCreateDeliveryNow) {
+            console.log('Delivery creation postponed for scheduled order');
+            return NextResponse.json({ status: 'success', message: 'Order scheduled' }, { status: 200 });
+          }
+          
           const ddToken = await generateDoorDashJWT();
           const external_delivery_id = crypto.randomUUID();
-          
-          // Parse scheduled time
-          let deliverAt = undefined;
-          if (order.scheduled_time && order.scheduled_time !== 'ASAP') {
-            deliverAt = new Date(order.scheduled_time).toISOString();
-          }
 
                      const deliveryPayload = {
              external_delivery_id,
