@@ -158,4 +158,9 @@ gmp-place-autocomplete .dropdown > ul,
 gmp-place-autocomplete .dropdown > ul > li {
   background-color: #ffffff !important;
   opacity: 1 !important;
+}
+
+/* Utility class for Samarkan font */
+.font-samarkan {
+  font-family: 'Samarkan', cursive !important;
 } 
