@@ -144,7 +144,7 @@ export default function HomeFoodCarouselSection() {
                     ref={videoRef}
                     src={media[current].src}
                     autoPlay
-                    muted={!inView}
+                    muted
                     playsInline
                     preload="auto"
                     className="object-cover w-full h-full"

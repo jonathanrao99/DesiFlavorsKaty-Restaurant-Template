@@ -11,13 +11,22 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', '@heroui/react', 'framer-motion'],
   },
   images: {
-    domains: ['images.unsplash.com'],
+    domains: [
+      new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname,
+      'images.unsplash.com',
+    ],
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'images.unsplash.com',
         port: '',
         pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname,
+        port: '',
+        pathname: '/storage/v1/**',
       },
     ],
     formats: ['image/avif', 'image/webp'],

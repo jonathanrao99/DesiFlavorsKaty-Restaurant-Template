@@ -151,11 +151,10 @@ const Catering = () => {
             transition={{ type: 'spring', stiffness: 100, damping: 20, delay: 0.3 }}
             className="text-white"
           >
-            <p className="text-lg md:text-xl lg:text-2xl font-semibold mb-2 text-desi-orange tracking-widest">Seamless Catering Experience</p>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display font-bold text-desi-white tracking-tight leading-tight">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-display w-full font-bold text-desi-white tracking-tight leading-tight">
               Catering for All Your Events
             </h2>
-            <p className="mt-4 text-base md:text-lg max-w-2xl mx-auto text-gray-300">
+            <p className="mt-4 text-base md:text-lg max-w-2xl mx-auto text-white">
               Elevate your events with exquisite Indian cuisine, crafted with passion and love.
             </p>
           </motion.div>
@@ -213,7 +212,7 @@ const Catering = () => {
                     {media[current].type === 'image' ? (
                       <Image src={media[current].src} alt={media[current].alt || ''} width={800} height={600} className="object-cover w-full h-full" priority={current === 0} />
                     ) : (
-                      <video ref={videoRef} src={media[current].src} autoPlay muted={!inView} playsInline preload="auto" className="object-cover w-full h-full" title={media[current].alt} />
+                      <video ref={videoRef} src={media[current].src} autoPlay muted playsInline preload="auto" className="object-cover w-full h-full" title={media[current].alt} />
                     )}
                   </motion.div>
                 </AnimatePresence>
