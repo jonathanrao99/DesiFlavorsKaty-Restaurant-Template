@@ -22,6 +22,8 @@ export default function HomeFoodCarouselSection() {
   const sectionRef = useRef(null);
   const videoRef = useRef(null);
   const fadeAudioInterval = useRef(null);
+  // Only these videos should play audio; others remain muted
+  const unmutedVideos = ['/HomeCarousel/VID-20250610-WA0076.mp4', '/HomeCarousel/VID-20250610-WA0082.mp4'];
 
   // Intersection Observer to detect if section is in view
   useEffect(() => {
@@ -144,7 +146,7 @@ export default function HomeFoodCarouselSection() {
                     ref={videoRef}
                     src={media[current].src}
                     autoPlay
-                    muted
+                    muted={!unmutedVideos.includes(media[current].src)}
                     playsInline
                     preload="auto"
                     className="object-cover w-full h-full"
