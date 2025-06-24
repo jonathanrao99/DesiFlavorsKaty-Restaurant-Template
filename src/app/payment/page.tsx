@@ -1,4 +1,5 @@
 'use client';
+export const dynamic = 'force-dynamic';
 
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -7,12 +8,12 @@ import { useCart } from '@/context/CartContext';
 import { toast } from 'sonner';
 import OrderSummary from '@/components/payment/OrderSummary';
 import { Button } from '@heroui/react';
-import dynamic from 'next/dynamic';
+import dynamicComponent from 'next/dynamic';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { AddressAutocompleteProps } from '@/components/payment/AddressAutocomplete';
 
-const AddressAutocomplete = dynamic<AddressAutocompleteProps>(
+const AddressAutocomplete = dynamicComponent<AddressAutocompleteProps>(
   () => import('@/components/payment/AddressAutocomplete').then(mod => mod.AddressAutocomplete),
   { ssr: false }
 );
