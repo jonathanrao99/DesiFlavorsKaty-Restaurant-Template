@@ -154,7 +154,7 @@ const Catering = () => {
             transition={{ type: 'spring', stiffness: 100, damping: 20, delay: 0.3 }}
             className="text-white"
           >
-            <h2 className="text-4xl md:text-4xl lg:text-7xl font-display font-bold text-desi-white tracking-tight leading-tight">
+            <h2 className="text-4xl md:text-4xl lg:text-7xl max-w-5xl mx-auto font-display font-bold text-desi-white tracking-tight leading-tight">
               Catering for All Your Events
             </h2>
             <p className="mt-4 text-base md:text-xl max-w-5xl mx-auto text-white font-bold">
