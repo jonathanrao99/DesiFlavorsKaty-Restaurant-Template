@@ -58,7 +58,7 @@ export default function BlogPage() {
               whileInView="visible"
               viewport={{ once: true }}
               transition={{ duration: 0.7, delay: 0.8 }}
-              className="text-lg md:text-xl text-white leading-relaxed max-w-5xl mx-auto mb-4 font-sans font-bold"
+              className="text-lg md:text-xl text-white leading-relaxed max-w-6xl mx-auto mb-4 font-sans font-bold"
             >
               Stories, recipes, and updates from the Desi Flavors Katy team. Check back for new dishes, behind-the-scenes, and more!
             </motion.p>
