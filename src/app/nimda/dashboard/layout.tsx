@@ -54,7 +54,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
   }
 
   // Check if we're on a subpage that should show the sidebar
-  const showSidebar = pathname !== '/nimda/dashboard';
+  const showSidebar = pathname !== '/nimda/dashboard' && pathname !== '/nimda/dashboard/menu';
 
   if (showSidebar) {
     return (
