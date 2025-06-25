@@ -33,6 +33,13 @@ async function generateDoorDashJWT() {
   return `${dataToSign}.${signatureB64}`;
 }
 
+// Calculate prep time based on order complexity
+function calculatePrepTime(order) {
+  const itemCount = Array.isArray(order.items) ? 
+    order.items.reduce((sum, item) => sum + (item.quantity || 1), 0) : 1;
+  return Math.min(25, Math.max(15, itemCount * 3)); // 3 minutes per item, 15-25 min range
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -44,71 +51,145 @@ serve(async (req) => {
     if (!SUPABASE_URL || !SERVICE_KEY) throw new Error('Missing Supabase environment variables');
 
     const now = new Date();
+    console.log(`Processing scheduled deliveries at ${now.toISOString()}`);
 
-    // Fetch scheduled delivery orders
+    // Fetch scheduled delivery orders that are ready to be processed
     const fetchRes = await fetch(
-      `${SUPABASE_URL}/rest/v1/orders?status=eq.scheduled&order_type=eq.delivery`,
+      `${SUPABASE_URL}/rest/v1/orders?status=eq.scheduled&order_type=eq.delivery&select=*`,
       { headers: { apikey: SERVICE_KEY, authorization: `Bearer ${SERVICE_KEY}` } }
     );
+    
     if (!fetchRes.ok) {
       const txt = await fetchRes.text();
       console.error('Failed fetching scheduled orders:', txt);
       throw new Error('Failed to fetch orders');
     }
+    
     const orders = await fetchRes.json();
+    console.log(`Found ${orders.length} scheduled orders to evaluate`);
     const processed = [];
 
     for (const order of orders) {
       if (!order.scheduled_time || order.scheduled_time === 'ASAP') continue;
+      
       const scheduledTime = new Date(order.scheduled_time);
-      const diffHrs = (scheduledTime - now) / (1000 * 60 * 60);
-      // Process if within 2 hours or up to 1 hour past
-      if (diffHrs <= 2 && diffHrs > -1) {
+      const timeDiffHours = (scheduledTime.getTime() - now.getTime()) / (1000 * 60 * 60);
+      
+      console.log(`Order ${order.id}: scheduled for ${scheduledTime.toISOString()}, diff: ${timeDiffHours.toFixed(2)} hours`);
+      
+      // Process if within 1.5 hours of scheduled time (matches webhook logic)
+      if (timeDiffHours <= 1.5 && timeDiffHours > -0.5) { // Allow 30 min past scheduled time
         try {
+          console.log(`Creating DoorDash delivery for scheduled order ${order.id}`);
+          
           const token = await generateDoorDashJWT();
           const externalId = crypto.randomUUID();
-          const pickup_address = Deno.env.get('STORE_ADDRESS');
-          const pickup_phone = Deno.env.get('STORE_PHONE_NUMBER');
-          if (!pickup_address || !pickup_phone) throw new Error('Missing store details');
-
+          const prepTime = calculatePrepTime(order);
+          
+          // Calculate when food should be ready (15 min before delivery)
+          const readyTime = new Date(scheduledTime.getTime() - 15 * 60 * 1000);
+          
           const payload = {
             external_delivery_id: externalId,
-            pickup_address,
-            pickup_phone_number: pickup_phone,
+            locale: 'en-US',
+            order_fulfillment_method: 'standard',
+            pickup_address: '1989 North Fry Rd, Katy, TX 77494',
+            pickup_business_name: 'Desi Flavors Hub',
+            pickup_phone_number: '+12814010758',
+            pickup_instructions: `Order #${order.id} - ${order.customer_name} - Ready: ${readyTime.toLocaleTimeString()}`,
             dropoff_address: order.delivery_address,
+            dropoff_business_name: order.customer_name,
             dropoff_phone_number: order.customer_phone,
+            dropoff_instructions: `Delivery for ${order.customer_name}`,
+            order_value: Math.round(order.total_amount * 100),
             deliver_at: scheduledTime.toISOString(),
           };
 
+          console.log('DoorDash delivery payload:', payload);
+
           const ddRes = await fetch('https://openapi.doordash.com/drive/v2/deliveries', {
             method: 'POST',
-            headers: { ...corsHeaders, 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+            headers: { 
+              ...corsHeaders, 
+              'Content-Type': 'application/json', 
+              Authorization: `Bearer ${token}` 
+            },
             body: JSON.stringify(payload),
           });
+          
           const ddJson = await ddRes.json();
+          
           if (!ddRes.ok) {
-            console.error('DoorDash error:', ddJson);
+            console.error(`DoorDash error for order ${order.id}:`, ddJson);
           } else {
-            // Update order to pending
-            await fetch(
+            console.log(`DoorDash delivery created for order ${order.id}:`, ddJson);
+            
+            // Update order to pending status with delivery info
+            const updateRes = await fetch(
               `${SUPABASE_URL}/rest/v1/orders?id=eq.${order.id}`,
               {
                 method: 'PATCH',
-                headers: { apikey: SERVICE_KEY, authorization: `Bearer ${SERVICE_KEY}`, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ external_delivery_id: externalId, status: 'pending' }),
+                headers: { 
+                  apikey: SERVICE_KEY, 
+                  authorization: `Bearer ${SERVICE_KEY}`, 
+                  'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify({ 
+                  external_delivery_id: externalId, 
+                  status: 'pending',
+                  prep_time: readyTime.toISOString()
+                }),
               }
             );
-            processed.push({ orderId: order.id, deliveryId: externalId });
+            
+            if (!updateRes.ok) {
+              console.error(`Failed to update order ${order.id}:`, await updateRes.text());
+            } else {
+              processed.push({ 
+                orderId: order.id, 
+                deliveryId: externalId,
+                scheduledTime: scheduledTime.toISOString(),
+                readyTime: readyTime.toISOString()
+              });
+            }
           }
         } catch (e) {
           console.error(`Error processing order ${order.id}:`, e.message);
         }
+      } else if (timeDiffHours > 1.5) {
+        console.log(`Order ${order.id} not ready yet (${timeDiffHours.toFixed(2)} hours remaining)`);
+      } else {
+        console.log(`Order ${order.id} is past processing window (${Math.abs(timeDiffHours).toFixed(2)} hours overdue)`);
       }
     }
 
-    return new Response(JSON.stringify({ success: true, processed, total: orders.length }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    const result = { 
+      success: true, 
+      processed, 
+      total: orders.length,
+      processedCount: processed.length,
+      timestamp: now.toISOString()
+    };
+    
+    console.log('Scheduled delivery processing complete:', result);
+    
+    return new Response(JSON.stringify(result), { 
+      headers: { 
+        ...corsHeaders, 
+        'Content-Type': 'application/json' 
+      } 
+    });
   } catch (err) {
     console.error('Scheduled function error:', err.message);
-    return new Response(JSON.stringify({ error: err.message }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 });
+    return new Response(
+      JSON.stringify({ error: err.message, timestamp: new Date().toISOString() }), 
+      { 
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'application/json' 
+        }, 
+        status: 500 
+      }
+    );
   }
 }); 

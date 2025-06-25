@@ -3,22 +3,114 @@
 import { ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FiLogOut } from "react-icons/fi";
+import { FiLogOut, FiHome, FiShoppingCart, FiBarChart, FiCode, FiUsers, FiMessageSquare, FiSettings } from "react-icons/fi";
 
 export default function DashboardLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
 
-  const linkClass = (path: string) =>
-    pathname === path
-      ? "text-desi-orange font-semibold"
-      : "text-gray-700 hover:text-desi-orange";
+  const navItems = [
+    {
+      name: "Dashboard",
+      href: "/nimda/dashboard",
+      icon: FiHome,
+      active: pathname === "/nimda/dashboard"
+    },
+    {
+      name: "Recent Orders",
+      href: "/nimda/dashboard/orders",
+      icon: FiShoppingCart,
+      active: pathname.startsWith("/nimda/dashboard/orders")
+    },
+    {
+      name: "Sales Analytics",
+      href: "/nimda/dashboard/analytics",
+      icon: FiBarChart,
+      active: pathname.startsWith("/nimda/dashboard/analytics")
+    },
+    {
+      name: "QR Code Analytics",
+      href: "/nimda/dashboard/qr",
+      icon: FiCode,
+      active: pathname.startsWith("/nimda/dashboard/qr")
+    },
+    {
+      name: "Menu Management",
+      href: "/nimda/dashboard/menu",
+      icon: FiSettings,
+      active: pathname.startsWith("/nimda/dashboard/menu")
+    },
+    {
+      name: "Customer Feedback",
+      href: "/nimda/dashboard/feedback",
+      icon: FiMessageSquare,
+      active: pathname.startsWith("/nimda/dashboard/feedback")
+    }
+  ];
 
   function handleLogout() {
     // TODO: Implement actual logout logic
     router.push("/nimda");
   }
 
+  // Check if we're on a subpage that should show the sidebar
+  const showSidebar = pathname !== '/nimda/dashboard';
+
+  if (showSidebar) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex">
+        {/* Sidebar */}
+        <div className="w-64 bg-white shadow-lg">
+          <div className="p-6 border-b">
+            <Link href="/nimda/dashboard" className="flex items-center gap-2">
+              <span className="font-samarkan text-2xl text-desi-orange">Desi</span>
+              <span className="font-display text-xl font-bold tracking-wide text-desi-black">Flavors</span>
+            </Link>
+          </div>
+          
+          <nav className="p-4">
+            <ul className="space-y-2">
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                return (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                        item.active
+                          ? 'bg-desi-orange text-white'
+                          : 'text-gray-700 hover:bg-gray-100'
+                      }`}
+                    >
+                      <Icon className="h-5 w-5" />
+                      {item.name}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+          
+          <div className="absolute bottom-6 left-4 right-4">
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-lg w-full transition-colors"
+            >
+              <FiLogOut className="h-5 w-5" />
+              Logout
+            </button>
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div className="flex-1">
+          {children}
+        </div>
+      </div>
+    );
+  }
+
+  // Main dashboard page layout
   return (
     <div className="min-h-screen bg-desi-cream">
       <header className="relative flex items-center justify-center px-6 py-4 bg-transparent">
@@ -35,22 +127,22 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
         </button>
       </header>
       <div className="px-6">
-        {pathname === '/nimda/dashboard' && (
-          <div className="flex justify-center gap-4 mb-6">
-            <Link href="/nimda/dashboard/menu">
-              <button className="px-4 py-2 bg-desi-orange text-white rounded">Menu</button>
-            </Link>
-            <Link href="/nimda/dashboard/blog">
-              <button className="px-4 py-2 bg-desi-orange text-white rounded">Blog</button>
-            </Link>
-            <Link href="/nimda/dashboard/customers">
-              <button className="px-4 py-2 bg-desi-orange text-white rounded">Customers</button>
-            </Link>
-            <Link href="/nimda/dashboard/transactions">
-              <button className="px-4 py-2 bg-desi-orange text-white rounded">Transactions</button>
-            </Link>
-          </div>
-        )}
+        {/* Quick Navigation Cards for Main Dashboard */}
+        <div className="flex justify-center gap-4 mb-6">
+          {navItems.slice(1).map((item) => {
+            const Icon = item.icon;
+            return (
+              <Link key={item.name} href={item.href}>
+                <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer min-w-[140px]">
+                  <div className="flex flex-col items-center gap-2">
+                    <Icon className="h-6 w-6 text-desi-orange" />
+                    <span className="text-sm font-medium text-gray-700">{item.name}</span>
+                  </div>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
         {children}
       </div>
     </div>
