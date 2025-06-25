@@ -70,7 +70,7 @@ const MenuHeader = () => {
             whileInView="visible"
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.8 }}
-            className="text-lg md:text-xl text-white leading-relaxed max-w-7xl mx-auto mb-4 font-sans"
+            className="text-lg md:text-xl text-white leading-relaxed max-w-5xl mx-auto mb-4 font-sans"
           >
             Our menu celebrates traditional desi flavours with the finest ingredients crafted into culinary masterpieces. From starters to desserts, each dish is an exquisite experience that invites you on a journey.
           </motion.p>
