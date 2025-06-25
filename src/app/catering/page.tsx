@@ -144,7 +144,7 @@ const Catering = () => {
           <img
             src="/Truck/IMG-20250603-WA0005.jpg"
             alt="Premium Catering"
-            className="w-full h-full object-cover dark:shadow-black/40"
+            className="w-full h-full object-cover dark:shadow-black/70"
           />
         </motion.div>
         <div className="relative z-20 text-center px-4 max-w-3xl">
@@ -154,11 +154,11 @@ const Catering = () => {
             transition={{ type: 'spring', stiffness: 100, damping: 20, delay: 0.3 }}
             className="text-white"
           >
-            <h2 className="text-4xl md:text-4xl lg:text-7xl max-w-5xl mx-auto font-display font-bold text-desi-white tracking-tight leading-tight">
+            <h2 className="text-3xl md:text-3xl lg:text-5xl max-w-5xl mx-auto font-display font-bold text-desi-white tracking-tight leading-tight">
               Catering for All Your Events
             </h2>
             <p className="mt-4 text-base md:text-xl max-w-5xl mx-auto text-white font-bold">
-            Elevate your events with exquisite Indian cuisine, crafted with passion and love. Every dish tells a story, leaving your guests with flavors they'll never forget.
+            Elevate your events with Indian cuisine, crafted with passion and love. Every dish tells a story, leaving your guests with flavors they'll never forget.
             </p>
           </motion.div>
         </div>

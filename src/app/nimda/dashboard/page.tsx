@@ -6,6 +6,7 @@ import { RecentOrdersWidget } from '@/components/admin/RecentOrdersWidget';
 import { SalesAnalytics } from '@/components/admin/SalesAnalytics';
 import { QrCodeStats } from '@/components/admin/QrCodeStats';
 import { CustomerFeedbackWidget } from '@/components/admin/CustomerFeedbackWidget';
+import { ComprehensiveDashboard } from '@/components/analytics/ComprehensiveDashboard';
 import { DollarSign, ShoppingCart, Users, TrendingUp, Clock, MapPin } from 'lucide-react';
 
 interface DashboardStats {
@@ -169,6 +170,11 @@ export default function AdminDashboardPage() {
             <p className="text-xs text-indigo-100">Future orders</p>
           </CardContent>
         </Card>
+      </div>
+
+      {/* Comprehensive Analytics Dashboard */}
+      <div className="mt-8">
+        <ComprehensiveDashboard />
       </div>
 
       {/* Main Content Grid */}
