@@ -22,7 +22,9 @@ const AddressAutocomplete = dynamicComponent<AddressAutocompleteProps>(
 const isWithinOperatingHours = () => {
   const now = new Date();
   const hour = now.getHours();
-  return hour >= 17 || hour < 1;
+  const minute = now.getMinutes();
+  // 5:30 PM to 12:30 AM
+  return (hour === 17 && minute >= 30) || (hour >= 18) || (hour === 0 && minute <= 30);
 };
 
 function PaymentPageContent() {
@@ -42,15 +44,33 @@ function PaymentPageContent() {
   const [canOrderASAP, setCanOrderASAP] = useState(false);
   const [scheduleType, setScheduleType] = useState<'ASAP' | 'scheduled'>('scheduled');
   const [isGoogleAddress, setIsGoogleAddress] = useState(false);
+  const [invalidToastShown, setInvalidToastShown] = useState(false);
 
   const getInitialStartTime = () => {
     const now = new Date();
     const thirtyMinutesFromNow = new Date(now.getTime() + 30 * 60 * 1000);
-    const today5pm = new Date(); today5pm.setHours(17,0,0,0);
-    if (now.getHours() >= 1 && now.getHours() < 17) {
-      return today5pm;
+    
+    // Set today at 5:30 PM
+    const today530pm = new Date(); 
+    today530pm.setHours(17, 30, 0, 0);
+    
+    // If it's before 5:30 PM today, return 5:30 PM today
+    if (now < today530pm) {
+      return today530pm;
     }
-    return thirtyMinutesFromNow > today5pm ? thirtyMinutesFromNow : today5pm;
+    
+    // If it's after 5:30 PM, return the later of: 30 minutes from now or 5:30 PM
+    const minimumTime = thirtyMinutesFromNow > today530pm ? thirtyMinutesFromNow : today530pm;
+    
+    // Round to next 30-minute interval
+    const minutes = minimumTime.getMinutes();
+    if (minutes > 0 && minutes < 30) {
+      minimumTime.setMinutes(30, 0, 0);
+    } else if (minutes > 30) {
+      minimumTime.setHours(minimumTime.getHours() + 1, 0, 0, 0);
+    }
+    
+    return minimumTime;
   };
 
   const [scheduledTime, setScheduledTime] = useState<Date>(getInitialStartTime());
@@ -75,32 +95,64 @@ function PaymentPageContent() {
     const now = new Date();
     const selected = new Date(time);
     const thirtyMinutesFromNow = new Date(now.getTime() + 30 * 60 * 1000);
+    
+    // Must be at least 30 minutes from now
     if (selected < thirtyMinutesFromNow) return false;
+    
     const hour = selected.getHours();
-    return hour >= 17 || hour < 1;
+    const minute = selected.getMinutes();
+    
+    // Only allow 30-minute intervals
+    if (minute !== 0 && minute !== 30) return false;
+    
+    // Business hours: 5:30 PM to 12:30 AM
+    return (hour === 17 && minute >= 30) || (hour >= 18 && hour <= 23) || (hour === 0 && minute <= 30);
   };
 
   const subtotal = getCartTotal();
   const tax = subtotal * 0.0825;
   const total = subtotal + tax + (fulfillmentMethod === 'delivery' && deliveryFee ? deliveryFee : 0);
 
+  // Fallback delivery fee (in USD) when calculation fails
+  const FALLBACK_DELIVERY_FEE = 5;
+
   useEffect(() => {
-    if (
-      fulfillmentMethod !== 'delivery' ||
-      !deliveryAddress.trim() ||
-      customerPhone.replace(/\D/g, '').length < 10
-    ) {
+    // Reset invalid toast when address changes
+    setInvalidToastShown(false);
+    
+    // Only calculate fee for delivery orders
+    if (fulfillmentMethod !== 'delivery') {
       setDeliveryFee(null);
       return;
     }
-    if (!isGoogleAddress) {
+
+    // Check if we have the required fields
+    if (!deliveryAddress.trim() || customerPhone.replace(/\D/g, '').length < 10) {
       setDeliveryFee(null);
-      toast.error('The delivery address is in invalid format. Please select an address from the suggestions.');
       return;
     }
+
+    // Validate address format - either from Google suggestions or manually entered with basic validation
+    const isValidAddressFormat = isGoogleAddress || 
+      (deliveryAddress.includes(',') && 
+       deliveryAddress.toLowerCase().includes('tx') && 
+       deliveryAddress.length > 20);
+
+    if (!isValidAddressFormat) {
+      setDeliveryFee(null);
+      if (!invalidToastShown) {
+        toast.error('Please enter a complete address including city and state, or select from Google suggestions.');
+        setInvalidToastShown(true);
+      }
+      return;
+    }
+
+    // Calculate delivery fee
     setFeeLoading(true);
     const timer = setTimeout(async () => {
       try {
+        console.log('Calculating delivery fee for:', { address: deliveryAddress, phone: customerPhone, isGoogleAddress });
+        
         const res = await fetch(`${process.env.NEXT_PUBLIC_SUPABASE_FUNCTION_URL}/calculate-fee`, {
           method: 'POST',
           headers: {
@@ -108,34 +160,110 @@ function PaymentPageContent() {
             'apikey': process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
             'Authorization': `Bearer ${process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!}`,
           },
-          body: JSON.stringify({ address: deliveryAddress, dropoffPhoneNumber: customerPhone.replace(/\D/g, '') }),
+          body: JSON.stringify({ 
+            address: deliveryAddress, 
+            dropoffPhoneNumber: customerPhone.replace(/\D/g, '') 
+          }),
         });
+        
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Fee calculation error');
+        console.log('Fee calculation response:', data);
+        
+        if (!res.ok || typeof data.fee !== 'number') {
+          throw new Error(data.error || 'Fee calculation failed');
+        }
+        
         setDeliveryFee(data.fee);
-      } catch {
-        toast.error("Sorry, we can't deliver to that address yet.");
-        setDeliveryFee(null);
+        console.log('Delivery fee set to:', data.fee);
+      } catch (error) {
+        console.error('Delivery fee calculation error:', error);
+        // Apply fallback fee on error
+        setDeliveryFee(FALLBACK_DELIVERY_FEE);
+        toast.error(`We're having trouble calculating the delivery fee. Using a standard fee of $${FALLBACK_DELIVERY_FEE.toFixed(2)} for now.`);
       } finally {
         setFeeLoading(false);
       }
-    }, 1500);
+    }, 500);
+
     return () => clearTimeout(timer);
-  }, [deliveryAddress, customerPhone, fulfillmentMethod, isGoogleAddress]);
+  }, [deliveryAddress, customerPhone, fulfillmentMethod, isGoogleAddress, invalidToastShown]);
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (scheduleType==='ASAP' && !isWithinOperatingHours()) { toast.error('ASAP orders unavailable',{description:'Open 5 PM to 1 AM.'}); setCanOrderASAP(false); setScheduleType('scheduled'); return; }
-    if ((fulfillmentMethod==='delivery' && !deliveryAddress) || !customerName || !customerEmail || !customerPhone) { toast.error('Please fill in all required fields.'); return; }
+    
+    if (scheduleType === 'ASAP' && !isWithinOperatingHours()) { 
+      toast.error('ASAP orders unavailable', { description: 'Open 5:30 PM to 12:30 AM.' }); 
+      setCanOrderASAP(false); 
+      setScheduleType('scheduled'); 
+      return; 
+    }
+    
+    if ((fulfillmentMethod === 'delivery' && (!deliveryAddress || deliveryFee === null)) || !customerName || !customerEmail || !customerPhone) { 
+      toast.error('Please fill in all required fields, including a valid delivery address and phone number.'); 
+      return; 
+    }
+    
     setIsProcessing(true);
+    
     try {
       const finalScheduledTime = scheduleType === 'ASAP' ? 'ASAP' : scheduledTime.toISOString();
-      const orderRes = await fetch('/api/orders',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cartItems,fulfillmentMethod,scheduledTime:finalScheduledTime,deliveryFee,customerInfo:{name:customerName,email:customerEmail,phone:customerPhone,address:deliveryAddress}})});
-      const {orderId,error:orderError} = await orderRes.json(); if(orderError) throw new Error(orderError);
-      const linkRes = await fetch('/api/create-payment-link',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cartItems,fulfillmentMethod,scheduledTime:finalScheduledTime,customerInfo:{name:customerName,email:customerEmail,phone:customerPhone,address:deliveryAddress},orderId})});
-      const {url,error:linkError} = await linkRes.json(); if(linkError) throw new Error(linkError);
-      if(url) router.push(url);
-    } catch { toast.error('Could not proceed to checkout. Please try again.'); setIsProcessing(false); }
+      
+      // Create order first
+      const orderRes = await fetch('/api/orders', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cartItems,
+          fulfillmentMethod,
+          scheduledTime: finalScheduledTime,
+          deliveryFee,
+          customerInfo: { 
+            name: customerName, 
+            email: customerEmail, 
+            phone: customerPhone, 
+            address: deliveryAddress 
+          }
+        })
+      });
+      
+      const { orderId, error: orderError } = await orderRes.json(); 
+      if (orderError) throw new Error(orderError);
+      
+      // Create payment link
+      const paymentLinkData = {
+        cartItems,
+        fulfillmentMethod,
+        scheduledTime: finalScheduledTime,
+        deliveryFee,
+        customerInfo: { 
+          name: customerName, 
+          email: customerEmail, 
+          phone: customerPhone, 
+          address: deliveryAddress 
+        },
+        orderId
+      };
+      
+      console.log('Creating payment link with data:', paymentLinkData);
+      
+      const linkRes = await fetch('/api/create-payment-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(paymentLinkData)
+      });
+      
+      const { url, error: linkError } = await linkRes.json(); 
+      if (linkError) throw new Error(linkError);
+      
+      if (url) {
+        console.log('Redirecting to payment URL:', url);
+        router.push(url);
+      }
+    } catch (error) { 
+      console.error('Checkout error:', error);
+      toast.error('Could not proceed to checkout. Please try again.'); 
+      setIsProcessing(false); 
+    }
   };
 
   const handleDeliveryAddressChange = (val: string) => {
@@ -148,18 +276,161 @@ function PaymentPageContent() {
     setIsGoogleAddress(true);
   };
 
+  // Always treat payment page as delivery
+  useEffect(() => {
+    setFulfillmentMethod('delivery');
+  }, [setFulfillmentMethod]);
+
   return (
     <main className="min-h-screen pt-24 pb-20 bg-gray-50">
       <div className="container mx-auto px-4 md:px-6 pt-4">
-        <button onClick={()=>router.push('/cart')} className="flex items-center font-semibold text-desi-orange hover:text-black transition-colors mb-8 text-base"><ArrowLeft size={16} className="mr-1"/><span>Back to Cart</span></button>
+        <button 
+          onClick={() => router.push('/cart')} 
+          className="flex items-center font-semibold text-desi-orange hover:text-black transition-colors mb-8 text-base"
+        >
+          <ArrowLeft size={16} className="mr-1" />
+          <span>Back to Cart</span>
+        </button>
+        
         <form onSubmit={handleCheckout} className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
           <div className="lg:col-span-2 space-y-6 bg-white rounded-xl shadow-md p-6">
             <h2 className="text-2xl font-bold font-display mb-4">Customer Information</h2>
-            <div><label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label><input type="text" id="name" value={customerName} onChange={e=>setCustomerName(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm"/></div>
-            {isClient&&fulfillmentMethod==='delivery'&&<div><label htmlFor="address" className="block text-sm font-medium text-gray-700">Delivery Address</label><AddressAutocomplete value={deliveryAddress} onValueChange={handleDeliveryAddressChange} onAddressSelect={handleGoogleAddressSelect}/></div>}
-            <div><label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label><input type="email" id="email" value={customerEmail} onChange={e=>setCustomerEmail(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm"/></div>
-            <div><label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label><input type="tel" id="phone" value={customerPhone} onChange={e=>setCustomerPhone(e.target.value)} required className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm"/></div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-2">Pickup/Delivery Time</label><div className="flex items-center space-x-4 mb-3"><label className={`flex items-center space-x-2 ${canOrderASAP?'cursor-pointer':'cursor-not-allowed opacity-50'}`}><input type="radio" name="scheduleType" value="ASAP" checked={scheduleType==='ASAP'} onChange={()=>setScheduleType('ASAP')} className="form-radio text-desi-orange focus:ring-desi-orange" disabled={!canOrderASAP}/><span>ASAP</span></label><label className="flex items-center space-x-2 cursor-pointer"><input type="radio" name="scheduleType" value="scheduled" checked={scheduleType==='scheduled'} onChange={()=>setScheduleType('scheduled')} className="form-radio text-desi-orange focus:ring-desi-orange"/><span>Schedule for later</span></label></div>{!canOrderASAP&&isClient&&<p className="text-xs text-gray-500 -mt-2 mb-3">ASAP orders are only available from 5 PM to 1 AM.</p>}{scheduleType==='scheduled'&&<div className="relative"><DatePicker selected={scheduledTime} onChange={(date: Date | null) => date && setScheduledTime(date)} showTimeSelect minDate={new Date()} filterTime={filterTime} dateFormat="MMMM d, yyyy h:mm aa" timeIntervals={30} className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm pl-10" placeholderText="Select a date and time"/><Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400"/></div>}</div><Button type="submit" disabled={isProcessing||cartItems.length===0||(fulfillmentMethod==='delivery'&&(feeLoading||deliveryFee===null))} className="w-full flex items-center justify-center bg-desi-orange hover:bg-desi-orange/90 text-white py-3 px-4 rounded-xl font-medium transition-colors disabled:opacity-70">{isProcessing?'Redirecting...':<><Lock size={16} className="mr-2"/>Proceed to Secure Payment</>}</Button></div>{isClient&&<div className="lg:col-span-1"><OrderSummary subtotal={subtotal} tax={tax} deliveryFee={fulfillmentMethod==='delivery'?deliveryFee:0} total={total} feeLoading={feeLoading}/></div>}</form></div></main>
+            
+            <div>
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
+              <input 
+                type="text" 
+                id="name" 
+                value={customerName} 
+                onChange={e => setCustomerName(e.target.value)} 
+                required 
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm"
+              />
+            </div>
+            
+            {isClient && (
+              <div>
+                <label htmlFor="address" className="block text-sm font-medium text-gray-700">Delivery Address</label>
+                <AddressAutocomplete 
+                  value={deliveryAddress} 
+                  onValueChange={handleDeliveryAddressChange} 
+                  onAddressSelect={handleGoogleAddressSelect}
+                />
+              </div>
+            )}
+            
+            <div>
+              <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
+              <input 
+                type="email" 
+                id="email" 
+                value={customerEmail} 
+                onChange={e => setCustomerEmail(e.target.value)} 
+                required 
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
+              <input 
+                type="tel" 
+                id="phone" 
+                value={customerPhone} 
+                onChange={e => setCustomerPhone(e.target.value)} 
+                required 
+                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Pickup/Delivery Time</label>
+              <div className="flex items-center space-x-4 mb-3">
+                <label className={`flex items-center space-x-2 ${canOrderASAP ? 'cursor-pointer' : 'cursor-not-allowed opacity-50'}`}>
+                  <input 
+                    type="radio" 
+                    name="scheduleType" 
+                    value="ASAP" 
+                    checked={scheduleType === 'ASAP'} 
+                    onChange={() => setScheduleType('ASAP')} 
+                    className="form-radio text-desi-orange focus:ring-desi-orange" 
+                    disabled={!canOrderASAP}
+                  />
+                  <span>ASAP</span>
+                </label>
+                <label className="flex items-center space-x-2 cursor-pointer">
+                  <input 
+                    type="radio" 
+                    name="scheduleType" 
+                    value="scheduled" 
+                    checked={scheduleType === 'scheduled'} 
+                    onChange={() => setScheduleType('scheduled')} 
+                    className="form-radio text-desi-orange focus:ring-desi-orange"
+                  />
+                  <span>Schedule for later</span>
+                </label>
+              </div>
+              
+              {!canOrderASAP && isClient && (
+                <p className="text-xs text-gray-500 -mt-2 mb-3">
+                  ASAP orders are only available from 5:30 PM to 12:30 AM.
+                </p>
+              )}
+              
+              {scheduleType === 'scheduled' && (
+                <div className="relative">
+                  <DatePicker 
+                    selected={scheduledTime} 
+                    onChange={(date: Date | null) => date && setScheduledTime(date)} 
+                    showTimeSelect 
+                    minDate={new Date()} 
+                    filterTime={filterTime} 
+                    dateFormat="MMMM d, yyyy h:mm aa" 
+                    timeIntervals={30} 
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm pl-10" 
+                    placeholderText="Select a date and time"
+                  />
+                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                </div>
+              )}
+            </div>
+            
+            <Button 
+              type="submit" 
+              disabled={isProcessing || cartItems.length === 0 || (fulfillmentMethod === 'delivery' && (feeLoading || deliveryFee == null))} 
+              className="w-full flex items-center justify-center bg-desi-orange hover:bg-desi-orange/90 text-white py-3 px-4 rounded-xl font-medium transition-colors disabled:opacity-70"
+            >
+              {isProcessing ? (
+                <>
+                  <svg className="animate-spin h-5 w-5 mr-2 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                  </svg>
+                  Processing...
+                </>
+              ) : (
+                <>
+                  <Lock size={16} className="mr-2" />
+                  Proceed to Secure Payment
+                </>
+              )}
+            </Button>
+          </div>
+          
+          {isClient && (
+            <div className="lg:col-span-1">
+              <OrderSummary 
+                subtotal={subtotal} 
+                tax={tax} 
+                deliveryFee={deliveryFee} 
+                total={total} 
+                feeLoading={feeLoading}
+              />
+            </div>
+          )}
+        </form>
+      </div>
+    </main>
   );
 }
 

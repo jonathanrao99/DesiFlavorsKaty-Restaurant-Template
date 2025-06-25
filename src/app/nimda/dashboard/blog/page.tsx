@@ -354,7 +354,7 @@ export default function BlogPage() {
                 </div>
               </div>
 
-              <div>
+    <div>
                 <label className="text-sm font-medium text-gray-700 mb-2 block">Meta Description</label>
                 <Textarea
                   placeholder="SEO description for search engines..."

@@ -33,10 +33,12 @@ async function generateDoorDashJWT() {
   return `${dataToSign}.${signature}`;
 }
 
-// Helper to check if within business hours (5 PM - 1 AM)
+// Helper to check if within business hours (5:30 PM - 12:30 AM)
 function isWithinBusinessHours(date: Date = new Date()): boolean {
   const hour = date.getHours();
-  return hour >= 17 || hour < 1;
+  const minute = date.getMinutes();
+  // 5:30 PM to 12:30 AM
+  return (hour === 17 && minute >= 30) || (hour >= 18) || (hour === 0 && minute <= 30);
 }
 
 // Helper to calculate optimal prep and delivery times

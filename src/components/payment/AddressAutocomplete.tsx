@@ -12,9 +12,10 @@ export interface AddressAutocompleteProps {
   value?: string;
   onValueChange?: (value: string) => void;
   onAddressSelect: (address: string) => void;
+  onBlur?: () => void;
 }
 
-export const AddressAutocomplete = ({ value, onValueChange, onAddressSelect }: AddressAutocompleteProps) => {
+export const AddressAutocomplete = ({ value, onValueChange, onAddressSelect, onBlur }: AddressAutocompleteProps) => {
   const { isLoaded, loadError } = useGoogleMapsScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
     libraries: MAP_LIBRARIES,
@@ -100,6 +101,7 @@ export const AddressAutocomplete = ({ value, onValueChange, onAddressSelect }: A
         ref={inputRef}
         value={value !== undefined ? value : (isLoaded ? autoValue : '')}
         onChange={handleInput}
+        onBlur={onBlur}
         placeholder={isLoaded ? "Start typing your delivery address..." : "Loading address suggestions..."}
         className="w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-desi-orange sm:text-sm"
       />

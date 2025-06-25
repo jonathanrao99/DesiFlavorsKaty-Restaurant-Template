@@ -68,9 +68,9 @@ serve(async (req) => {
     if (record.order_type === 'delivery' && record.delivery_address) {
       // Generate DoorDash JWT
       async function generateJWT() {
-        const developer_id = Deno.env.get('DD_DEVELOPER_ID');
-        const key_id = Deno.env.get('DD_KEY_ID');
-        const signing_secret = Deno.env.get('DD_SIGNING_SECRET');
+        const developer_id = Deno.env.get('DOORDASH_DRIVE_DEVELOPER_ID');
+        const key_id = Deno.env.get('DOORDASH_DRIVE_KEY_ID');
+        const signing_secret = Deno.env.get('DOORDASH_DRIVE_SIGNING_SECRET');
         if (!developer_id || !key_id || !signing_secret) throw new Error('Missing DoorDash credentials');
         const header = { alg: 'HS256', typ: 'JWT', 'dd-ver': 'DD-JWT-V1' };
         const iat = Math.floor(Date.now() / 1000);
