@@ -8,6 +8,8 @@ import { QrCodeStats } from '@/components/admin/QrCodeStats';
 import { CustomerFeedbackWidget } from '@/components/admin/CustomerFeedbackWidget';
 import { ComprehensiveDashboard } from '@/components/analytics/ComprehensiveDashboard';
 import { DollarSign, ShoppingCart, Users, TrendingUp, Clock, MapPin } from 'lucide-react';
+import Link from 'next/link';
+import { FiShoppingCart, FiBarChart, FiCode, FiSettings, FiMessageSquare } from 'react-icons/fi';
 
 interface DashboardStats {
   totalSales: number;
@@ -95,6 +97,39 @@ export default function AdminDashboardPage() {
 
   return (
     <div className="flex flex-col gap-6 p-6">
+      {/* Subpage Navigation Buttons */}
+      <div className="flex flex-wrap justify-center gap-4 mb-6">
+        <Link href="/nimda/dashboard/orders">
+          <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer min-w-[140px] flex flex-col items-center gap-2">
+            <FiShoppingCart className="h-6 w-6 text-desi-orange" />
+            <span className="text-sm font-medium text-gray-700">Orders</span>
+          </div>
+        </Link>
+        <Link href="/nimda/dashboard/analytics">
+          <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer min-w-[140px] flex flex-col items-center gap-2">
+            <FiBarChart className="h-6 w-6 text-desi-orange" />
+            <span className="text-sm font-medium text-gray-700">Sales Analytics</span>
+          </div>
+        </Link>
+        <Link href="/nimda/dashboard/qr">
+          <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer min-w-[140px] flex flex-col items-center gap-2">
+            <FiCode className="h-6 w-6 text-desi-orange" />
+            <span className="text-sm font-medium text-gray-700">QR Code Analytics</span>
+          </div>
+        </Link>
+        <Link href="/nimda/dashboard/menu">
+          <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer min-w-[140px] flex flex-col items-center gap-2">
+            <FiSettings className="h-6 w-6 text-desi-orange" />
+            <span className="text-sm font-medium text-gray-700">Menu Management</span>
+          </div>
+        </Link>
+        <Link href="/nimda/dashboard/feedback">
+          <div className="bg-white p-4 rounded-lg shadow hover:shadow-md transition-shadow cursor-pointer min-w-[140px] flex flex-col items-center gap-2">
+            <FiMessageSquare className="h-6 w-6 text-desi-orange" />
+            <span className="text-sm font-medium text-gray-700">Customer Feedback</span>
+          </div>
+        </Link>
+      </div>
       {/* Overview Header */}
       <div className="flex items-center justify-between">
         <div>

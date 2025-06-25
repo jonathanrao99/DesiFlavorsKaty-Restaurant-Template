@@ -4,6 +4,7 @@ import { ReactNode, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { FiArrowLeft } from "react-icons/fi";
+import NimdaNavbar from '../NimdaNavbar';
 
 const PAGE_TITLES: Record<string, string> = {
   "/nimda/dashboard": "Dashboard",
@@ -41,6 +42,7 @@ export default function DashboardLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen bg-desi-cream">
+      <NimdaNavbar />
       <div className="relative mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-center gap-2 pt-10">
         <div className="sm:absolute sm:left-4 flex items-center">
           {pathname !== "/nimda/dashboard" && (
