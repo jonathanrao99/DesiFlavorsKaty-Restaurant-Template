@@ -7,6 +7,20 @@
           "ACCESS_TOKEN": "EAAAl0KDt4gEgPPXeIvFUdCTSAfFhHH6mS66HEcNxeHKkaYI2TxLUVN_QhKXug2l",
           "SANDBOX": "true"
         }
+      },
+      "supabase": {
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@supabase/mcp-server-supabase@latest",
+        "--read-only",
+        "--project-ref=tpncxlxsggpsiswoownv"
+      ],
+      "env": {
+        "SUPABASE_ACCESS_TOKEN": "sbp_490fcd548f589f87b8f7e895e2f3cfb94faa0417"
       }
     }
   }
+}

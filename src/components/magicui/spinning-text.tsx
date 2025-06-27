@@ -20,7 +20,6 @@ type SpinningTextProps = {
 
 const BASE_TRANSITION = {
   repeat: Infinity,
-  ease: "linear",
 };
 
 const BASE_ITEM_VARIANTS = {
@@ -57,10 +56,10 @@ export function SpinningText({
   const letters = children.split("");
   letters.push(" ");
 
-  const finalTransition = {
+  const finalTransition: Transition = {
     ...BASE_TRANSITION,
+    duration,
     ...transition,
-    duration: (transition as { duration?: number })?.duration ?? duration,
   };
 
   const containerVariants = {

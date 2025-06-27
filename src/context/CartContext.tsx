@@ -1,6 +1,14 @@
 'use client';
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { toast } from 'sonner';
+import { logAnalyticsEvent } from '@/utils/loyaltyAndAnalytics';
+
+declare global {
+  interface Window {
+    gtag?: (...args: any[]) => void;
+    umami?: (...args: any[]) => void;
+  }
+}
 
 export interface CartItem {
   id: number;
@@ -97,6 +105,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         return [...prevItems, newItem];
       }
     });
+    // Analytics: log add to cart
+    logAnalyticsEvent('cart_item_added', { item });
+    if (typeof window !== 'undefined') {
+      window.gtag && window.gtag('event', 'add_to_cart', { item_id: item.id, item_name: item.name });
+      window.umami && window.umami('add_to_cart', { item_id: item.id, item_name: item.name });
+    }
   };
 
   const removeFromCart = (id: number) => {
@@ -104,6 +118,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const itemToRemove = prevItems.find(item => item.id === id);
       if (itemToRemove) {
         toast.success(`${itemToRemove.name} has been removed from your cart`);
+        // Analytics: log remove from cart
+        logAnalyticsEvent('cart_item_removed', { item: itemToRemove });
+        if (typeof window !== 'undefined') {
+          window.gtag && window.gtag('event', 'remove_from_cart', { item_id: itemToRemove.id, item_name: itemToRemove.name });
+          window.umami && window.umami('remove_from_cart', { item_id: itemToRemove.id, item_name: itemToRemove.name });
+        }
       }
       return prevItems.filter(item => item.id !== id);
     });
@@ -136,6 +156,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const clearCart = () => {
     setCartItems([]);
     toast.success('All items have been removed from your cart');
+    // Analytics: log cart abandoned
+    logAnalyticsEvent('cart_abandoned', { cart_items: cartItems });
+    if (typeof window !== 'undefined') {
+      window.gtag && window.gtag('event', 'cart_abandoned');
+      window.umami && window.umami('cart_abandoned');
+    }
   };
 
   const getCartTotal = () => {

@@ -1,4 +1,5 @@
 import { supabase } from "@/integrations/supabase/client";
+import { logAnalyticsEvent, awardLoyaltyPoints, redeemLoyaltyPointsIfEligible } from '@/utils/loyaltyAndAnalytics';
 
 // Define order types
 export interface OrderItem {
@@ -45,7 +46,22 @@ export const submitOrder = async (orderData: OrderData) => {
     if (error || !data?.[0]) throw error || new Error('No data returned');
 
     const typedData = data as unknown as OrderRecord[];
-    return { success: true, orderId: typedData[0].id };
+    const orderId = typedData[0].id;
+    // TODO: If customer_id is not present in OrderRecord, get it from orderData
+    const customerId = (typedData[0] as any).customer_id || (orderData as any).customer_id;
+    // Award loyalty points
+    if (customerId) {
+      await awardLoyaltyPoints(orderId, customerId, formatted.total_amount);
+      await redeemLoyaltyPointsIfEligible(orderId, customerId);
+    }
+    // Log analytics event
+    await logAnalyticsEvent('order_placed', {
+      order_id: orderId,
+      customer_id: customerId,
+      total_amount: formatted.total_amount,
+      order_type: formatted.order_type
+    });
+    return { success: true, orderId };
   } catch (error) {
     console.error('Error submitting order:', error);
     return { success: false, error };

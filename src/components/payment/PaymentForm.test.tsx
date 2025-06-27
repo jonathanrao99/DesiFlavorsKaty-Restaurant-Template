@@ -6,10 +6,6 @@ import { describe, expect, test, beforeEach } from 'vitest';
 describe('PaymentForm validation', () => {
   function FormWrapper() {
     const [cardName, setCardName] = useState('');
-    const [cardNumber, setCardNumber] = useState('');
-    const [expiryDate, setExpiryDate] = useState('');
-    const [cvv, setCvv] = useState('');
-    const [billingZip, setBillingZip] = useState('');
     const [customerName, setCustomerName] = useState('');
     const [customerEmail, setCustomerEmail] = useState('');
     const [customerPhone, setCustomerPhone] = useState('');
@@ -18,14 +14,7 @@ describe('PaymentForm validation', () => {
       <PaymentForm
         cardName={cardName}
         setCardName={setCardName}
-        cardNumber={cardNumber}
-        setCardNumber={setCardNumber}
-        expiryDate={expiryDate}
-        setExpiryDate={setExpiryDate}
-        cvv={cvv}
-        setCvv={setCvv}
-        billingZip={billingZip}
-        setBillingZip={setBillingZip}
+        onCardReady={() => {}}
         customerName={customerName}
         setCustomerName={setCustomerName}
         customerEmail={customerEmail}
@@ -34,13 +23,14 @@ describe('PaymentForm validation', () => {
         setCustomerPhone={setCustomerPhone}
         deliveryAddress={deliveryAddress}
         setDeliveryAddress={setDeliveryAddress}
+        onAddressSelect={() => {}}
+        onAddressInput={() => {}}
         deliveryMethod="pickup"
-        selectedMethod="card"
-        handleApplePay={() => {}}
-        handleGooglePay={() => {}}
-        handleCashApp={() => {}}
         isProcessing={false}
         handleSubmit={() => {}}
+        deliveryFee={null}
+        feeLoading={false}
+        amount="0"
       />
     );
   }

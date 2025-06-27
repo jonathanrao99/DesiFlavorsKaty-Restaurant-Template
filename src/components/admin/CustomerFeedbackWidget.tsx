@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Star, MessageSquare, ThumbsUp, ExternalLink } from 'lucide-react';
+import { logAnalyticsEvent } from '@/utils/loyaltyAndAnalytics';
 
 interface FeedbackItem {
   id: string;
@@ -82,6 +83,15 @@ export function CustomerFeedbackWidget() {
   const averageRating = feedback.length > 0 
     ? feedback.reduce((sum, item) => sum + item.rating, 0) / feedback.length 
     : 0;
+
+  // Add a function to log feedback submission (to be called when real feedback is submitted)
+  function handleFeedbackSubmit(feedback: FeedbackItem) {
+    logAnalyticsEvent('feedback_submitted', feedback);
+    if (typeof window !== 'undefined') {
+      window.gtag && window.gtag('event', 'feedback_submitted', { rating: feedback.rating, source: feedback.source });
+      window.umami && window.umami('feedback_submitted', { rating: feedback.rating, source: feedback.source });
+    }
+  }
 
   if (loading) {
     return (

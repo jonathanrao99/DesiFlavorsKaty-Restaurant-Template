@@ -12,7 +12,7 @@ import { useRouter } from 'next/navigation';
 // New animation variant for smooth fade/slide
 const fadeSlide = {
   hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 0.9, y: 0, transition: { duration: 1.5, ease: 'easeInOut' } },
+  visible: { opacity: 0.9, y: 0 },
 };
 
 const HeroSection = () => {

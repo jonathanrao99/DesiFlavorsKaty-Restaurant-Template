@@ -23,7 +23,7 @@ export default function RootLayout({
       </head>
       <body>
         <LayoutClientWrapper>
-          {children}
+        {children}
         </LayoutClientWrapper>
       </body>
     </html>

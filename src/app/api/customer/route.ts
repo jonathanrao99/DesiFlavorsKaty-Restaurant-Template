@@ -1,65 +1,133 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
-export async function GET(req: NextRequest) {
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const lookup = searchParams.get('lookup');
+
+  if (!lookup) {
+    return NextResponse.json({ error: 'Lookup parameter is required' }, { status: 400 });
+  }
+
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
+
   try {
-    const { searchParams } = new URL(req.url);
-    const lookup = searchParams.get('lookup');
-    
-    if (!lookup) {
-      return NextResponse.json({ error: 'Lookup parameter required' }, { status: 400 });
+    // First, find the customer by email or phone
+    const { data: customer, error: customerError } = await supabase
+      .from('customers')
+      .select('*')
+      .or(`email.eq.${lookup},phone.eq.${lookup}`)
+      .single();
+
+    if (customerError || !customer) {
+      return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
     }
 
-    const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-    const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+    // Get customer's order history with items
+    const { data: orders, error: ordersError } = await supabase
+      .from('orders')
+      .select(`
+        id,
+        created_at,
+        total_amount,
+        status,
+        order_type,
+        order_items (
+          quantity,
+          unit_price,
+          menu_items (
+            name
+          )
+        )
+      `)
+      .eq('customer_id', customer.id)
+      .order('created_at', { ascending: false })
+      .limit(10);
 
-    // Search by email or phone
-    const isEmail = lookup.includes('@');
-    const field = isEmail ? 'customer_email' : 'customer_phone';
-    
-    // Get customer orders
-    const ordersUrl = `${SUPABASE_URL}/rest/v1/orders?${field}=eq.${lookup}&select=*&order=created_at.desc`;
-    const ordersRes = await fetch(ordersUrl, {
-      headers: {
-        apikey: SERVICE_KEY,
-        authorization: `Bearer ${SERVICE_KEY}`
+    if (ordersError) {
+      console.error('Error fetching orders:', ordersError);
+    }
+
+    // Get loyalty points summary
+    const { data: loyaltyData, error: loyaltyError } = await supabase
+      .from('customer_loyalty_summary')
+      .select('*')
+      .eq('customer_id', customer.id)
+      .single();
+
+    if (loyaltyError) {
+      console.error('Error fetching loyalty data:', loyaltyError);
+    }
+
+    // Calculate customer statistics
+    const totalOrders = orders?.length || 0;
+    const totalSpent = orders?.reduce((sum, order) => sum + Number(order.total_amount), 0) || 0;
+    const lastOrderDate = orders?.[0]?.created_at || customer.created_at;
+
+    // Determine loyalty tier based on total spent
+    let loyaltyTier = 'Bronze';
+    if (totalSpent >= 500) loyaltyTier = 'Gold';
+    else if (totalSpent >= 200) loyaltyTier = 'Silver';
+
+    // Format order history
+    const orderHistory = orders?.map(order => ({
+      id: order.id,
+      created_at: order.created_at,
+      total_amount: Number(order.total_amount),
+      status: order.status,
+      order_type: order.order_type,
+      items: order.order_items?.map(item => ({
+        name: (item.menu_items as any)?.name || 'Unknown Item',
+        quantity: item.quantity,
+        unit_price: Number(item.unit_price)
+      })) || []
+    })) || [];
+
+    // Calculate available rewards
+    const currentPoints = loyaltyData?.current_points || 0;
+    const availableRewards = [
+      {
+        points_required: 100,
+        reward_value: 10,
+        description: '$10 off your order',
+        available: currentPoints >= 100
+      },
+      {
+        points_required: 250,
+        reward_value: 25,
+        description: '$25 off your order',
+        available: currentPoints >= 250
+      },
+      {
+        points_required: 500,
+        reward_value: 50,
+        description: '$50 off your order',
+        available: currentPoints >= 500
       }
-    });
+    ];
 
-    if (!ordersRes.ok) {
-      return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
-    }
-
-    const orders = await ordersRes.json();
-    
-    if (orders.length === 0) {
-      return NextResponse.json({ error: 'Customer not found' }, { status: 404 });
-    }
-
-    // Calculate loyalty points (1 point per dollar spent)
-    const totalSpent = orders.reduce((sum: number, order: any) => sum + order.total_amount, 0);
-    const loyaltyPoints = Math.floor(totalSpent);
-
-    // Get customer info from most recent order
-    const latestOrder = orders[0];
-    
-    const profile = {
-      name: latestOrder.customer_name,
-      email: latestOrder.customer_email,
-      phone: latestOrder.customer_phone,
-      loyaltyPoints,
-      totalSpent,
-      orderCount: orders.length,
-      pastOrders: orders.slice(0, 5).map((order: any) => ({
-        id: order.id,
-        date: new Date(order.created_at).toLocaleDateString(),
-        items: order.items.map((item: any) => item.name).join(', '),
-        total: order.total_amount
-      }))
+    const customerProfile = {
+      id: customer.id,
+      name: customer.name,
+      email: customer.email,
+      phone: customer.phone,
+      created_at: customer.created_at,
+      loyalty_points: currentPoints,
+      loyalty_tier: loyaltyTier,
+      total_orders: totalOrders,
+      total_spent: totalSpent,
+      last_order_date: lastOrderDate,
+      order_history: orderHistory,
+      available_rewards: availableRewards.filter(reward => reward.available)
     };
 
-    return NextResponse.json(profile);
-  } catch (error: any) {
-    console.error('Error fetching customer:', error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json(customerProfile);
+
+  } catch (error) {
+    console.error('Error fetching customer profile:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 } 

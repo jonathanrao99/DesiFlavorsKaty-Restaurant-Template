@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { supabase } from '@/integrations/supabase/client';
+import { logAnalyticsEvent } from '@/utils/loyaltyAndAnalytics';
 
 // Create transporter
 const transporter = nodemailer.createTransport({
@@ -67,6 +68,13 @@ export async function POST(request: NextRequest) {
         });
 
       if (error) throw error;
+
+      // Analytics: log newsletter signup
+      await logAnalyticsEvent('newsletter_signup', { email });
+      if (typeof window !== 'undefined') {
+        window.gtag && window.gtag('event', 'newsletter_signup', { email });
+        window.umami && window.umami('newsletter_signup', { email });
+      }
 
       return NextResponse.json({ success: true, message: 'Subscribed successfully' });
     }
