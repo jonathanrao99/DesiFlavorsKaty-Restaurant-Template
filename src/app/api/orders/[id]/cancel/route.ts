@@ -22,9 +22,9 @@ async function generateDoorDashJWT() {
   return `${dataToSign}.${signature}`;
 }
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
-    const orderId = params.id;
+    const { id: orderId } = await params;
     
     // Fetch order from Supabase
     const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
