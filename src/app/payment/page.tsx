@@ -122,9 +122,6 @@ function PaymentPageContent() {
   const FALLBACK_DELIVERY_FEE = 5;
 
   useEffect(() => {
-    // Reset invalid toast when address changes
-    setInvalidToastShown(false);
-    
     // Only calculate fee for delivery orders
     if (fulfillmentMethod !== 'delivery') {
       setDeliveryFee(null);
@@ -176,7 +173,7 @@ function PaymentPageContent() {
     };
 
     fee().then(setDeliveryFee);
-  }, [deliveryAddress, customerPhone, fulfillmentMethod, isGoogleAddress, invalidToastShown]);
+  }, [deliveryAddress, customerPhone, fulfillmentMethod, isGoogleAddress]);
 
   const handleCheckout = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -264,6 +261,7 @@ function PaymentPageContent() {
   const handleGoogleAddressSelect = (val: string) => {
     setDeliveryAddress(val);
     setIsGoogleAddress(true);
+    setInvalidToastShown(false);
   };
 
   // Always treat payment page as delivery
