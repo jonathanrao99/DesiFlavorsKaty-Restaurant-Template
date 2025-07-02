@@ -6,6 +6,7 @@ import { fadeInUp } from '@/utils/motion.variants';
 import MagneticButton from '@/components/MagneticButton';
 import AnimatedCardGrid, { AnimatedCard } from '@/components/AnimatedCardGrid';
 import Image from 'next/image';
+// import Script from 'next/script';
 
 // Custom X icon component
 const XIcon = ({ size = 20, className = "" }: { size?: number, className?: string }) => (

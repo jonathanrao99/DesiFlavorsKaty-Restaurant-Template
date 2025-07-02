@@ -66,6 +66,7 @@ const PaymentForm = ({
   const [deliveryAddressError, setDeliveryAddressError] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
   const [dropdownStyles, setDropdownStyles] = useState<{ top: number; left: number; width: number } | null>(null);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
 
   const formatPhoneNumber = (value: string) => {
     const v = value.replace(/\D/g, '');
@@ -133,6 +134,17 @@ const PaymentForm = ({
     setDeliveryAddressError('');
     onAddressSelect();
   };
+
+  // Load Google Maps script only when needed
+  useEffect(() => {
+    if (deliveryMethod === 'delivery' && !scriptLoaded) {
+      const script = document.createElement('script');
+      script.src = 'https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=places';
+      script.async = true;
+      document.head.appendChild(script);
+      setScriptLoaded(true);
+    }
+  }, [deliveryMethod, scriptLoaded]);
 
   return (
     <div>

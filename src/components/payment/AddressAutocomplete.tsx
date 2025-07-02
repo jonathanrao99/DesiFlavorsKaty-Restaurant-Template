@@ -1,6 +1,7 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import Script from 'next/script';
 
 declare global {
   interface Window {
@@ -23,6 +24,11 @@ export const AddressAutocomplete = ({
 }: AddressAutocompleteProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const autocompleteRef = useRef<any>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (
@@ -57,15 +63,23 @@ export const AddressAutocomplete = ({
   }, [onValueChange, onAddressSelect]);
 
   return (
-    <input
-      ref={inputRef}
-      type="text"
-      autoComplete="off"
-      value={value}
-      onChange={e => onValueChange?.(e.target.value)}
-      onBlur={onBlur}
-      placeholder="Start typing your delivery address..."
-      className="w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-desi-orange sm:text-sm"
-    />
+    <>
+      {mounted && (
+        <Script
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+          strategy="afterInteractive"
+        />
+      )}
+      <input
+        ref={inputRef}
+        type="text"
+        autoComplete="off"
+        value={value}
+        onChange={e => onValueChange?.(e.target.value)}
+        onBlur={onBlur}
+        placeholder="Start typing your delivery address..."
+        className="w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-desi-orange sm:text-sm"
+      />
+    </>
   );
 }; 
