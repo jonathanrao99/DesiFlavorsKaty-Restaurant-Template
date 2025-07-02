@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@heroui/react';
 import { useState } from 'react';
 import { Dialog, DialogOverlay, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
+import Image from 'next/image';
 
 interface CartSummaryProps {
   items: CartItem[];
@@ -91,13 +92,13 @@ const CartSummary = ({ items, deliveryMethod, setDeliveryMethod }: CartSummaryPr
           <DialogFooter className="justify-center mt-2">
             <div className="flex items-center space-x-2">
               <a href="https://www.doordash.com" target="_blank" rel="noopener noreferrer">
-                <img src="/Doordash.webp" alt="DoorDash" className="h-10 w-auto" />
+                <Image src="/Doordash.webp" alt="DoorDash" width={100} height={25} className="h-10 w-auto" />
               </a>
               <a href="https://www.grubhub.com" target="_blank" rel="noopener noreferrer">
-                <img src="/Grubhub.webp" alt="Grubhub" className="h-15 w-80" />
+                <Image src="/Grubhub.webp" alt="Grubhub" width={320} height={20} className="h-15 w-80" />
               </a>
               <a href="https://www.ubereats.com" target="_blank" rel="noopener noreferrer">
-                <img src="/ubereats.png" alt="Uber Eats" className="h-10 w-auto" />
+                <Image src="/ubereats.png" alt="Uber Eats" width={100} height={25} className="h-10 w-auto" />
               </a>
             </div>
           </DialogFooter>

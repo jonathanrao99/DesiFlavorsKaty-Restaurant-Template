@@ -2,6 +2,7 @@
 import Script from 'next/script';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRef } from 'react';
+import Image from 'next/image';
 
 interface Post {
   slug: string;
@@ -24,7 +25,7 @@ export default function BlogPostClient({ post }: { post: Post }) {
         return (
           <>
             <p>Our biryani starts with a meticulous marination process: tender chicken pieces bathed in yogurt, garlic, ginger, and an aromatic spice blend, left to soak for hours to develop depth of flavor.</p>
-            <img src="/Truck/truck-1.jpg" alt="Marinating chicken" className="w-full rounded-md mb-4" loading="lazy" decoding="async" />
+            <Image src="/Truck/truck-1.jpg" alt="Marinating chicken" className="w-full rounded-md mb-4" width={500} height={300} loading="lazy" decoding="async" />
             <p>We layer fragrant basmati rice over the marinated meat, sealing it inside a pot for the traditional dum technique. Steam gently cooks the layers, resulting in a steam-infused aroma that captivates the senses.</p>
             <video controls className="w-full rounded-md mb-4">
               <source src="/HomeCarousel/VID-20250609-WA0009.mp4" type="video/mp4" />
@@ -36,7 +37,7 @@ export default function BlogPostClient({ post }: { post: Post }) {
         return (
           <>
             <p>Chef Jaladevi grew up steeped in family culinary traditions, learning the art of spice blending and slow cooking from her grandmother's kitchen in India.</p>
-            <img src="/HomeCarousel/IMG-20250609-WA0005.jpg" alt="Chef preparing dishes" className="w-full rounded-md mb-4" loading="lazy" decoding="async" />
+            <Image src="/HomeCarousel/IMG-20250609-WA0005.jpg" alt="Chef preparing dishes" className="w-full rounded-md mb-4" width={500} height={300} loading="lazy" decoding="async" />
             <p>Her travels across India—from the fragrant kitchens of Hyderabad to the royal courts of Lucknow—shaped her craft, leading to a repertoire of authentic regional specialties.</p>
             <video controls className="w-full rounded-md mb-4">
               <source src="/HomeCarousel/VID-20250609-WA0014.mp4" type="video/mp4" />
@@ -48,7 +49,7 @@ export default function BlogPostClient({ post }: { post: Post }) {
         return (
           <>
             <p>Hosting an unforgettable Indian party is all about balance—start with flavorful appetizers like samosas and pakoras, paired with cooling chutneys.</p>
-            <img src="/HomeCarousel/IMG-20250609-WA0007.jpg" alt="Party spread" className="w-full rounded-md mb-4" loading="lazy" decoding="async" />
+            <Image src="/HomeCarousel/IMG-20250609-WA0007.jpg" alt="Party spread" className="w-full rounded-md mb-4" width={500} height={300} loading="lazy" decoding="async" />
             <p>Build a diverse menu: savory curries, biryani, fresh naan, and rice dishes. Offer a mix of vegetarian and meat options to cater to every guest.</p>
             <video controls className="w-full rounded-md mb-4">
               <source src="/HomeCarousel/VID-20250609-WA0011.mp4" type="video/mp4" />
@@ -60,7 +61,7 @@ export default function BlogPostClient({ post }: { post: Post }) {
         return (
           <>
             <p>Behind the scenes of our food truck is a symphony of early mornings, careful prep, and nonstop enthusiasm. Ingredients are hand-chopped and mixed fresh each day.</p>
-            <img src="/Truck/IMG-20250610-WA0005.jpg" alt="Team prepping" className="w-full rounded-md mb-4" loading="lazy" decoding="async" />
+            <Image src="/Truck/IMG-20250610-WA0005.jpg" alt="Team prepping" className="w-full rounded-md mb-4" width={500} height={300} loading="lazy" decoding="async" />
             <p>We load our truck with pride—each container eco-friendly and ready to deliver authentic Indian flavors straight to your community events and gatherings.</p>
             <video controls className="w-full rounded-md mb-4">
               <source src="/HomeCarousel/VID-20250610-WA0080.mp4" type="video/mp4" />
@@ -85,10 +86,12 @@ export default function BlogPostClient({ post }: { post: Post }) {
           className="absolute inset-0 z-0 will-change-transform"
           transition={{ type: 'spring', stiffness: 100, damping: 30 }}
         >
-          <img
+          <Image
             src={post.image}
             alt={post.title}
             className="absolute inset-0 w-full h-full object-cover"
+            width={1000}
+            height={600}
             loading="lazy"
             decoding="async"
           />

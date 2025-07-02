@@ -29,7 +29,13 @@ const OrderSummary: React.FC<OrderSummaryProps> = ({
               {item.quantity} x {item.name}
             </span>
             <span>
-              ${(parseFloat(item.price.replace('$', '')) * item.quantity).toFixed(2)}
+              ${(
+                typeof item.price === 'string'
+                  ? parseFloat(item.price.replace('$', ''))
+                  : typeof item.price === 'number'
+                    ? item.price
+                    : parseFloat(String(item.price))
+              ) * item.quantity).toFixed(2)}
             </span>
           </div>
         ))}

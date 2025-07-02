@@ -46,15 +46,6 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
     setIsDialogOpen(true);
   };
 
-  const handleAddToCart = (item: MenuItem) => {
-    logAnalyticsEvent('add_to_cart', { itemId: item.id, name: item.name, price: item.price });
-    if (typeof window !== 'undefined') {
-      window.gtag && window.gtag('event', 'add_to_cart', { itemId: item.id, name: item.name, price: item.price });
-      window.umami && window.umami('add_to_cart', { itemId: item.id, name: item.name, price: item.price });
-    }
-    handleAddToCart({ ...item, quantity: 1 });
-  };
-
   return (
     <>
       <motion.div

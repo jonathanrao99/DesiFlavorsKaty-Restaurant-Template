@@ -1,6 +1,7 @@
 import './globals.css';
 import { inter, samarkan, displayFont, butler } from './fonts';
 import LayoutClientWrapper from '@/components/LayoutClientWrapper';
+import Head from 'next/head';
 
 export const metadata = {
   title: 'Next.js',
@@ -15,6 +16,20 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${samarkan.variable} ${displayFont.variable} ${butler.variable}`}>
       <head>
+        <Head>
+          <title>Desi Flavors Hub | Authentic Indian Food Truck & Catering</title>
+          <meta name="description" content="Desi Flavors Hub brings authentic Indian cuisine to your table. Order online, view our menu, or book catering for your next event!" />
+          <link rel="canonical" href="https://yourdomain.com/" />
+          <meta property="og:title" content="Desi Flavors Hub | Authentic Indian Food Truck & Catering" />
+          <meta property="og:description" content="Desi Flavors Hub brings authentic Indian cuisine to your table. Order online, view our menu, or book catering for your next event!" />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://yourdomain.com/" />
+          <meta property="og:image" content="https://yourdomain.com/og-image.jpg" />
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="Desi Flavors Hub | Authentic Indian Food Truck & Catering" />
+          <meta name="twitter:description" content="Desi Flavors Hub brings authentic Indian cuisine to your table. Order online, view our menu, or book catering for your next event!" />
+          <meta name="twitter:image" content="https://yourdomain.com/og-image.jpg" />
+        </Head>
       </head>
       <body>
         <LayoutClientWrapper>

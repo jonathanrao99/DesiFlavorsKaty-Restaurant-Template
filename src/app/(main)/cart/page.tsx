@@ -18,6 +18,7 @@ import { fadeInUp } from '@/utils/motion.variants';
 import CartSummary from '@/components/cart/CartSummary';
 import CartItems from '@/components/cart/CartItems';
 import ReturningCustomer from '@/components/cart/ReturningCustomer';
+import { logAnalyticsEvent } from '@/utils/loyaltyAndAnalytics';
 
 const Cart = () => {
   useScrollToTop();

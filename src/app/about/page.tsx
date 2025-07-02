@@ -6,6 +6,7 @@ import { fadeInUp } from '@/utils/motion.variants';
 import MagneticButton from '@/components/MagneticButton';
 import AnimatedCardGrid, { AnimatedCard } from '@/components/AnimatedCardGrid';
 import Image from 'next/image';
+import Head from 'next/head';
 // import Script from 'next/script';
 
 // Custom X icon component
@@ -122,6 +123,28 @@ const About = () => {
   ];
 
   return (
+    <Head>
+      <title>About Us | Desi Flavors Hub</title>
+      <meta name="description" content="Learn about Desi Flavors Hub, our story, and our passion for bringing authentic Indian cuisine to Katy, TX." />
+      <meta property="og:title" content="About Us | Desi Flavors Hub" />
+      <meta property="og:description" content="Learn about Desi Flavors Hub, our story, and our passion for bringing authentic Indian cuisine to Katy, TX." />
+      <meta property="og:type" content="website" />
+      <meta property="og:url" content="https://yourdomain.com/about" />
+      <meta property="og:image" content="https://yourdomain.com/og-image.jpg" />
+      <script type="application/ld+json">{`
+        {
+          "@context": "https://schema.org",
+          "@type": "Organization",
+          "name": "Desi Flavors Hub",
+          "url": "https://yourdomain.com/about",
+          "logo": "https://yourdomain.com/og-image.jpg",
+          "sameAs": [
+            "https://www.facebook.com/yourpage",
+            "https://www.instagram.com/yourpage"
+          ]
+        }
+      `}</script>
+    </Head>
     <main className="min-h-screen">
       {/* Hero Section */}
       <section 
@@ -137,7 +160,7 @@ const About = () => {
           className="absolute inset-0 z-0 will-change-transform"
           transition={{ type: "spring", stiffness: 100, damping: 30 }}
         >
-          <img
+          <Image
             src="/Truck/truck-1.jpg"
             alt="Desi Flavors Food Truck"
             className="absolute inset-0 w-full h-full object-cover transform-gpu"
@@ -219,7 +242,7 @@ const About = () => {
             
             <div className="order-1 md:order-2">
               <div className="relative">
-                <img
+                <Image
                   src="/Truck/truck-3.jpg"
                   alt="Desi Flavors Food Preparation"
                   className="w-full h-auto rounded-xl shadow-lg"
@@ -302,7 +325,7 @@ const About = () => {
                 <div className="p-8">
                   <div className="flex items-center mb-4">
                     <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mr-4">
-                      <img src={value.icon} alt={value.title} className="h-6 w-6 opacity-70" />
+                      <Image src={value.icon} alt={value.title} className="h-6 w-6 opacity-70" />
                     </div>
                     <h3 className="text-xl font-bold text-gray-900">
                       {value.title}
@@ -340,7 +363,7 @@ const About = () => {
 
               {/* Image Column */}
               <div className="md:w-1/2 relative">
-                <img 
+                <Image 
                   src="/biryani.png" 
                   alt="Signature Biryani" 
                   className="w-full h-full object-cover"
@@ -410,7 +433,7 @@ const About = () => {
             <div className="max-w-2xl mx-auto">
               <AnimatedCard className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col items-center min-h-[600px] mb-10">
                 <div className="w-72 h-72 rounded-full overflow-hidden mt-8 mb-4 border-4 border-desi-orange/20">
-                  <img src="/Truck/IMG-20250610-WA0005.jpg" alt="Founders" className="w-full h-full object-cover" loading="lazy" decoding="async" />
+                  <Image src="/Truck/IMG-20250610-WA0005.jpg" alt="Founders" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 </div>
                 <div className="px-6 pt-6 pb-4 text-center">
                   <h3 className="text-xl font-display font-bold text-desi-black mb-1">Jaladevi & Venu Thota</h3>
@@ -460,7 +483,7 @@ const About = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Large Image */}
               <AnimatedCard className="md:col-span-2 md:row-span-2 overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <img 
+                <Image 
                   src="/Truck/truck-1.jpg" 
                   alt="Desi Flavors Food Truck" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
@@ -472,7 +495,7 @@ const About = () => {
               
               {/* Medium Images */}
               <AnimatedCard className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <img 
+                <Image 
                   src="/Truck/truck-2.jpg" 
                   alt="Food Preparation" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
@@ -483,7 +506,7 @@ const About = () => {
               </AnimatedCard>
               
               <AnimatedCard className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <img 
+                <Image 
                   src="/Truck/truck-3.jpg" 
                   alt="Customer Experience" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
@@ -495,7 +518,7 @@ const About = () => {
               
               {/* Small Images */}
               <AnimatedCard className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <img 
+                <Image 
                   src="/Truck/truck-4.jpg" 
                   alt="Special Dishes" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
@@ -506,7 +529,7 @@ const About = () => {
               </AnimatedCard>
               
               <AnimatedCard className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <img 
+                <Image 
                   src="/Truck/truck-5.jpg" 
                   alt="Food Truck Interior" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
@@ -517,7 +540,7 @@ const About = () => {
               </AnimatedCard>
               
               <AnimatedCard className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <img 
+                <Image 
                   src="/Truck/truck-old.png" 
                   alt="Special Events" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
@@ -551,7 +574,7 @@ const About = () => {
             >
               <X className="w-6 h-6" />
             </button>
-            <img
+            <Image
               src={selectedImage}
               alt="Selected image"
               className="w-full h-auto rounded-lg"

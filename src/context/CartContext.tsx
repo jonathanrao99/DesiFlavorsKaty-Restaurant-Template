@@ -109,7 +109,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     logAnalyticsEvent('cart_item_added', { item });
     if (typeof window !== 'undefined') {
       window.gtag && window.gtag('event', 'add_to_cart', { item_id: item.id, item_name: item.name });
-      window.umami && window.umami('add_to_cart', { item_id: item.id, item_name: item.name });
+      if (typeof window.umami === 'function') window.umami('add_to_cart', { item_id: item.id, item_name: item.name });
     }
   };
 
@@ -122,7 +122,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         logAnalyticsEvent('cart_item_removed', { item: itemToRemove });
         if (typeof window !== 'undefined') {
           window.gtag && window.gtag('event', 'remove_from_cart', { item_id: itemToRemove.id, item_name: itemToRemove.name });
-          window.umami && window.umami('remove_from_cart', { item_id: itemToRemove.id, item_name: itemToRemove.name });
+          if (typeof window.umami === 'function') window.umami('remove_from_cart', { item_id: itemToRemove.id, item_name: itemToRemove.name });
         }
       }
       return prevItems.filter(item => item.id !== id);
@@ -160,14 +160,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     logAnalyticsEvent('cart_abandoned', { cart_items: cartItems });
     if (typeof window !== 'undefined') {
       window.gtag && window.gtag('event', 'cart_abandoned');
-      window.umami && window.umami('cart_abandoned');
+      if (typeof window.umami === 'function') window.umami('cart_abandoned');
     }
   };
 
   const getCartTotal = () => {
     return cartItems.reduce((total, item) => {
       // Extract numeric price from string (e.g., "$14.99" -> 14.99)
-      const itemPrice = parseFloat(item.price.replace('$', ''));
+      const itemPrice = typeof item.price === 'string'
+        ? parseFloat(item.price.replace('$', ''))
+        : typeof item.price === 'number'
+          ? item.price
+          : parseFloat(String(item.price));
       return total + (itemPrice * item.quantity);
     }, 0);
   };

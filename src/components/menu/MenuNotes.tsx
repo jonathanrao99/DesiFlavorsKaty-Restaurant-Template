@@ -1,3 +1,5 @@
+import Image from 'next/image';
+
 const MenuNotes = () => {
   return (
     <section className="bg-desi-cream py-12">
@@ -49,12 +51,12 @@ const MenuNotes = () => {
               <div className="flex flex-col items-center gap-1">
                 <h3 className="text-xl font-bold font-display font-medium text-desi-black flex items-center gap-3">
                   <div className="w-8 h-8 rounded-full bg-desi-orange/10 flex items-center justify-center flex-shrink-0">
-                    <img 
+                    <Image 
                       src="/Delivery.png" 
                       alt="Delivery" 
                       className="w-5 h-5 object-contain"
-                      loading="lazy"
-                      decoding="async"
+                      width={20}
+                      height={20}
                     />
                   </div>
                   Online Ordering
@@ -76,12 +78,12 @@ const MenuNotes = () => {
                 rel="noopener noreferrer"
                 className="flex items-center justify-center group"
               >
-                <img 
+                <Image 
                   src="/Grubhub.webp" 
                   alt="Order on Grubhub" 
                   className="h-8 w-auto transition-transform group-hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
+                  width={32}
+                  height={32}
                 />
               </a>
               <a
@@ -90,12 +92,12 @@ const MenuNotes = () => {
                 rel="noopener noreferrer"
                 className="flex items-center justify-center group"
               >
-                <img 
+                <Image 
                   src="/Doordash.webp" 
                   alt="Order on Doordash" 
                   className="h-5 w-auto transition-transform group-hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
+                  width={20}
+                  height={20}
                 />
               </a>
               <a
@@ -104,12 +106,12 @@ const MenuNotes = () => {
                 rel="noopener noreferrer"
                 className="flex items-center justify-center group"
               >
-                <img 
+                <Image 
                   src="/ubereats.png" 
                   alt="Order on UberEats" 
                   className="h-5 w-auto transition-transform group-hover:scale-105"
-                  loading="lazy"
-                  decoding="async"
+                  width={20}
+                  height={20}
                 />
               </a>
             </div>
