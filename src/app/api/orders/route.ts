@@ -64,7 +64,7 @@ export async function POST(req: NextRequest) {
 
     if (fulfillmentMethod === 'delivery') {
       // Calculate delivery fee
-      const deliveryFee = await calculateDistanceFee(customerInfo.address, new Date());
+      const deliveryFee = await calculateDistanceFee(customerInfo.address, customerInfo.phone, new Date());
       // Call Shipday API to create delivery
       const shipdayRes = await fetch('https://api.shipday.com/v1/deliveries', {
         method: 'POST',

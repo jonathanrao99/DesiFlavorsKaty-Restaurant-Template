@@ -12,6 +12,7 @@ import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { AddressAutocompleteProps } from '@/components/payment/AddressAutocomplete';
 import { calculateDistanceFee } from '@/lib/deliveryFee';
+import { ordersApi, paymentApi } from '@/lib/supabaseFunctions';
 
 export const dynamic = 'force-dynamic';
 
@@ -158,7 +159,7 @@ function PaymentPageContent() {
       try {
         console.log('Calculating delivery fee for:', { address: deliveryAddress, phone: customerPhone, isGoogleAddress });
         
-        const fee = await calculateDistanceFee(deliveryAddress, new Date());
+        const fee = await calculateDistanceFee(deliveryAddress, customerPhone, new Date());
         console.log('Fee calculation response:', fee);
         
         if (typeof fee !== 'number') {
@@ -198,28 +199,29 @@ function PaymentPageContent() {
     try {
       const finalScheduledTime = scheduleType === 'ASAP' ? 'ASAP' : scheduledTime.toISOString();
       
-      // Create order first
+      // Create order first using Supabase Edge Function
+      const orderData = {
+        cartItems,
+        fulfillmentMethod,
+        scheduledTime: finalScheduledTime,
+        deliveryFee,
+        customerInfo: { 
+          name: customerName, 
+          email: customerEmail, 
+          phone: customerPhone, 
+          address: deliveryAddress 
+        }
+      };
+      
       const orderRes = await fetch('/api/orders', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cartItems,
-          fulfillmentMethod,
-          scheduledTime: finalScheduledTime,
-          deliveryFee,
-          customerInfo: { 
-            name: customerName, 
-            email: customerEmail, 
-            phone: customerPhone, 
-            address: deliveryAddress 
-          }
-        })
+        body: JSON.stringify(orderData),
       });
-      
-      const { orderId, error: orderError } = await orderRes.json(); 
+      const { orderId, error: orderError } = await orderRes.json();
       if (orderError) throw new Error(orderError);
       
-      // Create payment link
+      // Create payment link using Supabase Edge Function
       const paymentLinkData = {
         cartItems,
         fulfillmentMethod,
@@ -236,13 +238,7 @@ function PaymentPageContent() {
       
       console.log('Creating payment link with data:', paymentLinkData);
       
-      const linkRes = await fetch('/api/create-payment-link', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(paymentLinkData)
-      });
-      
-      const { url, error: linkError } = await linkRes.json(); 
+      const { url, error: linkError } = await paymentApi.createPaymentLink(paymentLinkData);
       if (linkError) throw new Error(linkError);
       
       if (url) {
@@ -264,6 +260,7 @@ function PaymentPageContent() {
   const handleGoogleAddressSelect = (val: string) => {
     setDeliveryAddress(val);
     setIsGoogleAddress(true);
+    setInvalidToastShown(false);
   };
 
   // Always treat payment page as delivery

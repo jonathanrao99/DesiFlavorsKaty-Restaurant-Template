@@ -2,7 +2,12 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { MinimalisticDashboard } from '@/components/admin/MinimalisticDashboard';
+import dynamic from 'next/dynamic';
+
+const BusinessIntelligenceDashboard = dynamic(
+  () => import('@/components/admin/BusinessIntelligenceDashboard'),
+  { ssr: false }
+);
 import { 
   FiShoppingCart, 
   FiBarChart, 
@@ -77,7 +82,7 @@ export default function AdminDashboardPage() {
 
         {/* Main Dashboard */}
         <div className="mb-8">
-          <MinimalisticDashboard />
+          <BusinessIntelligenceDashboard />
         </div>
 
         {/* Navigation Grid */}
