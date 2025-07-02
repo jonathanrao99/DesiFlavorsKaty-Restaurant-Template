@@ -27,7 +27,6 @@ export const AddressAutocomplete = ({
   useEffect(() => {
     if (
       typeof window === 'undefined' ||
-<<<<<<< HEAD
       !window.google?.maps?.places
     ) {
       console.error('Google Places API is not available.');
@@ -46,40 +45,13 @@ export const AddressAutocomplete = ({
 
     autocomplete.addListener('place_changed', () => {
       const place = autocomplete.getPlace();
-=======
-      !window.google?.maps?.places?.PlaceAutocompleteElement
-    ) {
-      console.error('Google Places Migration API is not available.');
-      return;
-    }
-    if (!inputRef.current) return;
-
-    // Initialize the PlaceAutocompleteElement
-    const widget = new window.google.maps.places.PlaceAutocompleteElement({
-      input: inputRef.current,
-      types: ['address'],
-      componentRestrictions: { country: 'us' },
-      fields: ['formatted_address'],
-    });
-    // Listen for place selection
-    const listener = widget.addListener('place_changed', () => {
-      const place = widget.getPlace();
->>>>>>> 2781fe3 (update)
       if (place.formatted_address) {
         onValueChange?.(place.formatted_address);
         onAddressSelect(place.formatted_address);
       }
     });
-<<<<<<< HEAD
 
     autocompleteRef.current = autocomplete;
-=======
-    // Cleanup on unmount
-    return () => {
-      listener.remove();
-      window.google.maps.event.clearInstanceListeners(widget);
-    };
->>>>>>> 2781fe3 (update)
   }, [onValueChange, onAddressSelect]);
 
   return (

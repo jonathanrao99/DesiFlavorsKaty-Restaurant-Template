@@ -1,22 +1,15 @@
 import MenuHeader from '@/components/menu/MenuHeader';
 import MenuNotes from '@/components/menu/MenuNotes';
 import MenuClient from './MenuClient';
-<<<<<<< HEAD
 import { createClient } from '@supabase/supabase-js';
-=======
-import { supabase } from '@/integrations/supabase/client';
->>>>>>> 2781fe3 (update)
 
 export const dynamic = 'force-dynamic';
 
 async function fetchMenuData() {
-<<<<<<< HEAD
   const supabase = createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
   );
-=======
->>>>>>> 2781fe3 (update)
   const { data: items, error } = await supabase
     .from('menu_items')
     .select('id, name, description, price, isvegetarian, isspicy, category, menu_img, sold_out, square_variation_id, images');
