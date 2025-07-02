@@ -37,7 +37,10 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
         .filter(item => item.category === category)
         .filter(item => !vegetarianOnly || item.isvegetarian)
         .filter(item => !spicyOnly || item.isspicy)
-        .filter(item => !under10Only || parseFloat(item.price.replace(/[^0-9.]/g, '')) < 10)
+        .filter(item => !under10Only || parseFloat(
+          typeof item.price === 'string' ? item.price :
+          typeof item.price === 'number' ? item.price.toFixed(2) : String(item.price)
+        ) < 10)
         .filter(item => item.name.toLowerCase().includes(searchFilter.toLowerCase()));
       return acc;
     }, {} as { [key: string]: MenuItem[] });

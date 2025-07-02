@@ -96,13 +96,13 @@ const MenuHeader = () => {
             className="flex flex-wrap items-center justify-center gap-6"
           >
             <Link href="https://www.order.store/store/desi-flavors-katy-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <Image src="/ubereats.png" alt="Uber Eats" width={140} height={40} className="object-contain" />
+              <Image src="/ubereats.png" alt="Uber Eats" width={140} height={40} className="object-contain" style={{ height: 'auto' }} />
             </Link>
             <Link href="http://menus.fyi/10883320" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <Image src="/Grubhub.webp" alt="Grubhub" width={140} height={40} className="object-contain" />
+              <Image src="/Grubhub.webp" alt="Grubhub" width={140} height={40} className="object-contain" style={{ height: 'auto' }} />
             </Link>
             <Link href="https://order.online/business/desi-flavors-katy-14145277" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <Image src="/Doordash.webp" alt="DoorDash" width={140} height={40} className="object-contain" />
+              <Image src="/Doordash.webp" alt="DoorDash" width={140} height={40} className="object-contain" style={{ height: 'auto' }} />
             </Link>
           </motion.div>
         </div>
