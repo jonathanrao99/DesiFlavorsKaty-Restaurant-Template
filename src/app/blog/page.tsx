@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { fadeInUp } from '@/utils/motion.variants';
 import { useRef } from 'react';
-import Image from 'next/image';
 
 export default function BlogPage() {
   const heroRef = useRef<HTMLDivElement>(null);
@@ -32,11 +31,10 @@ export default function BlogPage() {
           className="absolute inset-0 z-0 will-change-transform"
           transition={{ type: "spring", stiffness: 100, damping: 30 }}
         >
-          <Image
+          <img
             src="/Truck/IMG-20250610-WA0011.jpg"
             alt="Desi Flavors Blog"
             className="absolute inset-0 w-full h-full object-cover"
-            fill
           />
         </motion.div>
         {/* Content */}
@@ -78,7 +76,7 @@ export default function BlogPage() {
               <Link href={`/blog/${post.slug}`} key={post.slug} className="block">
                 <motion.article initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.6, delay: index * 0.1 }} viewport={{ once: true }} className="bg-white rounded-2xl overflow-hidden shadow-lg flex flex-col">
                   <div className="h-48 overflow-hidden">
-                    <Image src={post.image} alt={post.title} className="w-full h-full object-cover transform transition-transform duration-500 hover:scale-105" width={300} height={200} />
+                    <img src={post.image} alt={post.title} className="w-full h-full object-cover transform transition-transform duration-500 hover:scale-105" />
                   </div>
                   <div className="p-6 flex flex-col flex-grow">
                     <h3 className="text-xl font-display font-semibold text-gray-900 mb-2">{post.title}</h3>

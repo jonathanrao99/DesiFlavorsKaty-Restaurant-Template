@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import Image from 'next/image';
 
 const media = [
   { type: 'image', src: '/HomeCarousel/IMG-20250610-WA0008.jpg', alt: 'Fresh Indian Food 2' },
@@ -14,6 +13,8 @@ const media = [
   { type: 'video', src: '/HomeCarousel/VID-20250610-WA0082.mp4', alt: 'Cooking Video 3' },
   { type: 'video', src: '/HomeCarousel/VID-20250609-WA0014.mp4', alt: 'Cooking Video 4' },
 ];
+
+console.log('HomeFoodCarouselSection media:', media.map(m => m.src));
 
 export default function HomeFoodCarouselSection() {
   const [current, setCurrent] = useState(0);
@@ -113,8 +114,8 @@ export default function HomeFoodCarouselSection() {
   return (
     <section ref={sectionRef} className="w-full bg-gradient-to-b from-transparent via-orange-50 to-white py-12 md:py-20 relative overflow-hidden">
       {/* Decorative background elements */}
-      <Image src="/Ingredients/mint-removebg-preview.png" alt="Mint" width={80} height={80} className="absolute top-8 left-8 opacity-10 rotate-12 select-none pointer-events-none z-0" />
-      <Image src="/Ingredients/cinamon-removebg-preview.png" alt="Cinnamon" width={90} height={90} className="absolute bottom-8 right-8 opacity-10 -rotate-12 select-none pointer-events-none z-0" />
+      <img src="/Ingredients/mint-removebg-preview.png" alt="Mint" className="absolute top-8 left-8 opacity-10 rotate-12 select-none pointer-events-none z-0 w-[80px] h-[80px]" />
+      <img src="/Ingredients/cinamon-removebg-preview.png" alt="Cinnamon" className="absolute bottom-8 right-8 opacity-10 -rotate-12 select-none pointer-events-none z-0 w-[90px] h-[90px]" />
       <svg className="absolute right-1 top-1/4 w-40 h-40 opacity-10 z-0" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="48" stroke="#FFD700" strokeWidth="4" fill="none" /><path d="M50 10 Q60 30 50 50 Q40 70 50 90" stroke="#FFD700" strokeWidth="2" fill="none" /></svg>
       {/* Gold shimmer accent */}
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-gradient-to-br from-yellow-200/30 via-yellow-100/10 to-orange-100/0 blur-2xl opacity-40 z-0" />
@@ -133,13 +134,10 @@ export default function HomeFoodCarouselSection() {
                 className="absolute inset-0 flex items-center justify-center"
               >
                 {media[current].type === 'image' ? (
-                  <Image
+                  <img
                     src={media[current].src}
                     alt={media[current].alt}
-                    width={800}
-                    height={600}
                     className="object-cover w-full h-full"
-                    priority={current === 0}
                   />
                 ) : (
                   <video

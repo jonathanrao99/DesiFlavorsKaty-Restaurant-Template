@@ -5,7 +5,6 @@ import { useState, useRef, useEffect } from 'react';
 import { fadeInUp } from '@/utils/motion.variants';
 import MagneticButton from '@/components/MagneticButton';
 import AnimatedCardGrid, { AnimatedCard } from '@/components/AnimatedCardGrid';
-import Image from 'next/image';
 // import Script from 'next/script';
 
 // Custom X icon component
@@ -137,12 +136,10 @@ const About = () => {
           className="absolute inset-0 z-0 will-change-transform"
           transition={{ type: "spring", stiffness: 100, damping: 30 }}
         >
-          <Image
+          <img
             src="/Truck/truck-1.jpg"
             alt="Desi Flavors Food Truck"
             className="absolute inset-0 w-full h-full object-cover transform-gpu"
-            width={500}
-            height={300}
           />
         </motion.div>
         
@@ -185,8 +182,8 @@ const About = () => {
         className="py-20 bg-gradient-to-b from-transparent via-orange-50 to-white relative overflow-hidden"
       >
         {/* HomeCarousel-style decorative background */}
-        <Image src="/Ingredients/mint-removebg-preview.png" alt="Mint" width={80} height={80} className="absolute top-8 left-8 opacity-10 rotate-12 select-none pointer-events-none z-0" />
-        <Image src="/Ingredients/cinamon-removebg-preview.png" alt="Cinnamon" width={90} height={90} className="absolute bottom-8 right-8 opacity-10 -rotate-12 select-none pointer-events-none z-0" />
+        <img src="/Ingredients/mint-removebg-preview.png" alt="Mint" width={80} height={80} className="absolute top-8 left-8 opacity-10 rotate-12 select-none pointer-events-none z-0" />
+        <img src="/Ingredients/cinamon-removebg-preview.png" alt="Cinnamon" width={90} height={90} className="absolute bottom-8 right-8 opacity-10 -rotate-12 select-none pointer-events-none z-0" />
         <svg className="absolute right-1 top-1/4 w-40 h-40 opacity-10 z-0" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="48" stroke="#FFD700" strokeWidth="4" fill="none" /><path d="M50 10 Q60 30 50 50 Q40 70 50 90" stroke="#FFD700" strokeWidth="2" fill="none" /></svg>
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full bg-gradient-to-br from-yellow-200/30 via-yellow-100/10 to-orange-100/0 blur-2xl opacity-40 z-0" />
         
@@ -221,12 +218,10 @@ const About = () => {
             
             <div className="order-1 md:order-2">
               <div className="relative">
-                <Image
+                <img
                   src="/Truck/truck-3.jpg"
                   alt="Desi Flavors Food Preparation"
                   className="w-full h-auto rounded-xl shadow-lg"
-                  width={500}
-                  height={300}
                 />
               </div>
             </div>
@@ -306,7 +301,7 @@ const About = () => {
                 <div className="p-8">
                   <div className="flex items-center mb-4">
                     <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mr-4">
-                      <Image src={value.icon} alt={value.title} className="h-6 w-6 opacity-70" width={20} height={20} />
+                      <img src={value.icon} alt={value.title} className="h-6 w-6 opacity-70" />
                     </div>
                     <h3 className="text-xl font-bold text-gray-900">
                       {value.title}
@@ -344,12 +339,10 @@ const About = () => {
 
               {/* Image Column */}
               <div className="md:w-1/2 relative">
-                <Image 
+                <img 
                   src="/biryani.png" 
                   alt="Signature Biryani" 
                   className="w-full h-full object-cover"
-                  width={500}
-                  height={300}
                 />
               </div>
             </div>
@@ -416,7 +409,7 @@ const About = () => {
             <div className="max-w-2xl mx-auto">
               <AnimatedCard className="bg-white rounded-xl shadow-md overflow-hidden flex flex-col items-center min-h-[600px] mb-10">
                 <div className="w-72 h-72 rounded-full overflow-hidden mt-8 mb-4 border-4 border-desi-orange/20">
-                  <Image src="/Truck/IMG-20250610-WA0005.jpg" alt="Founders" className="w-full h-full object-cover" loading="lazy" decoding="async" width={200} height={200} />
+                  <img src="/Truck/IMG-20250610-WA0005.jpg" alt="Founders" className="w-full h-full object-cover" loading="lazy" decoding="async" />
                 </div>
                 <div className="px-6 pt-6 pb-4 text-center">
                   <h3 className="text-xl font-display font-bold text-desi-black mb-1">Jaladevi & Venu Thota</h3>
@@ -466,82 +459,70 @@ const About = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Large Image */}
               <AnimatedCard className="md:col-span-2 md:row-span-2 overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <Image 
+                <img 
                   src="/Truck/truck-1.jpg" 
                   alt="Desi Flavors Food Truck" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   onClick={() => setSelectedImage("/Truck/truck-1.jpg")}
                   loading="lazy"
                   decoding="async"
-                  width={500}
-                  height={300}
                 />
               </AnimatedCard>
               
               {/* Medium Images */}
               <AnimatedCard className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <Image 
+                <img 
                   src="/Truck/truck-2.jpg" 
                   alt="Food Preparation" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   onClick={() => setSelectedImage("/Truck/truck-2.jpg")}
                   loading="lazy"
                   decoding="async"
-                  width={500}
-                  height={300}
                 />
               </AnimatedCard>
               
               <AnimatedCard className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <Image 
+                <img 
                   src="/Truck/truck-3.jpg" 
                   alt="Customer Experience" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   onClick={() => setSelectedImage("/Truck/truck-3.jpg")}
                   loading="lazy"
                   decoding="async"
-                  width={500}
-                  height={300}
                 />
               </AnimatedCard>
               
               {/* Small Images */}
               <AnimatedCard className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <Image 
+                <img 
                   src="/Truck/truck-4.jpg" 
                   alt="Special Dishes" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   onClick={() => setSelectedImage("/Truck/truck-4.jpg")}
                   loading="lazy"
                   decoding="async"
-                  width={500}
-                  height={300}
                 />
               </AnimatedCard>
               
               <AnimatedCard className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <Image 
+                <img 
                   src="/Truck/truck-5.jpg" 
                   alt="Food Truck Interior" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   onClick={() => setSelectedImage("/Truck/truck-5.jpg")}
                   loading="lazy"
                   decoding="async"
-                  width={500}
-                  height={300}
                 />
               </AnimatedCard>
               
               <AnimatedCard className="overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
-                <Image 
+                <img 
                   src="/Truck/truck-old.png" 
                   alt="Special Events" 
                   className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
                   onClick={() => setSelectedImage("/Truck/truck-old.png")}
                   loading="lazy"
                   decoding="async"
-                  width={500}
-                  height={300}
                 />
               </AnimatedCard>
             </div>
@@ -569,14 +550,12 @@ const About = () => {
             >
               <X className="w-6 h-6" />
             </button>
-            <Image
+            <img
               src={selectedImage}
               alt="Selected image"
               className="w-full h-auto rounded-lg"
               loading="lazy"
               decoding="async"
-              width={500}
-              height={300}
             />
           </motion.div>
           </div>

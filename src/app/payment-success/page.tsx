@@ -5,10 +5,10 @@ import { useEffect } from 'react';
 export default function PaymentSuccessRoute() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      window.gtag && window.gtag('event', 'payment_success', {});
-      window.gtag && window.gtag('event', 'order_placed', {});
-      window.umami && window.umami('payment_success', {});
-      window.umami && window.umami('order_placed', {});
+      if (typeof window.gtag === 'function') window.gtag('event', 'payment_success', {});
+      if (typeof window.gtag === 'function') window.gtag('event', 'order_placed', {});
+      if (typeof window.umami === 'function') window.umami('payment_success', {});
+      if (typeof window.umami === 'function') window.umami('order_placed', {});
     }
   }, []);
 

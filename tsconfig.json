@@ -6,7 +6,10 @@
         "./src/*"
       ]
     },
-    "types": ["vitest", "@testing-library/jest-dom"],
+    "types": [
+      "vitest",
+      "@testing-library/jest-dom"
+    ],
     "noImplicitAny": false,
     "noUnusedParameters": false,
     "skipLibCheck": true,
@@ -35,11 +38,12 @@
     ]
   },
   "include": [
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx"
-, "next-intl.config.js"  ],
+    "**/*.tsx",
+    "next-env.d.ts",
+    "next-intl.config.js",
+    ".next/types/**/*.ts"
+  ],
   "exclude": [
     "node_modules",
     "src/scripts"

@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MenuItem } from '@/hooks/useMenuItems';
 import { X, Plus, Minus, ShoppingCart, Image as ImageIcon } from 'lucide-react';
 import ImageCarousel from '@/components/ui/ImageCarousel';
-import Image from 'next/image';
 
 interface OrderDialogProps {
   item: MenuItem;
@@ -72,12 +71,12 @@ const OrderDialog = ({ item, onClose, onAddToCart }: OrderDialogProps) => {
             {item.images && item.images.length > 0 ? (
               <ImageCarousel images={item.images} alt={item.name} />
             ) : item.menu_img ? (
-              <Image
+              <img
                 src={item.menu_img}
                 alt={item.name}
-                fill
-                className="object-cover"
-                sizes="(max-width: 768px) 100vw, 40vw"
+                className="object-cover w-full h-full"
+                style={{ width: '100%', height: '100%' }}
+                loading="lazy"
               />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center bg-gray-50">

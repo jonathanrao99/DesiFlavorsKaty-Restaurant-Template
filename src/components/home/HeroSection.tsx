@@ -4,7 +4,6 @@ import { Check, ChevronDown, ChevronRight } from 'lucide-react';
 import { motion, useSpring } from 'framer-motion';
 import { useRef } from 'react';
 import { fadeInUp } from '@/utils/motion.variants';
-import Image from 'next/image';
 import MagneticButton from '@/components/MagneticButton';
 import { PulsatingButton } from '@/components/magicui/pulsating-button';
 import { useRouter } from 'next/navigation';
@@ -42,13 +41,10 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-black/40 z-10" />
         {/* Subtle pulsing overlay */}
         <div className="absolute inset-0 bg-white/5 animate-pulse-subtle pointer-events-none" />
-        <Image
+        <img
           src="/Truck/truck-3.jpg"
           alt="Desi Flavors Food Truck"
-          fill
-          priority
-          className="object-cover"
-          sizes="100vw"
+          className="object-cover w-full h-full absolute inset-0"
         />
       </motion.div>
 

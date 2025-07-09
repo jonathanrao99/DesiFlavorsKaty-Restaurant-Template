@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRef } from 'react';
 import { fadeInUp } from '@/utils/motion.variants';
-import Image from 'next/image';
 
 const MenuHeader = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -29,12 +28,11 @@ const MenuHeader = () => {
         transition={{ type: 'spring', stiffness: 100, damping: 30 }}
       >
         <div className="absolute inset-0 bg-black/40 z-10"></div>
-        <Image
+        <img
           src="/biryani.png"
           alt="Desi Flavors Biryani"
-          fill
-          className="transform-gpu object-cover"
-          priority
+          className="transform-gpu object-cover absolute inset-0 w-full h-full"
+          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
         />
       </motion.div>
 
@@ -96,13 +94,13 @@ const MenuHeader = () => {
             className="flex flex-wrap items-center justify-center gap-6"
           >
             <Link href="https://www.order.store/store/desi-flavors-katy-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <Image src="/ubereats.png" alt="Uber Eats" width={140} height={40} className="object-contain" style={{ height: 'auto' }} />
+              <img src="/ubereats.png" alt="Uber Eats" width={140} height={40} className="object-contain" style={{ height: 'auto' }} />
             </Link>
             <Link href="http://menus.fyi/10883320" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <Image src="/Grubhub.webp" alt="Grubhub" width={140} height={40} className="object-contain" style={{ height: 'auto' }} />
+              <img src="/Grubhub.webp" alt="Grubhub" width={140} height={40} className="object-contain" style={{ height: 'auto' }} />
             </Link>
             <Link href="https://order.online/business/desi-flavors-katy-14145277" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <Image src="/Doordash.webp" alt="DoorDash" width={140} height={40} className="object-contain" style={{ height: 'auto' }} />
+              <img src="/Doordash.webp" alt="DoorDash" width={140} height={40} className="object-contain" style={{ height: 'auto' }} />
             </Link>
           </motion.div>
         </div>

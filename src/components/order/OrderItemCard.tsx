@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '@heroui/react';
 import { cn } from '@/lib/utils';
-import Image from 'next/image';
 
 interface OrderItemCardProps {
   item: MenuItem;
@@ -21,6 +20,10 @@ export default function OrderItemCard({ item, handleAddToCart, index, onOpenDial
   useEffect(() => {
     if (item.menu_img) {
       setImageUrl(item.menu_img);
+      console.log('OrderItemCard imageUrl:', item.menu_img);
+    } else {
+      setImageUrl('/placeholder.svg');
+      console.log('OrderItemCard imageUrl:', '/placeholder.svg');
     }
   }, [item.menu_img]);
 
@@ -52,15 +55,14 @@ export default function OrderItemCard({ item, handleAddToCart, index, onOpenDial
             <ImageIcon className="h-6 w-6 text-gray-300" />
           </div>
         ) : imageUrl ? (
-          <Image
+          <img
             src={imageUrl}
             alt={item.name}
-            fill
             className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
             onLoad={handleImageLoad}
             onError={handleImageError}
             loading="lazy"
-            sizes="(max-width: 768px) 100vw, 25vw"
+            style={{ width: '100%', height: '100%' }}
           />
         ) : (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-50">

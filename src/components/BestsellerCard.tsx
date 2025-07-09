@@ -2,7 +2,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronRight } from 'lucide-react';
-import Image from 'next/image';
 
 interface BestsellerCardProps {
   title: string;
@@ -26,6 +25,8 @@ const BestsellerCard = ({
   const [imageLoaded, setImageLoaded] = useState(false);
   const router = useRouter();
 
+  console.log('BestsellerCard imageSrc:', imageSrc);
+
   const handleOrderClick = (e: React.MouseEvent) => {
     e.preventDefault();
     // Analytics event for Order Now clicks
@@ -47,14 +48,13 @@ const BestsellerCard = ({
         {!imageLoaded && (
           <div className="absolute inset-0 bg-gray-200 animate-pulse" />
         )}
-        <Image
+        <img
           src={imageSrc}
           alt={title}
-          fill
           className={`object-cover transition-all duration-500 group-hover:scale-110 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoad={() => setImageLoaded(true)}
           loading="lazy"
-          sizes="(max-width: 768px) 100vw, 33vw"
+          style={{ width: '100%', height: '100%' }}
         />
         {/* Hover Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />

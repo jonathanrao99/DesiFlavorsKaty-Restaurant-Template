@@ -4,7 +4,6 @@ import { Mail, Phone, User, MessageSquare, Check, AlertCircle, ArrowRight, Users
 import { logAnalyticsEvent } from '@/utils/loyaltyAndAnalytics';
 import { createClient } from '@supabase/supabase-js';
 import { Listbox, Transition } from '@headlessui/react';
-import Image from 'next/image';
 
 // Initialize Supabase client
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
@@ -89,7 +88,7 @@ const ContactForm = () => {
         <body style="margin:0;padding:0;background-color:#f4f4f4;">
           <div style="max-width:600px;margin:20px auto;background:#ffffff;border-radius:8px;overflow:hidden;font-family:Arial,sans-serif;">
             <div style="background:#d35400;padding:20px;text-align:center;">
-              <Image src="${baseUrl}/logo.png" alt="Desi Flavors Katy" width={200} height={200} style={{ display: 'block', margin: '0 auto' }} />
+              <img src="${baseUrl}/logo.png" alt="Desi Flavors Katy" width={200} height={200} style={{ display: 'block', margin: '0 auto' }} />
             </div>
             <div style="padding:20px;color:#333333;font-size:16px;line-height:1.5;">
               <p>Hi ${formData.name},</p>
@@ -211,7 +210,7 @@ ${formData.message}
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          to: 'info@desiflavorskaty.com',
+          to: 'desiflavorskaty@gmail.com',
           subject: 'New Submission by ' + formData.name,
           html: adminHtml,
           text: adminText

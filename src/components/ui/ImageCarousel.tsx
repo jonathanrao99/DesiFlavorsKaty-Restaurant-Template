@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface ImageCarouselProps {
@@ -21,12 +20,11 @@ export default function ImageCarousel({ images, alt = '' }: ImageCarouselProps) 
         <ChevronLeft className="w-6 h-6" />
       </button>
       <div className="w-full h-full relative">
-        <Image
+        <img
           src={images[current]}
           alt={alt}
-          fill
           className="object-cover w-full h-full"
-          sizes="(max-width: 768px) 100vw, 40vw"
+          style={{ width: '100%', height: '100%' }}
         />
       </div>
       <button

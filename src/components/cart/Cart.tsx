@@ -13,8 +13,8 @@ export const Cart = () => {
   const handleCartOpen = () => {
     // logAnalyticsEvent('cart_view', {});
     if (typeof window !== 'undefined') {
-      window.gtag && window.gtag('event', 'cart_view', {});
-      window.umami && window.umami('cart_view', {});
+      if (typeof window.gtag === 'function') window.gtag('event', 'cart_view', {});
+      if (typeof window.umami === 'function') window.umami('cart_view', {});
     }
     // ...existing open logic...
   };
@@ -22,8 +22,8 @@ export const Cart = () => {
   const handleAddToCart = (item) => {
     // logAnalyticsEvent('add_to_cart', { itemId: item.id, name: item.name, price: item.price });
     if (typeof window !== 'undefined') {
-      window.gtag && window.gtag('event', 'add_to_cart', { itemId: item.id, name: item.name, price: item.price });
-      window.umami && window.umami('add_to_cart', { itemId: item.id, name: item.name, price: item.price });
+      if (typeof window.gtag === 'function') window.gtag('event', 'add_to_cart', { itemId: item.id, name: item.name, price: item.price });
+      if (typeof window.umami === 'function') window.umami('add_to_cart', { itemId: item.id, name: item.name, price: item.price });
     }
     // ...existing add logic...
   };
@@ -31,8 +31,8 @@ export const Cart = () => {
   const handleRemoveFromCart = (item) => {
     // logAnalyticsEvent('remove_from_cart', { itemId: item.id, name: item.name, price: item.price });
     if (typeof window !== 'undefined') {
-      window.gtag && window.gtag('event', 'remove_from_cart', { itemId: item.id, name: item.name, price: item.price });
-      window.umami && window.umami('remove_from_cart', { itemId: item.id, name: item.name, price: item.price });
+      if (typeof window.gtag === 'function') window.gtag('event', 'remove_from_cart', { itemId: item.id, name: item.name, price: item.price });
+      if (typeof window.umami === 'function') window.umami('remove_from_cart', { itemId: item.id, name: item.name, price: item.price });
     }
     // ...existing remove logic...
   };

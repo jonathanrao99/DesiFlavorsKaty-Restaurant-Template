@@ -9,7 +9,6 @@ import { MinimalToggle } from '@/components/ui/toggle';
 import { supabase } from '@/integrations/supabase/client';
 import './menu-toggle-override.css';
 import { useQueryClient } from '@tanstack/react-query';
-import Image from 'next/image';
 
 export default function MenuPage() {
   const queryClient = useQueryClient();
@@ -189,7 +188,14 @@ export default function MenuPage() {
                   <div className="flex gap-1">
                     {(item.images || []).slice(0, 3).map((img, idx) => (
                       <button key={img} onClick={e => { e.stopPropagation(); setModalImages(item.images || []); setModalItemId(item.id); setImageModalOpen(true); }}>
-                        <Image src={img} alt={item.name} width={32} height={32} className="rounded object-cover border border-gray-200" />
+                        <img
+                          src={img}
+                          alt={item.name}
+                          width={32}
+                          height={32}
+                          className="rounded object-cover border border-gray-200"
+                          style={{ width: 32, height: 32 }}
+                        />
                       </button>
                     ))}
                     {(!item.images || item.images.length === 0) && (
@@ -368,12 +374,13 @@ export default function MenuPage() {
                     setDeleteIndex(idx);
                   }
                 }}>
-                  <Image
+                  <img
                     src={img}
                     alt="Food image"
                     width={160}
                     height={160}
                     className={`w-full h-32 sm:h-40 md:h-48 object-cover rounded-lg border border-gray-200 transition-all duration-200 ${deleteIndex === idx ? 'ring-2 ring-red-500 opacity-70' : ''}`}
+                    style={{ width: 160, height: 160 }}
                   />
                   {deleteIndex === idx && (
                     <div className="absolute inset-0 bg-red-500/60 rounded-lg flex items-center justify-center">

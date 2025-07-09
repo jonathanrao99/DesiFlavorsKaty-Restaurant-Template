@@ -102,37 +102,37 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
     }
 
       return (
-    <div className="min-h-screen bg-desi-cream">
-      <div className="container mx-auto px-4 py-8">
+    <div className="min-h-screen bg-desi-cream overflow-x-hidden">
+      <div className="max-w-screen-lg mx-auto w-full px-4 py-8">
         {/* Filter Pills and Search */}
-        <div className="flex items-center gap-3 mb-6">
-          <div className="flex items-center gap-3">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 mb-6 w-full">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
             <button
               onClick={() => setVegetarianOnly(!vegetarianOnly)}
-              className={`px-3 py-1 rounded-full border transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${vegetarianOnly ? 'bg-green-500 border-green-500 text-white' : 'bg-white border-green-500 text-green-500'}`}
+              className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border text-base sm:text-lg transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${vegetarianOnly ? 'bg-green-500 border-green-500 text-white' : 'bg-white border-green-500 text-green-500'}`}
             >
               <span role="img" aria-label="Vegetarian">🥦</span> Vegetarian
             </button>
             <button
               onClick={() => setSpicyOnly(!spicyOnly)}
-              className={`px-3 py-1 rounded-full border transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${spicyOnly ? 'bg-red-500 border-red-500 text-white' : 'bg-white border-red-500 text-red-500'}`}
+              className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border text-base sm:text-lg transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${spicyOnly ? 'bg-red-500 border-red-500 text-white' : 'bg-white border-red-500 text-red-500'}`}
             >
               <span role="img" aria-label="Spicy">🔥</span> Spicy
             </button>
             <button
               onClick={() => setUnder10Only(!under10Only)}
-              className={`px-3 py-1 rounded-full border transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${under10Only ? 'bg-desi-orange border-desi-orange text-white' : 'bg-white border-desi-orange text-desi-orange'}`}
+              className={`px-4 sm:px-5 py-2 sm:py-2.5 rounded-full border text-base sm:text-lg transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${under10Only ? 'bg-desi-orange border-desi-orange text-white' : 'bg-white border-desi-orange text-desi-orange'}`}
             >
               Under $10
             </button>
           </div>
-          <div className="ml-auto relative">
+          <div className="w-full sm:w-auto mt-3 sm:mt-0 sm:ml-auto relative flex-shrink-0 max-w-full sm:max-w-xs md:max-w-md">
             <input
               type="text"
               value={searchFilter}
               onChange={e => setSearchFilter(e.target.value)}
               placeholder="Search..."
-              className="pr-10 pl-3 py-1 border border-desi-orange rounded-full focus:outline-none focus:ring-2 focus:ring-desi-orange transition-colors"
+              className="w-full pr-10 pl-4 py-2 border border-desi-orange rounded-full focus:outline-none focus:ring-2 focus:ring-desi-orange transition-colors text-base sm:text-lg"
             />
             <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-desi-orange cursor-pointer" />
           </div>

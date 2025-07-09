@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import { useSidebar } from "@/context/SidebarContext";
 import {
@@ -73,7 +72,7 @@ const AppSidebar: React.FC = () => {
     >
       <div className="flex items-center justify-center h-16">
         <Link href="/" className="flex items-center space-x-2">
-          <Image src="/logo.png" alt="Logo" width={30} height={30} />
+          <img src="/logo.png" alt="Logo" width={30} height={30} />
           {(isExpanded || isHovered || isMobileOpen) && (
             <span className="font-samarkan text-xl text-blue-600">TailAdmin</span>
           )}

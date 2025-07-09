@@ -8,9 +8,7 @@ import { InteractiveHoverButton } from '@/components/magicui/interactive-hover-b
 import OrderDialog from '@/components/order/OrderDialog';
 import { fadeInUp } from '@/utils/motion.variants';
 import { SpinningText } from '@/components/magicui/spinning-text';
-import Image from 'next/image';
 import { logAnalyticsEvent } from '@/utils/loyaltyAndAnalytics';
-import { useTranslations } from 'next-intl';
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -24,7 +22,8 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const imageUrl = item.menu_img || '/placeholder.svg';
-  const t = useTranslations();
+
+  console.log('MenuItemCard imageUrl:', imageUrl);
 
   const handleImageLoad = useCallback(() => {
     setImageLoading(false);
@@ -92,15 +91,13 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
               <ImageIcon className="h-12 w-12 text-gray-400" />
             </div>
           ) : imageUrl ? (
-            <Image
+            <img
               src={imageUrl}
               alt={item.name}
-              fill
               className={`w-full h-full object-cover transition-all duration-500 ${imageLoading ? 'opacity-0' : 'opacity-100'}`}
               onLoad={handleImageLoad}
               onError={handleImageError}
               loading="lazy"
-              sizes="(max-width: 768px) 100vw, 33vw"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center bg-gray-50">
@@ -134,7 +131,7 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
 
             {item.isSoldOut ? (
               <span className="flex items-center space-x-1 text-gray-400 font-medium text-base select-none" aria-disabled="true">
-                <span>{t('menu.soldOut')}</span>
+                <span>Sold Out</span>
                 <ArrowRight className="w-4 h-4 text-gray-400" />
               </span>
             ) : (
@@ -144,9 +141,9 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
                   handleAddToCart({ ...item, quantity: 1 });
                 }}
                 className="bg-white text-desi-orange hover:bg-desi-orange hover:text-white text-sm"
-                aria-label={`${t('button.addToCart')} ${item.name}`}
+                aria-label={`Add to Cart ${item.name}`}
               >
-                {t('button.addToCart')}
+                Add to Cart
               </InteractiveHoverButton>
             )}
           </div>

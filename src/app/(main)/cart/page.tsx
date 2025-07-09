@@ -44,8 +44,8 @@ const Cart = () => {
     setIsMounted(true);
     logAnalyticsEvent('cart_view', {});
     if (typeof window !== 'undefined') {
-      window.gtag && window.gtag('event', 'cart_view', {});
-      window.umami && window.umami('cart_view', {});
+      if (typeof window.gtag === 'function') window.gtag('event', 'cart_view', {});
+      if (typeof window.umami === 'function') window.umami('cart_view', {});
     }
   }, []);
 

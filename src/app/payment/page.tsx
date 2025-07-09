@@ -263,11 +263,6 @@ function PaymentPageContent() {
     setInvalidToastShown(false);
   };
 
-  // Always treat payment page as delivery
-  useEffect(() => {
-    setFulfillmentMethod('delivery');
-  }, [setFulfillmentMethod]);
-
   return (
     <main className="min-h-screen pt-24 pb-20 bg-gray-50">
       <div className="container mx-auto px-4 md:px-6 pt-4">
@@ -295,7 +290,7 @@ function PaymentPageContent() {
               />
             </div>
             
-            {isClient && (
+            {isClient && fulfillmentMethod === 'delivery' && (
               <div>
                 <label htmlFor="address" className="block text-sm font-medium text-gray-700">Delivery Address</label>
                 <AddressAutocomplete 

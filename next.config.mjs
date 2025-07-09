@@ -11,6 +11,10 @@ const withNextIntl = createNextIntlPlugin();
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  env: {
+    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
+  },
   output: 'export', // Enables static HTML export
   experimental: {
     optimizePackageImports: ['lucide-react', '@heroui/react', 'framer-motion'],
@@ -79,4 +83,7 @@ const nextConfig = {
   },
 };
 
-export default withBundleAnalyzer(withNextIntl(nextConfig)); 
+export default {
+  output: 'export',
+  trailingSlash: true,
+} 

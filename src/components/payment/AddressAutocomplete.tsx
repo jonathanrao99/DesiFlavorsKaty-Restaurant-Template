@@ -23,53 +23,42 @@ export const AddressAutocomplete = ({
   onBlur,
 }: AddressAutocompleteProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const autocompleteRef = useRef<any>(null);
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const [scriptLoaded, setScriptLoaded] = useState(false);
 
   useEffect(() => {
     if (
+      !scriptLoaded ||
       typeof window === 'undefined' ||
-      !window.google?.maps?.places?.PlaceAutocompleteElement
+      !window.google?.maps?.places?.Autocomplete
     ) {
-      console.error('Google Places Migration API is not available.');
       return;
     }
     if (!inputRef.current) return;
 
-    // Initialize the PlaceAutocompleteElement
-    const widget = new window.google.maps.places.PlaceAutocompleteElement({
-      input: inputRef.current,
+    const autocomplete = new window.google.maps.places.Autocomplete(inputRef.current, {
       types: ['address'],
       componentRestrictions: { country: 'us' },
-      fields: ['formatted_address'],
     });
-    // Listen for place selection
-    const listener = widget.addListener('place_changed', () => {
-      const place = widget.getPlace();
+    autocomplete.setFields(['formatted_address']);
+    const listener = autocomplete.addListener('place_changed', () => {
+      const place = autocomplete.getPlace();
       if (place.formatted_address) {
         onValueChange?.(place.formatted_address);
         onAddressSelect(place.formatted_address);
       }
     });
-    // Cleanup on unmount
     return () => {
-      listener.remove();
-      window.google.maps.event.clearInstanceListeners(widget);
+      window.google.maps.event.removeListener(listener);
     };
-  }, [onValueChange, onAddressSelect]);
+  }, [scriptLoaded, onValueChange, onAddressSelect]);
 
   return (
     <>
-      {mounted && (
-        <Script
-          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
-          strategy="afterInteractive"
-        />
-      )}
+      <Script
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places`}
+        strategy="afterInteractive"
+        onLoad={() => setScriptLoaded(true)}
+      />
       <input
         ref={inputRef}
         type="text"

@@ -1,0 +1,71 @@
+id,name,description,price,isvegetarian,isspicy,category
+1,Chicken Dum Biryani,Slow-cooked biryani with tender chicken pieces. Aromatic rice dish packed with traditional spices and flavors.,$11.99,FALSE,TRUE,Biryani
+2,Chicken 65 Biryani,Spicy Chicken 65 integrated into a classic biryani. Tangy and fiery rice preparation with marinated chicken chunks.,$12.99,FALSE,TRUE,Biryani
+3,Chicken Fried Piece Biryani,Traditional Arabian-style biryani with unique spice blend. Slow-cooked meat infused with aromatic rice.,$14.99,FALSE,TRUE,Biryani
+4,Mutton (Goat) Biryani,Rich and robust biryani prepared with tender goat meat. Intense flavors and traditional preparation method.,$13.99,FALSE,TRUE,Biryani
+5,Veg Biryani,Aromatic rice dish loaded with mixed vegetables. Flavorful and satisfying vegetarian biryani preparation.,$9.99,TRUE,FALSE,Biryani
+6,Paneer Biryani,"Biryani featuring cubes of Indian cottage cheese. Rich, creamy vegetarian rice dish with paneer.",$10.99,TRUE,FALSE,Biryani
+7,Chicken Curry,"Classic Indian chicken curry with a smooth, spicy gravy. Tender chicken pieces in a rich, aromatic sauce.",$11.99,FALSE,TRUE,Non-Veg Curry
+8,Butter Chicken,"Creamy, mildly spiced chicken in a luxurious tomato-based sauce. Beloved North Indian comfort dish.",$11.99,FALSE,FALSE,Non-Veg Curry
+9,Special Mutton Curry,"Deliciou mutton curry with a secret house blend of spices. Succulent, slow-cooked mutton in a rich gravy.",$13.99,FALSE,TRUE,Non-Veg Curry
+10,Chicken Tikka Masala,"Grilled chicken in a creamy, spiced tomato sauce. Iconic dish blending tandoori and curry flavors.",$12.99,FALSE,TRUE,Non-Veg Curry
+11,Dal Tadka,"Tempered lentil curry with aromatic spices. Protein-rich, comforting dish with a classic preparation.",$8.99,TRUE,FALSE,Veg Curry
+12,Paneer Butter Masala,Creamy cottage cheese curry in a rich tomato gravy. Luxurious vegetarian dish with smooth texture.,$10.99,TRUE,FALSE,Veg Curry
+13,Sambhar,"South Indian lentil-based vegetable stew. Tangy, nutritious accompaniment to many South Indian dishes.",$8.99,TRUE,FALSE,Veg Curry
+14,Bhindi Masala,Spiced okra curry with traditional Indian seasonings.,$9.99,TRUE,TRUE,Veg Curry
+15,Parotta,"Thin, flaky layers of soft, golden-brown flatbread with a delightful chewiness.",$3.99,TRUE,FALSE,Indian Breads
+16,Chapati,"Soft, whole wheat flatbread with a warm, earthy aroma and a fluffy, melt-in-your-mouth texture.",$2.99,TRUE,FALSE,Indian Breads
+17,Chicken Samosa,Crispy pastry filled with spiced chicken mixture. Classic Indian street food appetizer with a savory filling.,$6.99,FALSE,FALSE,Snacks
+18,Chicken Pakoda,"Crispy, battered chicken fritters. Deep-fried golden snack with a crunchy exterior and juicy interior.",$9.99,FALSE,FALSE,Snacks
+19,Chicken Lollipop,"Drumette-style chicken wings with a crispy coating. Popular appetizer with a fun, easy-to-eat format.",$12.99,FALSE,TRUE,Snacks
+20,Chicken Wings,"Classic deep-fried chicken wings. Crispy, flavorful snack perfect for sharing or solo enjoyment.",$9.99,FALSE,TRUE,Snacks
+21,Mirchi Bajji,Batter-fried stuffed green chili fritters. Spicy snack with a crispy exterior and fiery filling.,$6.99,TRUE,TRUE,Snacks
+22,Onion Pakoda,"Crispy deep-fried onion fritters. Popular Indian street food with a crunchy, spiced texture.",$5.99,TRUE,FALSE,Snacks
+23,Palak Pakoda,Spinach-based crispy fritters. Nutritious snack with a vibrant green color and herbal flavor.,$5.99,TRUE,FALSE,Snacks
+24,Aloo Samosa,Classic potato-filled pastry triangles. Iconic Indian street food with a crispy exterior.,$4.99,TRUE,FALSE,Snacks
+25,Onion (Chota) Samosa,Mini samosas filled with spiced onion mixture. Bite-sized version of the classic samosa.,$6.99,TRUE,FALSE,Snacks
+26,Bhel Puri,Puffed rice salad with tangy chutneys. Popular street food with a mix of crispy and soft textures.,$6.99,TRUE,FALSE,Chaat
+27,Papdi Chaat,Crispy wheat crackers topped with chutneys and yogurt. Layered street food with multiple flavor components.,$7.99,TRUE,FALSE,Chaat
+28,Dahi Puri,"Yogurt-filled puri with various chutneys. Soft, creamy chaat with a burst of tangy flavors.",$7.99,TRUE,FALSE,Chaat
+29,Samosa Chaat,Crumbled samosa topped with chutneys and yogurt. Deconstructed samosa with additional flavor layers.,$7.99,TRUE,FALSE,Chaat
+30,Pani Puri,Hollow crisp filled with spiced water and fillings. Interactive street food eaten in one bite.,$6.99,TRUE,FALSE,Chaat
+31,Idly,"Steamed rice cakes. Traditional South Indian breakfast staple with mild, soft texture.",$6.99,TRUE,FALSE,Breakfast
+32,Sambhar Idly,Idly served with spicy lentil stew. Complete breakfast combination with complementary flavors.,$7.99,TRUE,FALSE,Breakfast
+33,Ghee Idly,"Idly topped with clarified butter. Rich, aromatic variation of the classic steamed rice cake.",$7.99,TRUE,FALSE,Breakfast
+34,Karam Idly,"Spicy, seasoned idly with traditional spices. Flavorful twist on the classic steamed rice cake.",$7.99,TRUE,TRUE,Breakfast
+35,Idly Vada,Combination of steamed rice cakes and fried lentil donuts. Classic South Indian breakfast duo.,$7.99,TRUE,FALSE,Breakfast
+36,Vada,"Crispy deep-fried lentil donuts. Crunchy, savory South Indian breakfast item.",$7.99,TRUE,FALSE,Breakfast
+37,Sambhar Vada,Fried lentil donut served with lentil stew. Hearty breakfast combination with complementary flavors.,$8.99,TRUE,FALSE,Breakfast
+38,Plain Dosa,"Thin, crispy fermented rice and lentil crepe. Classic South Indian breakfast staple.",$7.49,TRUE,FALSE,Breakfast
+39,Masala Dosa,Crispy crepe filled with spiced potato mixture. Iconic South Indian breakfast dish.,$8.99,TRUE,FALSE,Breakfast
+40,Ghee Dosa,"Dosa prepared with clarified butter. Rich, aromatic variation of the traditional crepe.",$8.99,TRUE,FALSE,Breakfast
+41,Onion Dosa,Dosa topped with caramelized onions. Flavorful twist on the classic South Indian crepe.,$7.99,TRUE,FALSE,Breakfast
+42,Paneer Dosa,Dosa filled with Indian cottage cheese. Protein-rich variation of the traditional crepe.,$9.99,TRUE,FALSE,Breakfast
+43,Cheese Dosa,"Creamy, cheese-filled dosa with melted dairy goodness. Indulgent twist on the classic South Indian breakfast crepe.",$9.99,TRUE,FALSE,Breakfast
+44,Mysore Masala Dosa,"Spicy dosa with a unique Mysore-style chutney. Flavorful, region-specific breakfast preparation.",$9.99,TRUE,TRUE,Breakfast
+45,Egg Dosa,Dosa with scrambled egg filling. Protein-packed breakfast variation.,$9.99,FALSE,FALSE,Breakfast
+46,Poori Chole,"Deep-fried bread served with chickpea curry. Hearty, flavorful North Indian breakfast dish.",$7.99,TRUE,FALSE,Breakfast
+47,Aloo Poori,Deep-fried bread served with potato curry. Classic North Indian breakfast combination.,$7.99,TRUE,FALSE,Breakfast
+48,Mysore Bonda,"Deep-fried, soft flour balls. Traditional South Indian breakfast snack with a crispy exterior.",$8.99,TRUE,FALSE,Breakfast
+49,Chicken 65,"Crispy, spicy deep-fried chicken pieces. Popular Indo-Chinese appetizer with bold, tangy flavors.",$9.99,FALSE,TRUE,Chinese Non-Veg
+50,Chilli Chicken,"Boneless chicken in a spicy, soy-based sauce. Quintessential Indo-Chinese dish with a fiery kick.",$10.99,FALSE,TRUE,Chinese Non-Veg
+51,Chicken Manchurian,"Batter-fried chicken in a savory, slightly sweet sauce. Classic Indo-Chinese preparation with complex flavors.",$10.99,FALSE,FALSE,Chinese Non-Veg
+52,Egg Fried Rice/Noodles,"Wok-tossed rice or noodles with scrambled eggs. Quick, satisfying dish with a perfect balance of textures.",$10.99,FALSE,FALSE,Chinese Non-Veg
+53,Schezwan Egg Fried Rice/Noodles,"Spicy Schezwan-style egg fried rice or noodles. Fiery preparation with a distinctive, tangy flavor profile.",$11.99,FALSE,TRUE,Chinese Non-Veg
+54,Chicken Fried Rice/Noodles,Chicken-studded fried rice or noodles. Flavorful one-pot meal with a perfect blend of ingredients.,$11.99,FALSE,FALSE,Chinese Non-Veg
+55,Schezwan Chicken Rice/Noodles,"Spicy Schezwan-style chicken fried rice or noodles. Bold, hot preparation with deep, complex flavors.",$12.99,FALSE,TRUE,Chinese Non-Veg
+56,Babycorn Manchurian,"Crispy babycorn in a tangy, spicy sauce. Indo-Chinese vegetarian appetizer with complex flavors.",$9.99,TRUE,TRUE,Chinese Veg
+57,Chilli Paneer,"Crispy paneer in a spicy, tangy sauce. Popular Indo-Chinese vegetarian dish with bold flavors.",$9.99,TRUE,TRUE,Chinese Veg
+58,Gobi 65,"Crispy, spicy cauliflower fritters. Vegetarian take on the popular Chicken 65 preparation.",$9.99,TRUE,TRUE,Chinese Veg
+59,Paneer Manchurian,"Paneer cubes in a savory, slightly sweet sauce. Vegetarian version of the classic Manchurian.",$9.99,TRUE,FALSE,Chinese Veg
+60,Veg Fried Rice/Noodles,Mixed vegetable fried rice or noodles. Flavorful one-pot meal with assorted vegetables.,$9.99,TRUE,FALSE,Chinese Veg
+61,Schezwan Veg Rice/Noodles,Spicy Schezwan-style vegetable fried rice or noodles. Hot and flavorful vegetarian preparation.,$10.99,TRUE,TRUE,Chinese Veg
+62,Lassi,"Traditional yoghurt-based drink with a cool, smooth texture. Refreshingly sweet classic Indian beverage.",$3.99,TRUE,FALSE,Drinks
+63,Mango Lassi,"Creamy yogurt drink with ripe mango pulp. Refreshing, sweet beverage perfect for cooling down.",$3.99,TRUE,FALSE,Drinks
+64,Thums Up,Popular Indian cola with a distinctive strong flavor. Iconic carbonated soft drink with a loyal following.,$2.49,TRUE,FALSE,Drinks
+65,Limca,"Citrusy Indian lemon-lime carbonated beverage. Refreshing, tangy drink with a unique flavor profile.",$2.49,TRUE,FALSE,Drinks
+66,Frooti,Popular Mango drink,$1.49,TRUE,FALSE,Drinks
+67,Coca Cola,Classic international cola drink. Globally recognized carbonated beverage with a signature taste.,$1.99,TRUE,FALSE,Drinks
+68,Double Ka Meetha,"Traditional Hyderabadi bread pudding dessert. Rich, sweet preparation made with fried bread soaked in cardamom-infused sugar syrup.",$6.99,TRUE,FALSE,Sweets
+69,Sheer Khurma,"Sweet vermicelli pudding with raisins, and almonds in a creamy milk base.",$6.99,TRUE,FALSE,Sweets
+70,Gulab Jamun,"Traditional Indian sweet milk-solid dessert in sugar syrup. Rich, soft, and decadent sweet treat.",$5.99,TRUE,FALSE,Sweets

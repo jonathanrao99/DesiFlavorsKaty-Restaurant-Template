@@ -7,7 +7,6 @@ import { Input } from "@heroui/react";
 import SquareCardContainer from '@/components/payment/SquareCardContainer';
 import usePlacesAutocomplete from 'use-places-autocomplete';
 import { createPortal } from 'react-dom';
-import { useTranslations } from 'next-intl';
 
 interface PaymentFormProps {
   // Cardholder name input
@@ -68,7 +67,6 @@ const PaymentForm = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [dropdownStyles, setDropdownStyles] = useState<{ top: number; left: number; width: number } | null>(null);
   const [scriptLoaded, setScriptLoaded] = useState(false);
-  const t = useTranslations();
 
   const formatPhoneNumber = (value: string) => {
     const v = value.replace(/\D/g, '');
@@ -201,7 +199,7 @@ const PaymentForm = ({
         <input type="password" name="fakepasswordremembered" autoComplete="off" />
       </div>
       <div className="bg-white rounded-2xl shadow-lg overflow-visible p-6 animate-fade-in">
-        <h1 className="text-2xl font-display font-bold mb-4">{t('checkout.title')}</h1>
+        <h1 className="text-2xl font-display font-bold mb-4">Checkout</h1>
 
         {/* Customer Info Fields */}
         <div className="space-y-4 mb-6 animate-fade-in-delay">
@@ -374,7 +372,7 @@ const PaymentForm = ({
               aria-disabled={!isCustomerValid || isProcessing}
               className="w-full bg-desi-orange hover:bg-desi-orange/90 text-white py-6 text-lg rounded-xl transition-all shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {isProcessing ? 'Processing…' : t('button.checkout')}
+              {isProcessing ? 'Processing…' : 'Checkout'}
             </Button>
           </form>
       </div>

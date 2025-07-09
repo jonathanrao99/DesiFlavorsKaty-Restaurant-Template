@@ -8,7 +8,6 @@ import { PulsatingButton } from '@/components/magicui/pulsating-button';
 import AnimatedCardGrid, { AnimatedCard } from '@/components/AnimatedCardGrid';
 import { Phone, Mail, MapPin, Calendar, Users, PartyPopper, Utensils, Download } from 'lucide-react';
 import GradientText from '@/components/GradientText';
-import Image from 'next/image';
 
 // Define your services here
 const services = [
@@ -212,7 +211,7 @@ const Catering = () => {
                 <AnimatePresence initial={false} custom={direction}>
                   <motion.div key={current} custom={direction} initial={{ opacity: 0, x: direction > 0 ? 120 : -120 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: direction > 0 ? -120 : 120 }} transition={{ duration: 0.5, type: 'spring' }} className="absolute inset-0 flex items-center justify-center">
                     {media[current].type === 'image' ? (
-                      <Image src={media[current].src} alt={media[current].alt || ''} width={800} height={600} className="object-cover w-full h-full" priority={current === 0} />
+                      <img src={media[current].src} alt={media[current].alt || ''} className="object-cover w-full h-full" />
                     ) : (
                       <video ref={videoRef} src={media[current].src} autoPlay muted={!unmutedVideos.includes(media[current].src)} playsInline preload="auto" className="object-cover w-full h-full" title={media[current].alt} />
                     )}
@@ -294,10 +293,10 @@ const Catering = () => {
                 <div className="flex items-center space-x-4">
                   <Mail className="h-6 w-6 text-desi-orange" />
                   <a
-                    href="mailto:info@desiflavorskaty.com"
+                    href="mailto:desiflavorskaty@gmail.com"
                     className="text-gray-700 hover:text-desi-orange font-medium text-lg"
                   >
-                    info@desiflavorskaty.com
+                    desiflavorskaty@gmail.com
                   </a>
                 </div>
               </div>

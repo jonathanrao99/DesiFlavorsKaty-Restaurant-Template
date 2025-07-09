@@ -100,7 +100,7 @@ export default function NimdaAuthPage() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        to: 'info@desiflavorskaty.com',
+        to: 'desiflavorskaty@gmail.com',
         subject: 'Admin Passcode Reset Request',
         html: `<p><b>Name:</b> ${forgotName}<br/><b>Phone:</b> ${forgotPhone}</p>`,
         text: `Name: ${forgotName}\nPhone: ${forgotPhone}`,

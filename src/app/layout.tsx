@@ -1,8 +1,6 @@
 import './globals.css';
 import { inter, samarkan, displayFont } from './fonts';
 import LayoutClientWrapper from '@/components/LayoutClientWrapper';
-import { NextIntlClientProvider } from 'next-intl';
-import { getMessages } from 'next-intl/server';
 
 export const metadata = {
   title: 'Desi Flavors Katy | Authentic Indian Street Food',
@@ -28,12 +26,7 @@ export const metadata = {
   },
 };
 
-export default async function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
-  const messages = await getMessages();
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${inter.variable} ${samarkan.variable} ${displayFont.variable}`}> 
       <head>
@@ -76,12 +69,12 @@ export default async function RootLayout({
       </head>
       <body>
         <a href="#main-content" className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 bg-desi-orange text-white px-4 py-2 rounded shadow transition-all">Skip to main content</a>
-        <LayoutClientWrapper messages={messages}>
+        <LayoutClientWrapper>
           <main id="main-content" tabIndex={-1}>
             {children}
           </main>
         </LayoutClientWrapper>
       </body>
     </html>
-  )
+  );
 }

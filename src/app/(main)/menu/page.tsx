@@ -1,10 +1,8 @@
+import { Suspense } from 'react';
 import MenuHeader from '@/components/menu/MenuHeader';
 import MenuNotes from '@/components/menu/MenuNotes';
 import MenuClient from './MenuClient';
 import { createClient } from '@supabase/supabase-js';
-import { useTranslations } from 'next-intl';
-
-export const dynamic = 'force-dynamic';
 
 async function fetchMenuData() {
   const supabase = createClient(
@@ -31,13 +29,13 @@ async function fetchMenuData() {
 }
 
 export default async function MenuPage() {
-  const t = useTranslations();
   const menuData = await fetchMenuData();
   return (
     <div className="min-h-screen bg-gray-50">
       <MenuHeader />
-      <h1 className="text-3xl font-bold mb-6">{t('menu.title')}</h1>
-      <MenuClient initialMenuItems={menuData} />
+      <Suspense fallback={<div>Loading menu...</div>}>
+        <MenuClient initialMenuItems={menuData} />
+      </Suspense>
       <MenuNotes />
     </div>
   );
