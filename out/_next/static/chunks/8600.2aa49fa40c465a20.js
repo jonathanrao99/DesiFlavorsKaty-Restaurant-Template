@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[8600],{48600:(e,s,a)=>{a.r(s),a.d(s,{default:()=>t});var l=a(95155);function t(){return(0,l.jsx)("header",{className:"w-full h-16 flex items-center px-6 bg-white border-b shadow-sm",children:(0,l.jsx)("h1",{className:"text-lg font-semibold text-desi-black",children:"Dashboard"})})}a(12115)}}]);

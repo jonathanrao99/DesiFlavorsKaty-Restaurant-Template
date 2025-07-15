@@ -52,7 +52,7 @@ const CartItems = ({ items, onRemove, onUpdateQuantity, onUpdateInstructions }: 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <div className="p-6 border-b border-gray-200 bg-gray-50">
-        <h2 className="font-playfair font-medium text-lg">Item Details</h2>
+        <h2 className="font-display font-bold text-lg">Item Details</h2>
       </div>
       
       <div className="divide-y divide-gray-200">

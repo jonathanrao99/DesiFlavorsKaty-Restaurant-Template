@@ -3,11 +3,6 @@ import Script from 'next/script';
 import { usePathname } from 'next/navigation';
 
 export default function Analytics() {
-  const pathname = usePathname();
-  // Exclude admin (nimda) pages
-  if (pathname.startsWith('/nimda')) {
-    return null;
-  }
   return (
     <>
       {/* Google Analytics */}

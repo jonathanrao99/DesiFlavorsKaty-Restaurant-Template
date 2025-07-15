@@ -16,11 +16,7 @@ import {
 
 // Icon sources imported as StaticImageData
 const navItems = [
-  { iconSrc: GridIcon, name: "Dashboard", path: "/nimda/dashboard" },
-  { iconSrc: TableIcon, name: "Orders", path: "/nimda/orders" },
-  { iconSrc: ListIcon, name: "Menu", path: "/nimda/menu" },
-  { iconSrc: DocsIcon, name: "Blog", path: "/nimda/blog" },
-  { iconSrc: CalenderIcon, name: "Calendar", path: "/nimda/calendar" },
+  // Add only non-admin, non-blog items here
 ];
 
 // Logout icon source

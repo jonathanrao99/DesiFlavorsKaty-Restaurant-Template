@@ -218,24 +218,6 @@ export const inventoryApi = {
   },
 };
 
-// Blog API functions
-export const blogApi = {
-  // Get blog posts
-  async getBlogPosts() {
-    return callSupabaseFunction('blog', {
-      method: 'GET',
-    });
-  },
-
-  // Create blog post
-  async createBlogPost(postData: any) {
-    return callSupabaseFunction('blog', {
-      method: 'POST',
-      body: JSON.stringify(postData),
-    });
-  },
-};
-
 // Loyalty API functions
 export const loyaltyApi = {
   // Redeem loyalty points
@@ -357,21 +339,6 @@ export async function exportData() {
   if (res.headers.get('Content-Type')?.includes('text/csv')) {
     return res.text();
   }
-  return res.json();
-}
-
-// BLOG
-export async function getBlogPosts() {
-  const res = await fetch('/functions/v1/blog');
-  return res.json();
-}
-
-export async function createBlogPost(post: any) {
-  const res = await fetch('/functions/v1/blog', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(post)
-  });
   return res.json();
 }
 

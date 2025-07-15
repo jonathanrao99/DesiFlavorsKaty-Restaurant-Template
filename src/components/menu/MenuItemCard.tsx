@@ -21,7 +21,12 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
   const [imageError, setImageError] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const imageUrl = item.menu_img || '/placeholder.svg';
+  // Improved image fallback logic
+  const imageUrl =
+    item.menu_img ||
+    (item.name
+      ? `/Menu_Images/${item.name.toLowerCase().replace(/ /g, '-').replace(/[^a-z0-9-]/g, '')}.jpg`
+      : '/placeholder.svg');
 
   console.log('MenuItemCard imageUrl:', imageUrl);
 
@@ -71,16 +76,15 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
           }
         }}
       >
-        {(() => {
-          const name = item.name.toLowerCase();
-          const highlight = ['chicken dum biryani', 'butter chicken', 'samosa'].some(k => name.includes(k));
-          return highlight ? (
-            <SpinningText className="text-desi-orange bg-transparent text-[0.6rem] z-20">
-              bestseller • bestseller • bestseller •
-            </SpinningText>
-          ) : null;
-        })()}
         <div className="relative h-56 w-full">
+          {/* SpinningText always visible for bestsellers */}
+          {(() => {
+            const name = item.name.toLowerCase();
+            const highlight = ['chicken dum biryani', 'butter chicken', 'samosa'].some(k => name.includes(k));
+            return highlight ? (
+              <SpinningText className="text-desi-orange bg-transparent text-[0.6rem] z-30 pointer-events-none" children="bestseller • bestseller • bestseller •" />
+            ) : null;
+          })()}
           {imageLoading && (
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="w-full h-full bg-gray-200 animate-pulse" />

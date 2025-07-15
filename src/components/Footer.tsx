@@ -69,11 +69,6 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-gray-300 hover:text-desi-orange transition-colors duration-200">
-                  Blog
-                </Link>
-              </li>
-              <li>
                 <Link href="/about" className="text-gray-300 hover:text-desi-orange transition-colors duration-200">
                   About Us
                 </Link>

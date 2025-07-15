@@ -1,4 +1,7 @@
-import { createClient } from '@/utils/supabase/client';
+'use client';
+import { useState, useMemo } from 'react';
+
+import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
 
 // Add type for the database row
@@ -57,7 +60,6 @@ export function useMenuItems(initialData?: MenuItemRow[]) {
   const { data: menuData, isLoading, error } = useQuery<MenuItemRow[], Error>({
     queryKey: ['menuItems'],
     queryFn: async () => {
-      const supabase = createClient();
       try {
         const { data, error } = await supabase
           .from('menu_items')
@@ -68,7 +70,11 @@ export function useMenuItems(initialData?: MenuItemRow[]) {
           throw error;
         }
 
-        return data || [];
+        // Ensure the result is always MenuItemRow[] and not an error array
+        if (Array.isArray(data)) {
+          return data as unknown as MenuItemRow[];
+        }
+        return [];
       } catch (error) {
         console.error('Error fetching menu items:', error);
         return [];
