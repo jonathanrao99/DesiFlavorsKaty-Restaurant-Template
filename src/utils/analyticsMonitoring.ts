@@ -507,10 +507,7 @@ export class AnalyticsMonitor {
                 </ul>
                 
                 <div style="text-align: center; margin: 30px 0;">
-                  <a href="${process.env.NEXT_PUBLIC_SITE_URL}/nimda/dashboard/analytics" 
-                     style="background: #ff6b35; color: white; padding: 12px 30px; text-decoration: none; border-radius: 25px; display: inline-block;">
-                    View Analytics Dashboard
-                  </a>
+                  <!-- Nimda dashboard analytics link removed -->
                 </div>
               </div>
             </div>

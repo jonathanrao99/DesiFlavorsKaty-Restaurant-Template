@@ -14,7 +14,7 @@ interface AdminHeaderProps {
   };
 }
 
-export default function AdminHeader({ title, backUrl = '/nimda/dashboard', actionButton }: AdminHeaderProps) {
+export default function AdminHeader({ title, backUrl = '/', actionButton }: AdminHeaderProps) {
   return (
     <div className="bg-white border-b border-gray-200 px-4 py-4 mb-6">
       <div className="flex items-center justify-between max-w-7xl mx-auto">

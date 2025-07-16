@@ -100,7 +100,7 @@ export function RecentOrdersWidget() {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Recent Orders</CardTitle>
-        <Link href="/nimda/dashboard/orders">
+        <Link href="/">
           <Button variant="outline" size="sm">
             View All
           </Button>
