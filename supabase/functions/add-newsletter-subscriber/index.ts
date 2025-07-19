@@ -6,20 +6,17 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type"
 };
 
-// Helper function to add delay
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function addToResendContacts(email: string, name: string) {
+async function testResendAPI(email: string, name: string) {
   const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY');
   if (!RESEND_API_KEY) throw new Error('Missing RESEND_API_KEY');
   
-  console.log('Starting newsletter subscription for:', { email, name });
+  console.log('Testing Resend API with key:', RESEND_API_KEY.substring(0, 10) + '...');
+  console.log('Adding contact:', { email, name });
   
   try {
-    // First, let's test if we can access the Resend API at all
-    const testRes = await fetch('https://api.resend.com/audiences', {
+    // Test 1: List audiences
+    console.log('Step 1: Testing audience list...');
+    const listRes = await fetch('https://api.resend.com/audiences', {
       method: 'GET',
       headers: {
         'Authorization': `Bearer ${RESEND_API_KEY}`,
@@ -27,22 +24,21 @@ async function addToResendContacts(email: string, name: string) {
       }
     });
     
-    console.log('Test API response status:', testRes.status);
+    console.log('List audiences status:', listRes.status);
     
-    if (!testRes.ok) {
-      const errorText = await testRes.text();
-      console.log('API test error:', errorText);
-      throw new Error(`Resend API test failed: ${errorText}`);
+    if (!listRes.ok) {
+      const errorText = await listRes.text();
+      console.log('List audiences error:', errorText);
+      throw new Error(`Failed to list audiences: ${errorText}`);
     }
     
-    const audiences = await testRes.json();
-    console.log('Available audiences:', audiences);
+    const audiences = await listRes.json();
+    console.log('Audiences found:', audiences);
     
-    // Find or create our audience
+    // Test 2: Create or find audience
     const audienceName = 'Desi Flavors Newsletter';
     let audienceId = null;
     
-    // Look for existing audience
     for (const audience of audiences.data || []) {
       if (audience.name === audienceName) {
         audienceId = audience.id;
@@ -51,9 +47,8 @@ async function addToResendContacts(email: string, name: string) {
       }
     }
     
-    // Create audience if not found
     if (!audienceId) {
-      console.log('Creating new audience:', audienceName);
+      console.log('Creating new audience...');
       const createRes = await fetch('https://api.resend.com/audiences', {
         method: 'POST',
         headers: {
@@ -74,123 +69,52 @@ async function addToResendContacts(email: string, name: string) {
       const newAudience = await createRes.json();
       audienceId = newAudience.id;
       console.log('Created audience with ID:', audienceId);
-      
-      // Add delay to respect rate limits
-      await delay(600);
     }
     
-    // Check if user is already subscribed with retry logic
-    console.log('Checking if user is already subscribed...');
-    let checkRes;
-    let retryCount = 0;
-    const maxRetries = 3;
-    
-    while (retryCount < maxRetries) {
-      try {
-        checkRes = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts?email=${encodeURIComponent(email)}`, {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${RESEND_API_KEY}`,
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (checkRes.status === 429) {
-          console.log(`Rate limited, retrying in ${(retryCount + 1) * 1000}ms...`);
-          await delay((retryCount + 1) * 1000);
-          retryCount++;
-          continue;
-        }
-        
-        break; // Success, exit retry loop
-      } catch (error) {
-        console.log(`Check attempt ${retryCount + 1} failed:`, error);
-        retryCount++;
-        if (retryCount >= maxRetries) throw error;
-        await delay(1000);
-      }
-    }
-    
-    if (checkRes && checkRes.ok) {
-      const existingContacts = await checkRes.json();
-      if (existingContacts.data && existingContacts.data.length > 0) {
-        console.log('User is already subscribed:', existingContacts.data[0]);
-        return { 
-          success: true, 
-          message: 'User is already subscribed to the newsletter',
-          alreadySubscribed: true,
-          contact: existingContacts.data[0]
-        };
-      }
-    }
-    
-    // Add delay before adding new contact
-    await delay(600);
-    
-    // User is not subscribed, add them using the correct API
+    // Test 3: Create contact
+    console.log('Step 3: Creating contact...');
     const firstName = name.split(' ')[0] || name;
     const lastName = name.split(' ').slice(1).join(' ') || '';
     
-    // Use the correct API endpoint for adding contacts to audience
     const contactData = {
       email: email,
       firstName: firstName,
       lastName: lastName,
-      unsubscribed: false
+      unsubscribed: false,
+      audienceId: audienceId
     };
     
-    console.log('Adding new contact with data:', contactData);
+    console.log('Contact data:', contactData);
     
-    // Add contact with retry logic for rate limits
-    let contactRes;
-    retryCount = 0;
+    const contactRes = await fetch('https://api.resend.com/contacts', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(contactData)
+    });
     
-    while (retryCount < maxRetries) {
-      try {
-        contactRes = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${RESEND_API_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(contactData)
-        });
-        
-        if (contactRes.status === 429) {
-          console.log(`Rate limited, retrying in ${(retryCount + 1) * 1000}ms...`);
-          await delay((retryCount + 1) * 1000);
-          retryCount++;
-          continue;
-        }
-        
-        break; // Success, exit retry loop
-      } catch (error) {
-        console.log(`Add contact attempt ${retryCount + 1} failed:`, error);
-        retryCount++;
-        if (retryCount >= maxRetries) throw error;
-        await delay(1000);
-      }
-    }
-    
-    console.log('Contact response status:', contactRes.status);
+    console.log('Create contact status:', contactRes.status);
     
     if (!contactRes.ok) {
       const error = await contactRes.text();
-      console.log('Contact error:', error);
-      throw new Error(`Failed to add contact: ${error}`);
+      console.log('Create contact error:', error);
+      throw new Error(`Failed to create contact: ${error}`);
     }
     
     const result = await contactRes.json();
-    console.log('Success! Contact added:', result);
+    console.log('Contact created successfully:', result);
+    
     return { 
       success: true, 
       message: 'Successfully subscribed to newsletter',
-      alreadySubscribed: false,
-      contact: result
+      contact: result,
+      audienceId: audienceId
     };
     
   } catch (error) {
-    console.error('Error in addToResendContacts:', error);
+    console.error('Error in testResendAPI:', error);
     throw error;
   }
 }
@@ -218,7 +142,7 @@ serve(async (req) => {
       });
     }
     
-    const result = await addToResendContacts(body.email, body.name);
+    const result = await testResendAPI(body.email, body.name);
     return new Response(JSON.stringify(result), { 
       headers: corsHeaders 
     });
@@ -226,7 +150,8 @@ serve(async (req) => {
     console.error('Function error:', error);
     return new Response(JSON.stringify({ 
       error: error.message,
-      details: error.toString()
+      details: error.toString(),
+      stack: error.stack
     }), { 
       headers: corsHeaders, 
       status: 500 
