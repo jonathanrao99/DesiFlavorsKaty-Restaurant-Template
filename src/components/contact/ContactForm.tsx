@@ -64,10 +64,14 @@ const ContactForm = () => {
       
       // Get the correct Supabase URL - use hardcoded URL since we know it
       const supabaseUrl = 'https://tpncxlxsggpsiswoownv.supabase.co';
-      const url = `${supabaseUrl}/functions/v1/send-email`;
+      const timestamp = Date.now();
+      const url = `${supabaseUrl}/functions/v1/send-email?t=${timestamp}`;
       
-      console.log('Using Supabase URL:', supabaseUrl);
+      console.log('Environment check:');
+      console.log('- NEXT_PUBLIC_SUPABASE_URL:', process.env.NEXT_PUBLIC_SUPABASE_URL);
+      console.log('- Using hardcoded URL:', supabaseUrl);
       console.log('Full URL:', url);
+      console.log('Making fetch request to:', url);
       
       const body = {
         to: 'desiflavorskaty@gmail.com',
@@ -105,7 +109,7 @@ const ContactForm = () => {
       // If user subscribed to newsletter, add them to Resend
       if (formData.subscribe_newsletter) {
         try {
-          const newsletterUrl = `${supabaseUrl}/functions/v1/add-newsletter-subscriber`;
+          const newsletterUrl = `${supabaseUrl}/functions/v1/add-newsletter-subscriber?t=${timestamp}`;
           const newsletterRes = await fetch(newsletterUrl, {
             method: 'POST',
             headers: { 
