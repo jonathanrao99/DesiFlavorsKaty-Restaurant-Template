@@ -125,27 +125,28 @@ async function testResendAPI(email: string, name: string) {
       await delay(600);
     }
     
-    // Test 3: Create contact with rate limiting
-    console.log('Step 3: Creating contact...');
+    // Test 3: Add contact to audience using the correct endpoint
+    console.log('Step 3: Adding contact to audience...');
     const firstName = name.split(' ')[0] || name;
     const lastName = name.split(' ').slice(1).join(' ') || '';
     
+    // Use the audience contacts endpoint
     const contactData = {
       email: email,
       firstName: firstName,
       lastName: lastName,
-      unsubscribed: false,
-      audienceId: audienceId
+      unsubscribed: false
     };
     
     console.log('Contact data:', contactData);
+    console.log('Adding to audience ID:', audienceId);
     
     let contactRes;
     retryCount = 0;
     
     while (retryCount < maxRetries) {
       try {
-        contactRes = await fetch('https://api.resend.com/contacts', {
+        contactRes = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${RESEND_API_KEY}`,
@@ -154,7 +155,7 @@ async function testResendAPI(email: string, name: string) {
           body: JSON.stringify(contactData)
         });
         
-        console.log('Create contact status:', contactRes.status);
+        console.log('Add contact status:', contactRes.status);
         
         if (contactRes.status === 429) {
           console.log(`Rate limited, waiting 1 second before retry ${retryCount + 1}...`);
@@ -174,12 +175,12 @@ async function testResendAPI(email: string, name: string) {
     
     if (!contactRes || !contactRes.ok) {
       const error = await contactRes?.text() || 'Unknown error';
-      console.log('Create contact error:', error);
-      throw new Error(`Failed to create contact: ${error}`);
+      console.log('Add contact error:', error);
+      throw new Error(`Failed to add contact: ${error}`);
     }
     
     const result = await contactRes.json();
-    console.log('Contact created successfully:', result);
+    console.log('Contact added successfully:', result);
     
     return { 
       success: true, 
