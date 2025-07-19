@@ -32,7 +32,7 @@ const Index = () => {
   }, []);
   
   return (
-    <main className="min-h-screen relative">
+    <main className="min-h-screen relative" style={{ position: 'relative' }}>
       {/* Back to Top Button */}
       <motion.button
         initial={{ opacity: 0, y: 20 }}
@@ -62,7 +62,7 @@ const Index = () => {
       </motion.button>
 
       {/* Ensure all top-level sections have relative positioning for scroll/animation */}
-      <div className="relative">
+      <div className="relative" style={{ position: 'relative' }}>
         <HeroSection />
         <HomeFoodCarouselSection />
         <BestsellersSection />
