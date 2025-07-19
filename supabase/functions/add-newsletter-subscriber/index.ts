@@ -71,24 +71,45 @@ async function addToResendContacts(email: string, name: string) {
       console.log('Created audience with ID:', audienceId);
     }
     
-    // Now add the contact using the correct API endpoint
+    // Check if user is already subscribed
+    console.log('Checking if user is already subscribed...');
+    const checkRes = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts?email=${encodeURIComponent(email)}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${RESEND_API_KEY}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    
+    if (checkRes.ok) {
+      const existingContacts = await checkRes.json();
+      if (existingContacts.data && existingContacts.data.length > 0) {
+        console.log('User is already subscribed:', existingContacts.data[0]);
+        return { 
+          success: true, 
+          message: 'User is already subscribed to the newsletter',
+          alreadySubscribed: true,
+          contact: existingContacts.data[0]
+        };
+      }
+    }
+    
+    // User is not subscribed, add them using the correct API
     const firstName = name.split(' ')[0] || name;
     const lastName = name.split(' ').slice(1).join(' ') || '';
     
-    // Use the audience endpoint to add contacts
+    // Use the correct API endpoint for adding contacts to audience
     const contactData = {
-      audience: [{
-        email: email,
-        firstName: firstName,
-        lastName: lastName,
-        subscribed: true
-      }]
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      unsubscribed: false
     };
     
-    console.log('Adding contact with data:', contactData);
+    console.log('Adding new contact with data:', contactData);
     
-    const contactRes = await fetch(`https://api.resend.com/audiences/${audienceId}`, {
-      method: 'PATCH',
+    const contactRes = await fetch(`https://api.resend.com/audiences/${audienceId}/contacts`, {
+      method: 'POST',
       headers: {
         'Authorization': `Bearer ${RESEND_API_KEY}`,
         'Content-Type': 'application/json'
@@ -106,7 +127,12 @@ async function addToResendContacts(email: string, name: string) {
     
     const result = await contactRes.json();
     console.log('Success! Contact added:', result);
-    return result;
+    return { 
+      success: true, 
+      message: 'Successfully subscribed to newsletter',
+      alreadySubscribed: false,
+      contact: result
+    };
     
   } catch (error) {
     console.error('Error in addToResendContacts:', error);
@@ -138,7 +164,7 @@ serve(async (req) => {
     }
     
     const result = await addToResendContacts(body.email, body.name);
-    return new Response(JSON.stringify({ success: true, result }), { 
+    return new Response(JSON.stringify(result), { 
       headers: corsHeaders 
     });
   } catch (error) {

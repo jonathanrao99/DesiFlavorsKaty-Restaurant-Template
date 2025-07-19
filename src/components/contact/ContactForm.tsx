@@ -138,7 +138,14 @@ const ContactForm = () => {
             const errorText = await newsletterRes.text();
             console.error('Newsletter subscription failed:', newsletterRes.status, errorText);
           } else {
-            console.log('Newsletter subscription successful');
+            const newsletterResult = await newsletterRes.json();
+            console.log('Newsletter subscription result:', newsletterResult);
+            
+            if (newsletterResult.alreadySubscribed) {
+              console.log('User was already subscribed to newsletter');
+            } else {
+              console.log('Newsletter subscription successful');
+            }
           }
         } catch (newsletterError) {
           console.error('Newsletter subscription error:', newsletterError);
