@@ -71,22 +71,24 @@ async function addToResendContacts(email: string, name: string) {
       console.log('Created audience with ID:', audienceId);
     }
     
-    // Now add the contact
+    // Now add the contact using the correct API endpoint
     const firstName = name.split(' ')[0] || name;
     const lastName = name.split(' ').slice(1).join(' ') || '';
     
+    // Use the audience endpoint to add contacts
     const contactData = {
-      email: email,
-      firstName: firstName,
-      lastName: lastName,
-      unsubscribed: false,
-      audienceId: audienceId
+      audience: [{
+        email: email,
+        firstName: firstName,
+        lastName: lastName,
+        subscribed: true
+      }]
     };
     
     console.log('Adding contact with data:', contactData);
     
-    const contactRes = await fetch('https://api.resend.com/contacts', {
-      method: 'POST',
+    const contactRes = await fetch(`https://api.resend.com/audiences/${audienceId}`, {
+      method: 'PATCH',
       headers: {
         'Authorization': `Bearer ${RESEND_API_KEY}`,
         'Content-Type': 'application/json'
