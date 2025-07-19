@@ -62,9 +62,12 @@ const ContactForm = () => {
       const now = new Date().toLocaleString();
       const eventLabel = selectedEvent.label;
       
-      // Get the correct Supabase URL
-      const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+      // Get the correct Supabase URL - use hardcoded URL since we know it
+      const supabaseUrl = 'https://tpncxlxsggpsiswoownv.supabase.co';
       const url = `${supabaseUrl}/functions/v1/send-email`;
+      
+      console.log('Using Supabase URL:', supabaseUrl);
+      console.log('Full URL:', url);
       
       const body = {
         to: 'desiflavorskaty@gmail.com',
@@ -93,7 +96,11 @@ const ContactForm = () => {
         body: JSON.stringify(body)
       });
       
-      if (!res.ok) throw new Error('Failed to send email');
+      if (!res.ok) {
+        const errorText = await res.text();
+        console.error('Email send failed:', res.status, errorText);
+        throw new Error(`Failed to send email: ${res.status} ${errorText}`);
+      }
       
       // If user subscribed to newsletter, add them to Resend
       if (formData.subscribe_newsletter) {
@@ -112,7 +119,9 @@ const ContactForm = () => {
           });
           
           if (!newsletterRes.ok) {
-            console.error('Newsletter subscription failed');
+            console.error('Newsletter subscription failed:', newsletterRes.status);
+          } else {
+            console.log('Newsletter subscription successful');
           }
         } catch (newsletterError) {
           console.error('Newsletter subscription error:', newsletterError);
