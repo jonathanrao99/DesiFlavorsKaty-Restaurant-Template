@@ -1,7 +1,7 @@
 'use client';
 import { useCart, CartItem } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
-import { Button } from '@heroui/react';
+import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 import { Dialog, DialogOverlay, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogClose } from '@/components/ui/dialog';
 

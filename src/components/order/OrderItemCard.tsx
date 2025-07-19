@@ -1,8 +1,8 @@
 import { ShoppingCart, ImageIcon, ArrowRight } from 'lucide-react';
-import { MenuItem } from '@/hooks/useMenuItems';
+import { MenuItem } from '@/types/menu';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '@heroui/react';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
 interface OrderItemCardProps {
@@ -98,18 +98,18 @@ export default function OrderItemCard({ item, handleAddToCart, index, onOpenDial
           {/* Order Now Button */}
           <Button 
             onClick={() => {
-              if (!item.isSoldOut) {
+              if (!item.sold_out) {
                 const gtag = (window as any).gtag;
                 if (gtag) gtag('event','add_to_cart',{event_category:'Ecommerce',item_id:item.id,item_name:item.name,price:item.price});
                 onOpenDialog(item);
               }
             }}
-            className={`text-xs py-1 px-3 h-8 flex items-center gap-1 ${item.isSoldOut ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-desi-orange hover:bg-desi-orange/90 text-white'}`}
-            disabled={item.isSoldOut}
-            aria-disabled={item.isSoldOut}
+            className={`text-xs py-1 px-3 h-8 flex items-center gap-1 ${item.sold_out ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-desi-orange hover:bg-desi-orange/90 text-white'}`}
+            disabled={item.sold_out}
+            aria-disabled={item.sold_out}
           >
             <ShoppingCart className="h-3 w-3" />
-            {item.isSoldOut ? 'Sold Out' : 'Add to Cart'}
+            {item.sold_out ? 'Sold Out' : 'Add to Cart'}
           </Button>
         </div>
       </div>

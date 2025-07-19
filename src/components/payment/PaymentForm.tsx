@@ -2,8 +2,8 @@
 import React from 'react';
 import { useState, useRef, useEffect } from 'react';
 import { User } from 'lucide-react';
-import { Button } from "@heroui/react";
-import { Input } from "@heroui/react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import SquareCardContainer from '@/components/payment/SquareCardContainer';
 import usePlacesAutocomplete from 'use-places-autocomplete';
 import { createPortal } from 'react-dom';

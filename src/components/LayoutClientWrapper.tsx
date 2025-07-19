@@ -4,7 +4,6 @@ import React, { useEffect } from 'react';
 import Analytics from '@/components/Analytics';
 import { CartProvider } from '@/context/CartContext';
 import ReactQueryProvider from '@/components/ReactQueryProvider';
-import { HeroUIProvider } from '@heroui/react';
 import { Toaster } from '@/components/ui/sonner';
 import NavbarWrapper from '@/components/NavbarWrapper';
 import FooterWrapper from '@/components/FooterWrapper';
@@ -23,14 +22,12 @@ export default function LayoutClientWrapper({ children }: { children: React.Reac
       <Analytics />
       <CartProvider>
         <ReactQueryProvider>
-          <HeroUIProvider>
-            <Toaster />
-            <NavbarWrapper />
-            <PageTransitionWrapper>
-              {children}
-            </PageTransitionWrapper>
-            <FooterWrapper />
-          </HeroUIProvider>
+          <Toaster />
+          <NavbarWrapper />
+          <PageTransitionWrapper>
+            {children}
+          </PageTransitionWrapper>
+          <FooterWrapper />
         </ReactQueryProvider>
       </CartProvider>
     </>

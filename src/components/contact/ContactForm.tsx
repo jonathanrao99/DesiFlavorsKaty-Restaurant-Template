@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Phone, User, MessageSquare, Check, AlertCircle, ArrowRight, Users, PartyPopper, ChevronDown, Download, HelpCircle } from 'lucide-react';
 import { logAnalyticsEvent } from '@/utils/loyaltyAndAnalytics';
 import { supabase } from '@/integrations/supabase/client';
-import { Listbox, Transition } from '@headlessui/react';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -265,55 +264,29 @@ const ContactForm = () => {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.4, delay: 0.4 }}
-            className="relative"
+            className="relative group"
           >
-            <label htmlFor="eventType" className="block text-sm font-medium text-gray-700 mb-1">Event Type</label>
-            <Listbox
-              value={formData.event_type}
-              onChange={(value) => setFormData(prev => ({ ...prev, event_type: value }))}
-            >
-              <div className="relative mt-1">
-                <Listbox.Button className="w-full pl-4 pr-3 py-3 rounded-xl border border-gray-200 focus:border-desi-orange focus:ring-2 focus:ring-desi-orange/20 transition-all bg-white flex justify-between items-center">
-                  <span className="flex items-center space-x-2">
-                    <SelectedEventIcon className="w-5 h-5 text-desi-orange" />
-                    <span className="block truncate text-gray-700">{selectedEvent.label}</span>
-                  </span>
-                  <ChevronDown className="w-5 h-5 text-gray-400" />
-                </Listbox.Button>
-                <Transition as={Fragment} leave="transition ease-in duration-100" leaveFrom="opacity-100" leaveTo="opacity-0">
-                  <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-lg bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none z-50">
-                    {eventOptions.map((option) => {
-                      const Icon = option.icon;
-                      return (
-                        <Listbox.Option
-                          key={option.value}
-                          value={option.value}
-                          className={({ active }) =>
-                            `relative cursor-default select-none py-2 pl-3 pr-9 ${
-                              active ? 'bg-desi-orange/10 text-desi-orange' : 'text-gray-900'
-                            }`
-                          }
-                        >
-                          {({ selected, active }) => (
-                            <>
-                              <div className="flex items-center space-x-2">
-                                <Icon className={`${selected || active ? 'text-desi-orange' : 'text-gray-400'} w-5 h-5`} />
-                                <span className={`${selected ? 'font-semibold' : ''} truncate`}>
-                                  {option.label}
-                                </span>
-                              </div>
-                              {selected && (
-                                <Check className="absolute inset-y-0 right-0 h-5 w-5 text-desi-orange" aria-hidden="true" />
-                              )}
-                            </>
-                          )}
-                        </Listbox.Option>
-                      );
-                    })}
-                  </Listbox.Options>
-                </Transition>
-              </div>
-            </Listbox>
+            <label htmlFor="event_type" className="block text-sm font-medium text-gray-700 mb-1">Event Type</label>
+            <div className="relative">
+              <SelectedEventIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-desi-orange/80 group-focus-within:text-desi-orange transition-colors z-10" size={20} />
+              <select
+                id="event_type"
+                name="event_type"
+                value={formData.event_type}
+                onChange={handleChange}
+                className="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-200 focus:border-desi-orange focus:ring-2 focus:ring-desi-orange/20 transition-all bg-white appearance-none cursor-pointer"
+              >
+                {eventOptions.map((option) => {
+                  const Icon = option.icon;
+                  return (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
+                  );
+                })}
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" size={20} />
+            </div>
           </motion.div>
         </div>
 

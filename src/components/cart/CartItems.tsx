@@ -1,6 +1,8 @@
 import { Trash2, Plus, Minus, Edit, ShoppingBag } from 'lucide-react';
 import { useState } from 'react';
-import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, Textarea } from '@heroui/react';
+import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 
 interface CartItem {
   id: number;
@@ -139,12 +141,12 @@ const CartItems = ({ items, onRemove, onUpdateQuantity, onUpdateInstructions }: 
       </div>
 
       {/* Edit Instructions Modal */}
-      <Modal isOpen={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} size="sm">
-        <ModalContent className="sm:max-w-md bg-white">
-          <ModalHeader>
-            <h2 className="text-xl font-display pb-2">Special Instructions</h2>
-          </ModalHeader>
-          <ModalBody className="space-y-4 py-2">
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-md bg-white">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-display pb-2">Special Instructions</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
             <div className="space-y-2">
               <label htmlFor="instructions" className="block text-sm font-medium text-gray-700">Add special preparation instructions:</label>
               <Textarea
@@ -155,17 +157,17 @@ const CartItems = ({ items, onRemove, onUpdateQuantity, onUpdateInstructions }: 
                 className="min-h-[80px]"
               />
             </div>
-            <ModalFooter className="pt-4 flex justify-end space-x-2">
-              <Button variant="flat" onPress={() => setIsEditDialogOpen(false)}>
+            <DialogFooter className="pt-4 flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)}>
                 Cancel
               </Button>
-              <Button onPress={handleSaveInstructions} className="bg-desi-orange hover:bg-desi-orange/90 text-white">
+              <Button onClick={handleSaveInstructions} className="bg-desi-orange hover:bg-desi-orange/90 text-white">
                 Save Instructions
               </Button>
-            </ModalFooter>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+            </DialogFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

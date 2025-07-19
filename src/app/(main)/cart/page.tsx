@@ -3,16 +3,15 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Trash2, Plus, Minus, ArrowLeft, ShoppingBag, Edit } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
-import { useScrollToTop } from '@/hooks/useScrollToTop';
 import {
-  Modal,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  Button,
-  Textarea
-} from '@heroui/react';
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogFooter,
+  DialogTitle
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
 import { motion } from 'framer-motion';
 import { fadeInUp } from '@/utils/motion.variants';
 import CartSummary from '@/components/cart/CartSummary';
@@ -21,7 +20,6 @@ import ReturningCustomer from '@/components/cart/ReturningCustomer';
 import { logAnalyticsEvent } from '@/utils/loyaltyAndAnalytics';
 
 const Cart = () => {
-  useScrollToTop();
   const { 
     cartItems, 
     removeFromCart, 
@@ -82,7 +80,7 @@ const Cart = () => {
             <Button
               variant="ghost"
               size="sm"
-              onPress={() => router.back()}
+              onClick={() => router.back()}
               className="text-desi-orange"
             >
               <ArrowLeft className="h-6 w-6" />
@@ -139,12 +137,12 @@ const Cart = () => {
       </section>
 
       {/* Edit Instructions Modal */}
-      <Modal isOpen={isEditDialogOpen} onOpenChange={setIsEditDialogOpen} size="sm">
-        <ModalContent className="sm:max-w-md rounded-xl">
-          <ModalHeader>
-            <h2 className="text-xl font-display">Special Instructions</h2>
-          </ModalHeader>
-          <ModalBody className="space-y-4 py-2">
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent className="sm:max-w-md rounded-xl">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-display">Special Instructions</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-2">
             <div className="space-y-2">
               <label htmlFor="instructions" className="block text-sm font-medium text-gray-700">Add special preparation instructions:</label>
               <Textarea
@@ -155,17 +153,17 @@ const Cart = () => {
                 className="min-h-[80px] rounded-xl border border-gray-300 focus:border-desi-orange focus:ring-2 focus:ring-desi-orange/20"
               />
             </div>
-            <ModalFooter className="pt-4 flex justify-end space-x-2">
-              <Button variant="flat" onPress={() => setIsEditDialogOpen(false)} className="rounded-xl">
+            <DialogFooter className="pt-4 flex justify-end space-x-2">
+              <Button variant="outline" onClick={() => setIsEditDialogOpen(false)} className="rounded-xl">
                 Cancel
               </Button>
-              <Button onPress={handleSaveInstructions} className="bg-desi-orange hover:bg-desi-orange/90 text-white rounded-xl">
+              <Button onClick={handleSaveInstructions} className="bg-desi-orange hover:bg-desi-orange/90 text-white rounded-xl">
                 Save Instructions
               </Button>
-            </ModalFooter>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+            </DialogFooter>
+          </div>
+        </DialogContent>
+      </Dialog>
     </>
   );
 };

@@ -6,10 +6,8 @@ import { ArrowLeft, Lock, Calendar, Clock } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 import { toast } from 'sonner';
 import OrderSummaryClean from '@/components/payment/OrderSummaryClean';
-import { Button } from '@heroui/react';
+import { Button } from '@/components/ui/button';
 import dynamicComponent from 'next/dynamic';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
 import { AddressAutocompleteProps } from '@/components/payment/AddressAutocomplete';
 import { calculateDistanceFee } from '@/lib/deliveryFee';
 import { ordersApi, paymentApi } from '@/lib/supabaseFunctions';
@@ -357,16 +355,14 @@ function PaymentPageContent() {
               
               {scheduleType === 'scheduled' && (
                 <div className="relative">
-                  <DatePicker 
-                    selected={scheduledTime} 
-                    onChange={(date: Date | null) => date && setScheduledTime(date)} 
-                    showTimeSelect 
-                    minDate={new Date()} 
-                    filterTime={filterTime} 
-                    dateFormat="MMMM d, yyyy h:mm aa" 
-                    timeIntervals={30} 
+                  <input 
+                    type="datetime-local" 
+                    id="scheduledTime" 
+                    value={scheduledTime.toISOString().slice(0, 16)} 
+                    onChange={(e) => setScheduledTime(new Date(e.target.value))} 
+                    min={new Date().toISOString().slice(0, 16)} 
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm pl-10" 
-                    placeholderText="Select a date and time"
+                    placeholder="Select a date and time"
                   />
                   <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                 </div>

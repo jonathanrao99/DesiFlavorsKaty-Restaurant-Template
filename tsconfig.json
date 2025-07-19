@@ -46,6 +46,7 @@
   ],
   "exclude": [
     "node_modules",
-    "src/scripts"
+    "src/scripts",
+    "supabase"
   ]
 }

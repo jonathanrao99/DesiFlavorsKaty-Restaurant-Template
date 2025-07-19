@@ -2,7 +2,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { useScrollToTopOnNavClick } from '@/hooks/useScrollToTopOnNavClick';
 import { fadeInUp } from '@/utils/motion.variants';
 import { PulsatingButton } from '@/components/magicui/pulsating-button';
 import AnimatedCardGrid, { AnimatedCard } from '@/components/AnimatedCardGrid';
@@ -25,7 +24,6 @@ const galleryItems = [
 
 const Catering = () => {
   const router = useRouter();
-  useScrollToTopOnNavClick();
 
   const handleQuoteClick = () => {
     router.push('/#connect');

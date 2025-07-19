@@ -3,24 +3,42 @@
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import { AnimatePresence } from 'framer-motion';
-import { useMenuItems } from '@/hooks/useMenuItems';
 import { useCart } from '@/context/CartContext';
 import { useSearchParams } from 'next/navigation';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
-import { Accordion, AccordionItem } from '@heroui/react';
 import MenuItemCard from '@/components/menu/MenuItemCard';
-import type { MenuItem } from '@/hooks/useMenuItems';
 import { toast } from 'sonner';
-import { Search } from 'lucide-react';
+import { Search, ChevronDown } from 'lucide-react';
 
 const OrderDialog = dynamic(() => import('@/components/order/OrderDialog'));
+
+// Simple MenuItem interface
+interface MenuItem {
+  id: number;
+  name: string;
+  description: string;
+  price: string;
+  isvegetarian: boolean;
+  isspicy: boolean;
+  category: string;
+  menu_img?: string;
+  quantity?: number;
+  specialInstructions?: string;
+  sold_out: boolean;
+  square_variation_id?: string | null;
+}
 
 type MenuClientProps = {
   initialMenuItems?: MenuItem[];
 };
 
 export default function MenuClient({ initialMenuItems }: MenuClientProps) {
-  const { menuItems, loading, error, categories } = useMenuItems(initialMenuItems);
+  // Simple static menu data - in a real app this would come from an API
+  const menuItems: MenuItem[] = initialMenuItems || [];
+  const categories = ['Appetizers', 'Main Course', 'Biryani', 'Breads', 'Desserts', 'Beverages'];
+  const loading = false;
+  const error = null;
+
   const [vegetarianOnly, setVegetarianOnly] = useState(false);
   const [spicyOnly, setSpicyOnly] = useState(false);
   const [under10Only, setUnder10Only] = useState(false);
@@ -137,25 +155,23 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
             <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-desi-orange cursor-pointer" />
           </div>
         </div>
-        <Accordion selectionMode="multiple" defaultExpandedKeys={categories} className="divide-y divide-gray-200 bg-transparent rounded-none shadow-none border-none">
+        <div className="divide-y divide-gray-200 bg-transparent rounded-none shadow-none border-none">
           {categories.map((category) => (
-            <AccordionItem
-              key={category}
-              title={category}
-              classNames={{
-                base: 'border-0 rounded-none',
-                heading: 'w-full text-left font-display font-bold py-0.5 md:py-1 px-0 text-base md:text-xl bg-transparent no-underline hover:text-desi-orange focus:outline-none',
-                content: 'px-0 pb-4 pt-0'
-              }}
-            >
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                {filteredMenuItems[category]?.map(item => (
-                    <MenuItemCard key={item.id} item={item} handleAddToCart={handleAddToCart} />
-                ))}
+            <details key={category} open className="border-0 rounded-none">
+              <summary className="w-full text-left font-display font-bold py-0.5 md:py-1 px-0 text-base md:text-xl bg-transparent no-underline hover:text-desi-orange focus:outline-none cursor-pointer flex items-center justify-between">
+                {category}
+                <ChevronDown className="w-5 h-5 transition-transform group-open:rotate-180" />
+              </summary>
+              <div className="px-0 pb-4 pt-0">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                  {filteredMenuItems[category]?.map(item => (
+                      <MenuItemCard key={item.id} item={item} handleAddToCart={handleAddToCart} />
+                  ))}
+                </div>
               </div>
-            </AccordionItem>
+            </details>
           ))}
-        </Accordion>
+        </div>
       </div>
       <AnimatePresence>
         {isDialogOpen && selectedItem && (

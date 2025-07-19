@@ -1,6 +1,6 @@
 'use client';
 import { ShoppingCart, ImageIcon, Star, ArrowRight, Clock, Utensils } from 'lucide-react';
-import { MenuItem } from '@/hooks/useMenuItems';
+import { MenuItem } from '@/types/menu';
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
@@ -131,7 +131,7 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
               )}
             </div>
 
-            {item.isSoldOut ? (
+            {item.sold_out ? (
               <span className="flex items-center space-x-1 text-gray-400 font-medium text-base select-none" aria-disabled="true">
                 <span>Sold Out</span>
                 <ArrowRight className="w-4 h-4 text-gray-400" />

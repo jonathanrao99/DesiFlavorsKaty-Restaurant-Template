@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { CheckCircle, Clock, Truck, ChefHat, Package } from 'lucide-react';
-import { useTranslations } from 'next-intl';
 
 
 
@@ -34,7 +33,6 @@ export default function OrderTrackingPage() {
   const [order, setOrder] = useState<Order | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const t = useTranslations();
 
   const handleTrackOrder = async () => {
     if (!orderId) return;
@@ -70,7 +68,7 @@ export default function OrderTrackingPage() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         <div className="bg-white rounded-lg shadow-md p-6 mb-6">
-          <h1 className="text-2xl font-bold text-gray-800 mb-4">{t('orderTracking.title')}</h1>
+          <h1 className="text-2xl font-bold text-gray-800 mb-4">Order Tracking</h1>
           <div className="flex gap-2">
             <input
               type="text"

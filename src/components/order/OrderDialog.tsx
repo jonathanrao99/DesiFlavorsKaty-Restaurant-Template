@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MenuItem } from '@/hooks/useMenuItems';
+import { MenuItem } from '@/types/menu';
 import { X, Plus, Minus, ShoppingCart, Image as ImageIcon } from 'lucide-react';
 import ImageCarousel from '@/components/ui/ImageCarousel';
 
@@ -68,9 +68,7 @@ const OrderDialog = ({ item, onClose, onAddToCart }: OrderDialogProps) => {
 
           {/* Image Section (carousel) */}
           <div className="md:w-2/5 h-48 md:h-auto relative overflow-hidden">
-            {item.images && item.images.length > 0 ? (
-              <ImageCarousel images={item.images} alt={item.name} />
-            ) : item.menu_img ? (
+            {item.menu_img ? (
               <img
                 src={item.menu_img}
                 alt={item.name}
@@ -147,13 +145,13 @@ const OrderDialog = ({ item, onClose, onAddToCart }: OrderDialogProps) => {
 
               {/* Add to Cart Button */}
               <button
-                onClick={item.isSoldOut ? undefined : handleAddToCart}
-                className={`w-full py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 text-sm font-medium ${item.isSoldOut ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-desi-orange hover:bg-desi-orange/90 text-white'}`}
-                disabled={item.isSoldOut}
-                aria-disabled={item.isSoldOut}
+                onClick={item.sold_out ? undefined : handleAddToCart}
+                className={`w-full py-2 rounded-lg transition-colors flex items-center justify-center space-x-2 text-sm font-medium ${item.sold_out ? 'bg-gray-300 text-gray-400 cursor-not-allowed' : 'bg-desi-orange hover:bg-desi-orange/90 text-white'}`}
+                disabled={item.sold_out}
+                aria-disabled={item.sold_out}
               >
                 <ShoppingCart className="w-4 h-4" />
-                <span>{item.isSoldOut ? 'Sold Out' : 'Add to Cart'}</span>
+                <span>{item.sold_out ? 'Sold Out' : 'Add to Cart'}</span>
               </button>
             </div>
           </div>

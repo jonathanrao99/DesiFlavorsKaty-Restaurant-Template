@@ -2,13 +2,11 @@ import { ShoppingCart } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useCart } from '@/context/CartContext';
 import { useRouter } from 'next/navigation';
-import { useTranslations } from 'next-intl';
 
 export const Cart = () => {
   const { cartItems } = useCart();
   const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
   const router = useRouter();
-  const t = useTranslations();
 
   const handleCartOpen = () => {
     // logAnalyticsEvent('cart_view', {});
@@ -43,7 +41,7 @@ export const Cart = () => {
       whileTap={{ scale: 0.95 }}
       onClick={() => router.push('/cart')}
       className="relative p-2 text-gray-700 hover:text-desi-orange transition-colors no-underline"
-      aria-label={t('cart.title')}
+      aria-label="Shopping Cart"
       role="button"
       tabIndex={0}
       onKeyDown={e => {

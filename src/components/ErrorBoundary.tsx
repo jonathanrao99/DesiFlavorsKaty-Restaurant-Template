@@ -1,5 +1,5 @@
 import React, { Component, ErrorInfo, ReactNode } from 'react';
-import { Button } from '@heroui/react';
+import { Button } from '@/components/ui/button';
 
 interface Props {
   children: ReactNode;
@@ -39,14 +39,14 @@ export class ErrorBoundary extends Component<Props, State> {
             </p>
             <div className="space-x-4">
               <Button
-                onPress={() => window.location.reload()}
+                onClick={() => window.location.reload()}
                 className="bg-desi-orange hover:bg-desi-orange/90"
               >
                 Refresh Page
               </Button>
               <Button
-                onPress={() => window.history.back()}
-                variant="bordered"
+                onClick={() => window.history.back()}
+                variant="outline"
               >
                 Go Back
               </Button>

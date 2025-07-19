@@ -7,7 +7,6 @@ import { SpinningText } from '@/components/magicui/spinning-text';
 import { fadeInUp } from '@/utils/motion.variants';
 import MagneticButton from '@/components/MagneticButton';
 import AnimatedCardGrid, { AnimatedCard } from '@/components/AnimatedCardGrid';
-import { Card, CardBody } from '@heroui/react';
 
 const BestsellersSection = () => {
   const sectionRef = useRef(null);
@@ -158,16 +157,16 @@ const BestsellersSection = () => {
                     whileHover={{ scale: 1.04, boxShadow: '0 4px 32px #ffb34733' }}
                     transition={{ type: 'spring', stiffness: 200 }}
                   >
-                    <Card className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 bg-white">
-                      <CardBody className="p-0">
+                    <div className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 bg-white">
+                      <div className="p-0">
                         <div className="relative">
                           <SpinningText className="text-desi-orange bg-transparent text-[0.6rem]">
                             bestseller • bestseller • bestseller •
                           </SpinningText>
                           <BestsellerCard {...item} />
                         </div>
-                      </CardBody>
-                    </Card>
+                      </div>
+                    </div>
                   </motion.div>
                 </AnimatedCard>
               ))}
