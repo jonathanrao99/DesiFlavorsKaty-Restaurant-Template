@@ -35,7 +35,44 @@ type MenuClientProps = {
 export default function MenuClient({ initialMenuItems }: MenuClientProps) {
   // Simple static menu data - in a real app this would come from an API
   const menuItems: MenuItem[] = initialMenuItems || [];
-  const categories = ['Appetizers', 'Main Course', 'Biryani', 'Breads', 'Desserts', 'Beverages'];
+  
+  // Dynamically get categories from menu items in custom order
+  const categories = useMemo(() => {
+    if (!menuItems || menuItems.length === 0) return [];
+    const uniqueCategories = [...new Set(menuItems.map(item => item.category))];
+    
+    // Custom category order
+    const categoryOrder = [
+      'Biryani',
+      'Breakfast', 
+      'Non-Veg Curry',
+      'Veg Curry',
+      'Indian Breads',
+      'Chaat',
+      'Snacks',
+      'Chinese Non-Veg',
+      'Chinese Veg',
+      'Drinks',
+      'Sweets'
+    ];
+    
+    // Sort categories according to custom order, with any new categories at the end
+    return uniqueCategories.sort((a, b) => {
+      const aIndex = categoryOrder.indexOf(a);
+      const bIndex = categoryOrder.indexOf(b);
+      
+      // If both categories are in the order list, sort by their position
+      if (aIndex !== -1 && bIndex !== -1) {
+        return aIndex - bIndex;
+      }
+      // If only one is in the order list, prioritize it
+      if (aIndex !== -1) return -1;
+      if (bIndex !== -1) return 1;
+      // If neither is in the order list, sort alphabetically
+      return a.localeCompare(b);
+    });
+  }, [menuItems]);
+  
   const loading = false;
   const error = null;
 
@@ -47,10 +84,11 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
   const searchParams: ReadonlyURLSearchParams = useSearchParams();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [openCategories, setOpenCategories] = useState<Set<string>>(new Set(categories));
 
   const filteredMenuItems = useMemo(() => {
     if (!menuItems) return {};
-    return categories.reduce((acc, category) => {
+    const filtered = categories.reduce((acc, category) => {
       acc[category] = menuItems
         .filter(item => item.category === category)
         .filter(item => !vegetarianOnly || item.isvegetarian)
@@ -63,6 +101,11 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
         .filter(item => item.name.toLowerCase().includes(searchFilter.toLowerCase()));
       return acc;
     }, {} as { [key: string]: MenuItem[] });
+    
+    // Debug logging
+    console.log('Filtered menu items by category:', Object.keys(filtered).map(cat => `${cat}: ${filtered[cat].length} items`));
+    
+    return filtered;
   }, [menuItems, categories, vegetarianOnly, spicyOnly, under10Only, searchFilter]);
 
   useEffect(() => {
@@ -104,6 +147,18 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
     // ...existing search logic...
   };
 
+  const toggleCategory = (category: string) => {
+    setOpenCategories(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(category)) {
+        newSet.delete(category);
+      } else {
+        newSet.add(category);
+      }
+      return newSet;
+    });
+  };
+
   if (loading) {
       return (
         <div className="flex items-center justify-center min-h-[400px]">
@@ -123,23 +178,23 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
     <div className="min-h-screen bg-desi-cream overflow-x-hidden">
       <div className="w-[90%] max-w-[90vw] mx-auto px-2 sm:px-4 py-8">
         {/* Filter Pills and Search */}
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4 mb-6 w-full">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4 mb-4 w-full">
           <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
             <button
               onClick={() => setVegetarianOnly(!vegetarianOnly)}
-              className={`px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full border text-sm sm:text-lg transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${vegetarianOnly ? 'bg-green-500 border-green-500 text-white' : 'bg-white border-green-500 text-green-500'}`}
+              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border text-sm sm:text-base transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${vegetarianOnly ? 'bg-green-500 border-green-500 text-white' : 'bg-white border-green-500 text-green-500'}`}
             >
               <span role="img" aria-label="Vegetarian">🥦</span> Vegetarian
             </button>
             <button
               onClick={() => setSpicyOnly(!spicyOnly)}
-              className={`px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full border text-sm sm:text-lg transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${spicyOnly ? 'bg-red-500 border-red-500 text-white' : 'bg-white border-red-500 text-red-500'}`}
+              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border text-sm sm:text-base transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${spicyOnly ? 'bg-red-500 border-red-500 text-white' : 'bg-white border-red-500 text-red-500'}`}
             >
               <span role="img" aria-label="Spicy">🔥</span> Spicy
             </button>
             <button
               onClick={() => setUnder10Only(!under10Only)}
-              className={`px-3 sm:px-5 py-1.5 sm:py-2.5 rounded-full border text-sm sm:text-lg transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${under10Only ? 'bg-desi-orange border-desi-orange text-white' : 'bg-white border-desi-orange text-desi-orange'}`}
+              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border text-sm sm:text-base transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${under10Only ? 'bg-desi-orange border-desi-orange text-white' : 'bg-white border-desi-orange text-desi-orange'}`}
             >
               Under $10
             </button>
@@ -150,27 +205,42 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
               value={searchFilter}
               onChange={e => setSearchFilter(e.target.value)}
               placeholder="Search..."
-              className="w-full pr-10 pl-4 py-2 border border-desi-orange rounded-full focus:outline-none focus:ring-2 focus:ring-desi-orange transition-colors text-sm sm:text-lg"
+              className="w-full pr-10 pl-4 py-2 border border-desi-orange rounded-full focus:outline-none focus:ring-2 focus:ring-desi-orange transition-colors text-sm sm:text-base"
             />
             <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-desi-orange cursor-pointer" />
           </div>
         </div>
         <div className="divide-y divide-gray-200 bg-transparent rounded-none shadow-none border-none">
-          {categories.map((category) => (
-            <details key={category} open className="border-0 rounded-none">
-              <summary className="w-full text-left font-display font-bold py-0.5 md:py-1 px-0 text-base md:text-xl bg-transparent no-underline hover:text-desi-orange focus:outline-none cursor-pointer flex items-center justify-between">
-                {category}
-                <ChevronDown className="w-5 h-5 transition-transform group-open:rotate-180" />
-              </summary>
-              <div className="px-0 pb-4 pt-0">
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                  {filteredMenuItems[category]?.map(item => (
-                      <MenuItemCard key={item.id} item={item} handleAddToCart={handleAddToCart} />
-                  ))}
+          {categories.map((category) => {
+            const isOpen = openCategories.has(category);
+            return (
+              <div key={category} className="border-0 rounded-none">
+                <button
+                  onClick={() => toggleCategory(category)}
+                  className="w-full text-center font-display font-bold py-1 md:py-2 px-0 text-base md:text-xl bg-transparent no-underline hover:text-desi-orange focus:outline-none cursor-pointer flex items-center justify-between"
+                >
+                  <span className="flex-1">{category}</span>
+                  <ChevronDown className={`w-5 h-5 transition-transform duration-300 ease-in-out ${isOpen ? 'rotate-180' : ''}`} />
+                </button>
+                <div 
+                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                    isOpen ? 'max-h-[6000px] opacity-100' : 'max-h-0 opacity-0'
+                  }`}
+                  style={{
+                    maxHeight: isOpen ? 'none' : '0px'
+                  }}
+                >
+                  <div className="px-0 pb-6 pt-2">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                      {filteredMenuItems[category]?.map(item => (
+                          <MenuItemCard key={item.id} item={item} handleAddToCart={handleAddToCart} />
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </details>
-          ))}
+            );
+          })}
         </div>
       </div>
       <AnimatePresence>

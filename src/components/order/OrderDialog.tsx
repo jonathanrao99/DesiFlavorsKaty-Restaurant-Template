@@ -56,7 +56,7 @@ const OrderDialog = ({ item, onClose, onAddToCart }: OrderDialogProps) => {
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
-          className="relative bg-white rounded-xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row"
+          className="relative bg-white rounded-xl shadow-xl w-full max-w-5xl max-h-[90vh] overflow-hidden flex flex-col md:flex-row"
         >
           {/* Close Button */}
           <button
@@ -67,7 +67,7 @@ const OrderDialog = ({ item, onClose, onAddToCart }: OrderDialogProps) => {
           </button>
 
           {/* Image Section (carousel) */}
-          <div className="md:w-2/5 h-48 md:h-auto relative overflow-hidden">
+          <div className="md:w-1/2 h-48 md:h-auto relative overflow-hidden">
             {item.menu_img ? (
               <img
                 src={item.menu_img}
@@ -84,7 +84,7 @@ const OrderDialog = ({ item, onClose, onAddToCart }: OrderDialogProps) => {
           </div>
 
           {/* Content Section */}
-          <div className="md:w-3/5 p-4 md:p-6 flex flex-col">
+          <div className="md:w-1/2 p-4 md:p-6 flex flex-col">
             <div className="space-y-4">
               {/* Title and Price */}
               <div>

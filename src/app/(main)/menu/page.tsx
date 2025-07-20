@@ -30,6 +30,9 @@ async function fetchMenuData() {
 
 export default async function MenuPage() {
   const menuData = await fetchMenuData();
+  console.log('Menu data fetched:', menuData.length, 'items');
+  console.log('Categories found:', [...new Set(menuData.map(item => item.category))]);
+  
   return (
     <div className="min-h-screen bg-gray-50">
       <MenuHeader />

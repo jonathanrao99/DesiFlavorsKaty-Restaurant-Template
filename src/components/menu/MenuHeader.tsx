@@ -29,8 +29,8 @@ const MenuHeader = () => {
       >
         <div className="absolute inset-0 bg-black/40 z-10"></div>
         <img
-          src="/biryani.png"
-          alt="Desi Flavors Biryani"
+          src="/Food/foodtable.webp"
+          alt="Desi Flavors Food Table"
           className="transform-gpu object-cover absolute inset-0 w-full h-full"
           style={{ objectFit: 'cover', width: '100%', height: '100%' }}
         />
@@ -48,7 +48,7 @@ const MenuHeader = () => {
       </div>
 
       <div className="container relative z-10 px-4 sm:px-6 max-w-7xl mx-auto">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="w-full text-center">
           <motion.div
             variants={fadeInUp}
             initial="hidden"
@@ -68,7 +68,7 @@ const MenuHeader = () => {
             whileInView="visible"
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 0.8 }}
-            className="text-lg md:text-xl text-white leading-relaxed max-w-5xl mx-auto mb-4 font-sans"
+            className="text-lg md:text-xl lg:text-2xl text-white font-display leading-relaxed max-w-10xl mx-auto mb-4 font-sans"
           >
             Our menu celebrates traditional desi flavors, crafted with the finest ingredients and now available to enjoy wherever you are — dine in or have it delivered fresh to your door.
 
@@ -80,7 +80,7 @@ const MenuHeader = () => {
             whileInView="visible"
             viewport={{ once: true }}
             transition={{ duration: 0.7, delay: 1.1 }}
-            className="text-lg md:text-xl text-desi-orange font-bold leading-relaxed max-w-2xl mx-auto mb-4 font-sans"
+            className="text-lg md:text-xl lg:text-2xl text-desi-orange font-bold leading-relaxed max-w-2xl mx-auto mb-4 font-sans"
           >
             Find us on your favorite delivery platforms:
           </motion.p>
@@ -93,14 +93,14 @@ const MenuHeader = () => {
             transition={{ duration: 0.7, delay: 1.4 }}
             className="flex flex-wrap items-center justify-center gap-6"
           >
-            <Link href="https://www.order.store/store/desi-flavors-katy-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <img src="/ubereats.png" alt="Uber Eats" width={140} height={40} className="object-contain" style={{ height: 'auto' }} />
+            <Link href="https://order.online/business/desi-flavors-katy-14145277" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
+              <img src="/Doordash.webp" alt="DoorDash" width={220} height={80} className="object-contain" style={{ height: 'auto' }} />
             </Link>
             <Link href="http://menus.fyi/10883320" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <img src="/Grubhub.webp" alt="Grubhub" width={140} height={40} className="object-contain" style={{ height: 'auto' }} />
+              <img src="/Grubhub.webp" alt="Grubhub" width={200} height={70} className="object-contain" style={{ height: 'auto' }} />
             </Link>
-            <Link href="https://order.online/business/desi-flavors-katy-14145277" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <img src="/Doordash.webp" alt="DoorDash" width={140} height={40} className="object-contain" style={{ height: 'auto' }} />
+            <Link href="https://www.order.store/store/desi-flavors-katy-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
+              <img src="/ubereats.png" alt="Uber Eats" width={200} height={70} className="object-contain" style={{ height: 'auto' }} />
             </Link>
           </motion.div>
         </div>

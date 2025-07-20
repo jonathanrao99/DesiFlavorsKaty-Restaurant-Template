@@ -112,7 +112,9 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
           <div className="flex-grow">
             <div className="flex justify-between items-start">
               <h3 className="text-lg font-semibold text-gray-900">{item.name}</h3>
-              <span className="text-desi-orange font-medium text-base">{item.price}</span>
+              <span className="text-desi-orange font-medium text-base">
+                <span className="text-desi-orange">$</span>{item.price}
+              </span>
             </div>
             <p className="text-gray-600 text-sm line-clamp-2 mt-1">{item.description}</p>
           </div>
