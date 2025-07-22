@@ -11,11 +11,8 @@ import { calculateDistanceFee } from '@/lib/deliveryFee';
 import { ordersApi, paymentApi } from '@/lib/supabaseFunctions';
 import { supabase } from '@/integrations/supabase/client';
 import { AddressAutocomplete } from '@/components/payment/AddressAutocomplete';
-<<<<<<< HEAD
-=======
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
->>>>>>> b5f7315 (Reset)
 
 export const dynamic = 'force-dynamic';
 
@@ -614,18 +611,6 @@ function PaymentPageContent() {
               
               {scheduleType === 'scheduled' && (
                 <div className="relative">
-<<<<<<< HEAD
-                  <input 
-                    type="datetime-local" 
-                    id="scheduledTime" 
-                    value={scheduledTime.toISOString().slice(0, 16)} 
-                    onChange={(e) => setScheduledTime(new Date(e.target.value))} 
-                    min={new Date().toISOString().slice(0, 16)} 
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-desi-orange focus:ring-0 focus:outline-none sm:text-sm pl-10" 
-                    placeholder="Select a date and time"
-                  />
-                  <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-=======
                   <DatePicker
                     selected={scheduledTime}
                     onChange={(date: Date) => setScheduledTime(date)}
@@ -677,7 +662,6 @@ function PaymentPageContent() {
                       </div>
                     }
                   />
->>>>>>> b5f7315 (Reset)
                 </div>
               )}
             </div>

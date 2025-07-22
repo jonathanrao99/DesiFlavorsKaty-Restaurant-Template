@@ -100,10 +100,10 @@ export const customerApi = {
 // Delivery fee calculation
 export const deliveryApi = {
   // Calculate delivery fee
-  async calculateFee(address: string, dropoffPhoneNumber: string) {
+  async calculateFee(orderId: string, address: string, dropoffPhoneNumber: string) {
     return callSupabaseFunction('calculate-fee', {
       method: 'POST',
-      body: JSON.stringify({ address, dropoffPhoneNumber }),
+      body: JSON.stringify({ orderId, address, dropoffPhoneNumber }),
     });
   },
 

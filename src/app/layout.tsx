@@ -66,6 +66,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           },
           "openingHours": ["Mo-Su 17:00-01:00"]
         }` }} />
+        <script
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&libraries=places&v=beta&loading=async`}
+          async
+        ></script>
+        <script
+          src="https://unpkg.com/@googlemaps/places-autocomplete-element@latest/dist/index.min.js"
+          async
+        ></script>
       </head>
       <body>
         <a href="#main-content" className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 bg-desi-orange text-white px-4 py-2 rounded shadow transition-all">Skip to main content</a>

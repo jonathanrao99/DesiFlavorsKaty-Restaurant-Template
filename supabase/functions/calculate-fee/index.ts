@@ -28,44 +28,65 @@ serve(async (req) => {
   }
 
   try {
-    const { address, dropoffPhoneNumber } = await req.json();
-    console.log('calculate-fee received body:', {
-      address,
-      dropoffPhoneNumber
-    });
+    // Use Shipday /on-demand/estimate endpoint (no orderId required)
+    let estimatedFee = null;
+    let usedShipday = false;
+    try {
+      const SHIPDAY_API_KEY = Deno.env.get('SHIPDAY_API_KEY');
+      const STORE_ADDRESS = Deno.env.get('STORE_ADDRESS');
+      if (!SHIPDAY_API_KEY || !STORE_ADDRESS) throw new Error('Missing Shipday API key or store address');
 
-    if (!address) throw new Error('No address provided');
-    if (!dropoffPhoneNumber) throw new Error('No dropoffPhoneNumber provided');
+      // Parse request body for dropoff address
+      const { address } = await req.json();
+      if (!address) throw new Error('No address provided');
 
-    // Calculate delivery fee using fallback method (while ShipDay API is being debugged)
-    console.log('Using fallback delivery fee calculation');
-    
-    // Simple distance-based fee calculation
-    let estimatedFee = 5.00; // Base fee
-    
-    // If address contains Katy, TX, it's closer
-    if (address.toLowerCase().includes('katy')) {
-      estimatedFee = 4.50;
-    } else if (address.toLowerCase().includes('houston')) {
-      estimatedFee = 6.50;
-    } else if (address.toLowerCase().includes('cypress') || address.toLowerCase().includes('spring')) {
-      estimatedFee = 5.50;
-    } else if (address.toLowerCase().includes('sugar land') || address.toLowerCase().includes('missouri city')) {
-      estimatedFee = 5.75;
+      const estimateUrl = 'https://api.shipday.com/on-demand/estimate';
+      const estimateBody = {
+        pickupAddress: STORE_ADDRESS,
+        dropoffAddress: address,
+      };
+      const estimateResp = await fetch(estimateUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `API-KEY ${SHIPDAY_API_KEY}`,
+        },
+        body: JSON.stringify(estimateBody),
+      });
+      const errorText = await estimateResp.text();
+      let estimateData = null;
+      try { estimateData = JSON.parse(errorText); } catch { estimateData = { errorMessage: errorText }; }
+      if (!estimateResp.ok || estimateData.error) {
+        console.error('Shipday API error response:', errorText);
+        throw new Error(estimateData.errorMessage || 'Shipday estimate API failed');
+      }
+      estimatedFee = estimateData.fee || estimateData.estimatedFee || null;
+      usedShipday = true;
+      console.log('Shipday API fee:', estimatedFee);
+      // Return the Shipday response
+      return new Response(JSON.stringify({
+        fee: estimatedFee,
+        usedShipday,
+        shipday: estimateData
+      }), {
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json'
+        },
+        status: 200
+      });
+    } catch (err) {
+      console.error('Shipday API error, returning 500:', err.message);
+      return new Response(JSON.stringify({
+        error: err.message
+      }), {
+        headers: {
+          ...corsHeaders,
+          'Content-Type': 'application/json'
+        },
+        status: 500
+      });
     }
-    
-    console.log('Fallback delivery fee calculated:', estimatedFee);
-
-    // Return the estimated fee
-    return new Response(JSON.stringify({
-      fee: estimatedFee
-    }), {
-      headers: {
-        ...corsHeaders,
-        'Content-Type': 'application/json'
-      },
-      status: 200
-    });
 
   } catch (error) {
     console.error('Delivery fee calculation error:', error.message);

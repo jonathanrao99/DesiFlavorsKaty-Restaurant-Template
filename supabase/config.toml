@@ -1,1 +1,5 @@
 project_id = "tpncxlxsggpsiswoownv"
+
+# Disable JWT verification for calculate-fee function (public API)
+[functions.calculate-fee]
+verify_jwt = false
