@@ -45,7 +45,6 @@ serve(async (req) => {
       deliveryFee,
       total
     });
-    console.log('Service charges being sent:', paymentLinkReq.order.service_charges);
 
     // Build payment link request
     const paymentLinkReq = {
@@ -100,7 +99,7 @@ serve(async (req) => {
         customer_notes: body.customerInfo?.special_instructions || ""
       },
       checkout_options: {
-        redirect_url: body.redirectUrl || undefined,
+        redirect_url: body.redirectUrl || `${body.baseUrl || 'https://desi-flavors-hub.vercel.app'}/payment-success`,
         allow_tipping: true,
         tip_options: {
           percentage_tip_options: ["15", "18", "20", "25"],
@@ -108,6 +107,8 @@ serve(async (req) => {
         }
       }
     };
+    
+    console.log('Service charges being sent:', paymentLinkReq.order.service_charges);
     console.log('Sending request to Square:', JSON.stringify(paymentLinkReq, null, 2));
     const response = await fetch("https://connect.squareup.com/v2/online-checkout/payment-links", {
       method: "POST",

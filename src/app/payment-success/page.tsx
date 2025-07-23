@@ -1,8 +1,8 @@
 'use client';
 import PaymentSuccessPage from '@/components/payment/PaymentSuccessPage';
-import { useEffect } from 'react';
+import { useEffect, Suspense } from 'react';
 
-export default function PaymentSuccessRoute() {
+function PaymentSuccessContent() {
   useEffect(() => {
     if (typeof window !== 'undefined') {
       if (typeof window.gtag === 'function') window.gtag('event', 'payment_success', {});
@@ -13,4 +13,12 @@ export default function PaymentSuccessRoute() {
   }, []);
 
   return <PaymentSuccessPage />;
+}
+
+export default function PaymentSuccessRoute() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PaymentSuccessContent />
+    </Suspense>
+  );
 } 

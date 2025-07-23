@@ -6,12 +6,10 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "export": "next build && next export",
     "start": "next start",
     "lint": "eslint ."
   },
   "dependencies": {
-    "@googlemaps/google-maps-services-js": "^3.4.1",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-slot": "^1.2.3",
     "@radix-ui/react-tabs": "^1.1.0",
@@ -24,8 +22,6 @@
     "next": "^15.3.5",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-icons": "^5.5.0",
-    "resend": "^4.6.0",
     "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
@@ -34,26 +30,17 @@
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@next/bundle-analyzer": "^15.3.4",
-    "@testing-library/jest-dom": "^6.6.3",
-    "@testing-library/react": "^16.3.0",
     "@types/node": "^22.16.1",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
-    "@types/react-icons": "^2.2.7",
     "autoprefixer": "^10.4.21",
-    "cross-env": "^7.0.3",
-    "dotenv": "^16.5.0",
     "eslint": "^9.9.0",
     "eslint-plugin-react-hooks": "^5.1.0-rc.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
-    "ignore-loader": "^0.1.2",
-    "jest-axe": "^10.0.0",
-    "jsdom": "^26.1.0",
     "sharp": "^0.34.1",
     "tailwindcss": "^3.4.11",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.0.1",
-    "vitest": "^3.2.2"
+    "typescript-eslint": "^8.0.1"
   }
 }

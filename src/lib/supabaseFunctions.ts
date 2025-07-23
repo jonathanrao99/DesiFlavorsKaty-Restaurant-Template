@@ -100,10 +100,10 @@ export const customerApi = {
 // Delivery fee calculation
 export const deliveryApi = {
   // Calculate delivery fee
-  async calculateFee(orderId: string, address: string, dropoffPhoneNumber: string) {
+  async calculateFee(address: string, dropoffPhoneNumber: string) {
     return callSupabaseFunction('calculate-fee', {
       method: 'POST',
-      body: JSON.stringify({ orderId, address, dropoffPhoneNumber }),
+      body: JSON.stringify({ address, dropoffPhoneNumber }),
     });
   },
 
@@ -116,6 +116,107 @@ export const deliveryApi = {
     return callSupabaseFunction('schedule-delivery', {
       method: 'POST',
       body: JSON.stringify(deliveryData),
+    });
+  },
+
+  // Create Shipday order after successful payment (using REST API)
+  async createShipdayOrder(orderData: {
+    orderId: string;
+    customerName: string;
+    customerPhone: string;
+    customerEmail?: string;
+    deliveryAddress: string;
+    pickupTime: string;
+    deliveryTime: string;
+    orderItems?: any[];
+    totalAmount: number;
+    deliveryFee: number;
+    paymentId?: string;
+  }) {
+    return callSupabaseFunction('create-shipday-order', {
+      method: 'POST',
+      body: JSON.stringify(orderData),
+    });
+  },
+
+  // Create Shipday order using Python SDK (new)
+  async createShipdayOrderSDK(orderData: {
+    orderId: string;
+    customerName: string;
+    customerPhone: string;
+    customerEmail?: string;
+    deliveryAddress: string;
+    orderItems?: any[];
+    subtotal: number;
+    deliveryFee: number;
+    taxAmount: number;
+    totalAmount: number;
+    paymentId?: string;
+  }) {
+    return callSupabaseFunction('create-shipday-order-sdk', {
+      method: 'POST',
+      body: JSON.stringify(orderData),
+    });
+  },
+
+  // Estimate delivery fee using Python SDK
+  async estimateDeliveryFee(deliveryAddress: string, orderValue: number = 0) {
+    return callSupabaseFunction('estimate-delivery-fee', {
+      method: 'POST',
+      body: JSON.stringify({ deliveryAddress, orderValue }),
+    });
+  },
+
+  // Send order confirmation emails
+  async sendOrderConfirmation(orderData: {
+    orderId: string;
+    customerName: string;
+    customerEmail: string;
+    customerPhone: string;
+    deliveryAddress?: string;
+    fulfillmentMethod: string;
+    orderItems: any[];
+    subtotal: number;
+    deliveryFee: number;
+    taxAmount: number;
+    totalAmount: number;
+    scheduledTime?: string;
+  }) {
+    return callSupabaseFunction('send-order-confirmation', {
+      method: 'POST',
+      body: JSON.stringify(orderData),
+    });
+  },
+
+  // Create Shipday pickup order (no delivery driver)
+  async createShipdayPickupOrder(orderData: {
+    orderId: string;
+    customerName: string;
+    customerPhone: string;
+    customerEmail?: string;
+    orderItems?: any[];
+    subtotal: number;
+    taxAmount: number;
+    totalAmount: number;
+  }) {
+    return callSupabaseFunction('create-shipday-pickup-order', {
+      method: 'POST',
+      body: JSON.stringify(orderData),
+    });
+  },
+
+  // Send phone call notification
+  async sendPhoneNotification(notificationData: {
+    orderId: string;
+    customerName: string;
+    customerPhone: string;
+    fulfillmentMethod: string;
+    totalAmount: number;
+    orderItems: any[];
+  }) {
+    return callSupabaseFunction('send-phone-notification', {
+      method: 'POST',
+      body: JSON.stringify(notificationData),
     });
   },
 };
@@ -261,6 +362,27 @@ export const paymentApi = {
     });
     if (!response.ok) throw new Error(await response.text());
     return response.json();
+  },
+
+  // Send order confirmation emails
+  async sendOrderConfirmation(orderData: {
+    orderId: string;
+    customerName: string;
+    customerEmail: string;
+    customerPhone: string;
+    deliveryAddress?: string;
+    fulfillmentMethod: string;
+    orderItems: any[];
+    subtotal: number;
+    deliveryFee: number;
+    taxAmount: number;
+    totalAmount: number;
+    scheduledTime?: string;
+  }) {
+    return callSupabaseFunction('send-order-confirmation', {
+      method: 'POST',
+      body: JSON.stringify(orderData),
+    });
   },
 };
 

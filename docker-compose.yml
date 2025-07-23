@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  # Next.js frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_ANON_KEY=${NEXT_PUBLIC_SUPABASE_ANON_KEY}
+      - ORDER_SERVICE_URL=http://order-service:8000
+    depends_on:
+      - order-service
+    networks:
+      - desi-flavors-network
+
+  # Python Order Service
+  order-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.order-service
+    ports:
+      - "8000:8000"
+    environment:
+      - SHIPDAY_API_KEY=${SHIPDAY_API_KEY}
+      - STORE_ADDRESS=${STORE_ADDRESS}
+      - STORE_PHONE_NUMBER=${STORE_PHONE_NUMBER}
+      - ORDER_SERVICE_HOST=0.0.0.0
+      - ORDER_SERVICE_PORT=8000
+    networks:
+      - desi-flavors-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Nginx reverse proxy (optional)
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - order-service
+    networks:
+      - desi-flavors-network
+
+networks:
+  desi-flavors-network:
+    driver: bridge
+
+volumes:
+  # Add any persistent volumes here if needed
+  pass 

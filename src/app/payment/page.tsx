@@ -42,6 +42,7 @@ function PaymentPageContent() {
   const [scheduleType, setScheduleType] = useState<'ASAP' | 'scheduled'>('scheduled');
   const invalidToastShownRef = useRef(false);
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const lastApiCallRef = useRef<number>(0);
 
   const getInitialStartTime = () => {
     const now = new Date();
@@ -271,18 +272,63 @@ function PaymentPageContent() {
         cartItems,
         fulfillmentMethod,
         scheduledTime: finalScheduledTime,
-        deliveryFee,
+        deliveryFee: fulfillmentMethod === 'delivery' ? (deliveryFee || 0) : 0, // Ensure deliveryFee is always a number
         customerInfo: { 
           name: customerName, 
           email: customerEmail, 
           phone: customerPhone, 
           address: deliveryAddress 
         },
-        orderId
+        orderId,
+        baseUrl: window.location.origin
       };
       
       const { url, error: linkError } = await paymentApi.createPaymentLink(paymentLinkData);
       if (linkError) throw new Error(linkError);
+      
+      // Store customer information in localStorage for the success page
+      localStorage.setItem('fulfillmentMethod', fulfillmentMethod);
+      localStorage.setItem('customerName', customerName);
+      localStorage.setItem('customerPhone', customerPhone);
+      localStorage.setItem('customerEmail', customerEmail);
+      localStorage.setItem('orderId', orderId.toString());
+      
+      if (fulfillmentMethod === 'delivery') {
+        localStorage.setItem('deliveryAddress', deliveryAddress);
+        localStorage.setItem('deliveryFee', (deliveryFee || 0).toString());
+        localStorage.setItem('totalAmount', (subtotal + tax + (deliveryFee || 0)).toString());
+        localStorage.setItem('subtotal', subtotal.toString());
+        localStorage.setItem('taxAmount', tax.toString());
+        localStorage.setItem('scheduledTime', finalScheduledTime || 'ASAP');
+        
+        console.log('Stored delivery data in localStorage:', {
+          fulfillmentMethod,
+          customerName,
+          customerPhone,
+          customerEmail,
+          deliveryAddress,
+          deliveryFee,
+          totalAmount: subtotal + tax + (deliveryFee || 0),
+          orderId
+        });
+      } else {
+        // For pickup orders
+        localStorage.setItem('deliveryAddress', '');
+        localStorage.setItem('deliveryFee', '0');
+        localStorage.setItem('totalAmount', (subtotal + tax).toString());
+        localStorage.setItem('subtotal', subtotal.toString());
+        localStorage.setItem('taxAmount', tax.toString());
+        localStorage.setItem('scheduledTime', finalScheduledTime || 'ASAP');
+        
+        console.log('Stored pickup data in localStorage:', {
+          fulfillmentMethod,
+          customerName,
+          customerPhone,
+          customerEmail,
+          totalAmount: subtotal + tax,
+          orderId
+        });
+      }
       
       if (url) {
         window.location.href = url;
@@ -308,10 +354,18 @@ function PaymentPageContent() {
     
     // Trigger calculation immediately when user types a complete address
     if (val.trim().length > 15 && !feeLoading) {
+      // Check if we've called the API recently (within 3 seconds)
+      const now = Date.now();
+      if (now - lastApiCallRef.current < 3000) {
+        console.log('Skipping API call - too recent');
+        return;
+      }
+      
       // Debounce the calculation to avoid too many API calls
       debounceTimeoutRef.current = setTimeout(async () => {
         console.log('Auto-triggering calculation for typed address:', val);
         setFeeLoading(true);
+        lastApiCallRef.current = Date.now();
         
         try {
           // Use a placeholder phone number for calculation if customer hasn't entered one yet
@@ -334,7 +388,7 @@ function PaymentPageContent() {
         } finally {
           setFeeLoading(false);
         }
-      }, 1000); // 1 second debounce
+      }, 2000); // 2 second debounce to prevent rate limiting
     }
   };
 
@@ -462,9 +516,11 @@ function PaymentPageContent() {
     } catch (error) {
       console.error('Google address delivery fee calculation failed:', error);
 
-      // If it's a timeout error, show a more specific message
+      // Show specific error messages based on the error type
       if (error.message.includes('timed out')) {
         toast.error('Delivery fee calculation is taking longer than expected. Please try again.');
+      } else if (error.message.includes('rate limited')) {
+        toast.error('Delivery service is busy. Please wait a moment and try again.');
       } else {
         toast.error('Oops! There seems to be a problem calculating your delivery fee. Please try again later.');
       }
@@ -500,7 +556,11 @@ function PaymentPageContent() {
           }
         } catch (error) {
           console.error('Enter key delivery fee calculation failed:', error);
-          toast.error('Oops! There seems to be a problem calculating your delivery fee. Please try again later.');
+          if (error.message.includes('rate limited')) {
+            toast.error('Delivery service is busy. Please wait a moment and try again.');
+          } else {
+            toast.error('Oops! There seems to be a problem calculating your delivery fee. Please try again later.');
+          }
           setDeliveryFee(null);
         } finally {
           setFeeLoading(false);
