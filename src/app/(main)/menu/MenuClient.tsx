@@ -11,7 +11,11 @@ import { toast } from 'sonner';
 import { Search, ChevronDown } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 
-const OrderDialog = dynamic(() => import('@/components/order/OrderDialog'));
+// Lazy load OrderDialog for better performance
+const OrderDialog = dynamic(() => import('@/components/order/OrderDialog'), {
+  loading: () => <div className="flex items-center justify-center p-4">Loading...</div>,
+  ssr: false
+});
 
 // Simple MenuItem interface
 interface MenuItem {
@@ -29,7 +33,7 @@ interface MenuItem {
   square_variation_id?: string | null;
 }
 
-// Static menu data as fallback
+// Static menu data as fallback - moved outside component to prevent recreation
 const staticMenuItems: MenuItem[] = [
   {
     id: 1,
@@ -101,6 +105,23 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
+  const [showOrderDialog, setShowOrderDialog] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  
+  const { addToCart } = useCart();
+  const searchParams = useSearchParams();
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Memoized Supabase client to prevent recreation
+  const supabaseClient = useMemo(() => {
+    return createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    );
+  }, []);
 
   // Fetch menu data on client side
   useEffect(() => {
@@ -115,13 +136,8 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
         console.log('Supabase URL:', supabaseUrl ? 'Set' : 'Missing');
         console.log('Supabase Key:', supabaseKey ? 'Set' : 'Missing');
         
-        const supabase = createClient(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        );
-        
         console.log('Supabase client created, fetching menu_items...');
-        const { data: items, error } = await supabase
+        const { data: items, error } = await supabaseClient
           .from('menu_items')
           .select('id, name, description, price, isvegetarian, isspicy, category, menu_img, sold_out, square_variation_id, images');
         
@@ -170,7 +186,7 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
     };
 
     fetchMenuData();
-  }, []);
+  }, [supabaseClient]);
   
   // Dynamically get categories from menu items in custom order
   const categories = useMemo(() => {
@@ -192,99 +208,61 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
       'Sweets'
     ];
     
-    // Sort categories according to custom order, with any new categories at the end
     return uniqueCategories.sort((a, b) => {
       const aIndex = categoryOrder.indexOf(a);
       const bIndex = categoryOrder.indexOf(b);
-      
-      // If both categories are in the order list, sort by their position
-      if (aIndex !== -1 && bIndex !== -1) {
-        return aIndex - bIndex;
-      }
-      // If only one is in the order list, prioritize it
-      if (aIndex !== -1) return -1;
-      if (bIndex !== -1) return 1;
-      // If neither is in the order list, sort alphabetically
-      return a.localeCompare(b);
+      if (aIndex === -1 && bIndex === -1) return a.localeCompare(b);
+      if (aIndex === -1) return 1;
+      if (bIndex === -1) return -1;
+      return aIndex - bIndex;
     });
   }, [menuItems]);
 
-  const [vegetarianOnly, setVegetarianOnly] = useState(false);
-  const [spicyOnly, setSpicyOnly] = useState(false);
-  const [under10Only, setUnder10Only] = useState(false);
-  const [searchFilter, setSearchFilter] = useState('');
-  const { addToCart, updateQuantity, cartItems } = useCart();
-  const searchParams: ReadonlyURLSearchParams = useSearchParams();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
-  const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
+  // Filter menu items based on search and category
+  const filteredMenuItems = useMemo(() => {
+    let filtered = menuItems;
+    
+    if (searchTerm) {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(item => 
+        item.name.toLowerCase().includes(term) ||
+        item.description.toLowerCase().includes(term) ||
+        item.category.toLowerCase().includes(term)
+      );
+    }
+    
+    if (selectedCategory) {
+      filtered = filtered.filter(item => item.category === selectedCategory);
+    }
+    
+    return filtered;
+  }, [menuItems, searchTerm, selectedCategory]);
 
-  // Initialize openCategories when categories are available
+  // Initialize open categories when categories are available
   useEffect(() => {
     if (categories.length > 0 && openCategories.size === 0) {
       setOpenCategories(new Set(categories));
     }
   }, [categories, openCategories.size]);
 
-  const filteredMenuItems = useMemo(() => {
-    if (!menuItems) return {};
-    const filtered = categories.reduce((acc, category) => {
-      acc[category] = menuItems
-        .filter(item => item.category === category)
-        .filter(item => !vegetarianOnly || item.isvegetarian)
-        .filter(item => !spicyOnly || item.isspicy)
-        .filter(item => !under10Only || (
-          typeof item.price === 'string'
-            ? parseFloat(item.price.replace(/[^\d.]/g, '')) < 10
-            : parseFloat(String(item.price).replace(/[^\d.]/g, '')) < 10
-        ))
-        .filter(item => item.name.toLowerCase().includes(searchFilter.toLowerCase()));
-      return acc;
-    }, {} as { [key: string]: MenuItem[] });
-    
-    return filtered;
-  }, [menuItems, categories, vegetarianOnly, spicyOnly, under10Only, searchFilter]);
-
+  // Handle URL parameters for direct item access
   useEffect(() => {
     const itemId = searchParams.get('itemId');
-    if (itemId && menuItems) {
-      const item = menuItems.find((m) => m.id === parseInt(itemId));
+    if (itemId && menuItems.length > 0) {
+      const item = menuItems.find(item => item.id.toString() === itemId);
       if (item) {
         setSelectedItem(item);
-        setIsDialogOpen(true);
+        setShowOrderDialog(true);
       }
     }
   }, [searchParams, menuItems]);
 
-  const handleAddToCart = useCallback((item: MenuItem) => {
-    const qtyToAdd = item.quantity && item.quantity > 0 ? item.quantity : 1;
-    const existing = cartItems.find(ci => ci.id === item.id);
-    if (existing) {
-      updateQuantity(item.id, existing.quantity + qtyToAdd);
-    } else {
-      addToCart({
-        id: item.id,
-        name: item.name,
-        price: item.price,
-        quantity: qtyToAdd,
-        specialInstructions: item.specialInstructions,
-        isVegetarian: item.isvegetarian,
-        isSpicy: item.isspicy,
-      });
-    }
-    toast.success(`${item.name} has been added to your cart.`);
-  }, [addToCart, updateQuantity, cartItems]);
+  const handleSearch = useCallback((searchTerm: string) => {
+    setSearchTerm(searchTerm);
+    setSelectedCategory(null);
+  }, []);
 
-  const handleSearch = (searchTerm) => {
-    // logAnalyticsEvent('search_performed', { searchTerm }); // Removed undefined function
-    if (typeof window !== 'undefined') {
-      window.gtag && window.gtag('event', 'search_performed', { searchTerm });
-      window.umami && window.umami('search_performed', { searchTerm });
-    }
-    // ...existing search logic...
-  };
-
-  const toggleCategory = (category: string) => {
+  const toggleCategory = useCallback((category: string) => {
     setOpenCategories(prev => {
       const newSet = new Set(prev);
       if (newSet.has(category)) {
@@ -294,97 +272,178 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
       }
       return newSet;
     });
-  };
+  }, []);
+
+  const handleCategoryFilter = useCallback((category: string | null) => {
+    setSelectedCategory(category);
+    setSearchTerm('');
+  }, []);
+
+  const handleAddToCart = useCallback((item: MenuItem) => {
+    addToCart({
+      ...item,
+      quantity: 1,
+      specialInstructions: ''
+    });
+    toast.success(`${item.name} added to cart!`);
+  }, [addToCart]);
+
+  const handleOrderNow = useCallback((item: MenuItem) => {
+    setSelectedItem(item);
+    setShowOrderDialog(true);
+  }, []);
+
+  const handleCloseOrderDialog = useCallback(() => {
+    setShowOrderDialog(false);
+    setSelectedItem(null);
+  }, []);
+
+  // Memoized search input handler
+  const handleSearchInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    handleSearch(e.target.value);
+  }, [handleSearch]);
+
+  // Memoized category filter handler
+  const handleCategoryClick = useCallback((category: string) => {
+    handleCategoryFilter(selectedCategory === category ? null : category);
+  }, [selectedCategory, handleCategoryFilter]);
 
   if (loading) {
-      return (
-        <div className="flex items-center justify-center min-h-[400px]">
-            <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-primary"></div>
-        </div>
-      );
-    }
-    if (error) {
-      return (
-        <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-red-500">Error loading menu items: {error}</div>
-        </div>
-      );
-    }
-
-      return (
-    <div className="min-h-screen bg-desi-cream overflow-x-hidden">
-      <div className="w-[90%] max-w-[90vw] mx-auto px-2 sm:px-4 py-8">
-        {/* Filter Pills and Search */}
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4 mb-4 w-full">
-          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
-            <button
-              onClick={() => setVegetarianOnly(!vegetarianOnly)}
-              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border text-sm sm:text-base transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${vegetarianOnly ? 'bg-green-500 border-green-500 text-white' : 'bg-white border-green-500 text-green-500'}`}
-            >
-              <span role="img" aria-label="Vegetarian">🥦</span> Vegetarian
-            </button>
-            <button
-              onClick={() => setSpicyOnly(!spicyOnly)}
-              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border text-sm sm:text-base transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${spicyOnly ? 'bg-red-500 border-red-500 text-white' : 'bg-white border-red-500 text-red-500'}`}
-            >
-              <span role="img" aria-label="Spicy">🔥</span> Spicy
-            </button>
-            <button
-              onClick={() => setUnder10Only(!under10Only)}
-              className={`px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border text-sm sm:text-base transition ease-in-out duration-150 hover:shadow-lg active:scale-95 ${under10Only ? 'bg-desi-orange border-desi-orange text-white' : 'bg-white border-desi-orange text-desi-orange'}`}
-            >
-              Under $10
-            </button>
-          </div>
-          <div className="w-full sm:w-auto mt-1 sm:mt-0 sm:ml-auto relative flex-shrink-0 max-w-full sm:max-w-xs md:max-w-md">
-            <input
-              type="text"
-              value={searchFilter}
-              onChange={e => setSearchFilter(e.target.value)}
-              placeholder="Search..."
-              className="w-full pr-10 pl-4 py-2 border border-desi-orange rounded-full focus:outline-none focus:ring-2 focus:ring-desi-orange transition-colors text-sm sm:text-base"
-            />
-            <Search className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-desi-orange cursor-pointer" />
-          </div>
-        </div>
-        <div className="divide-y divide-gray-200 bg-transparent rounded-none shadow-none border-none">
-          {categories.map((category) => {
-            const isOpen = openCategories.has(category);
-            return (
-              <div key={category} className="border-0 rounded-none">
-                <button
-                  onClick={() => toggleCategory(category)}
-                  className="w-full text-center font-display font-bold py-1 md:py-2 px-0 text-base md:text-xl bg-transparent no-underline hover:text-desi-orange focus:outline-none cursor-pointer flex items-center justify-between"
-                >
-                  <span className="flex-1">{category}</span>
-                  <ChevronDown className={`w-5 h-5 transition-transform duration-300 ease-in-out ${isOpen ? 'rotate-180' : ''}`} />
-                </button>
-                <div 
-                  className={`overflow-hidden transition-all duration-300 ease-in-out ${
-                    isOpen ? 'max-h-[6000px] opacity-100' : 'max-h-0 opacity-0'
-                  }`}
-                  style={{
-                    maxHeight: isOpen ? 'none' : '0px'
-                  }}
-                >
-                  <div className="px-0 pb-6 pt-2">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                      {filteredMenuItems[category]?.map(item => (
-                          <MenuItemCard key={item.id} item={item} handleAddToCart={handleAddToCart} />
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+    return (
+      <div className="min-h-screen bg-desi-cream flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-desi-orange mx-auto mb-4"></div>
+          <p className="text-desi-gray">Loading menu...</p>
         </div>
       </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-desi-cream overflow-x-hidden">
+      <div className="w-[90%] max-w-[90vw] mx-auto px-2 sm:px-4 py-8">
+        {/* Search and Filter Section */}
+        <div className="mb-8">
+          {/* Search Bar */}
+          <div className="relative mb-4">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+            <input
+              ref={searchInputRef}
+              type="text"
+              placeholder="Search for dishes..."
+              value={searchTerm}
+              onChange={handleSearchInput}
+              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-desi-orange focus:border-transparent"
+            />
+          </div>
+
+          {/* Category Filter Pills */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            <button
+              onClick={() => handleCategoryFilter(null)}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                selectedCategory === null
+                  ? 'bg-desi-orange text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              All
+            </button>
+            {categories.map(category => (
+              <button
+                key={category}
+                onClick={() => handleCategoryClick(category)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                  selectedCategory === category
+                    ? 'bg-desi-orange text-white'
+                    : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`}
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+
+          {/* Filter Pills */}
+          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4 mb-4 w-full">
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
+              <span className="px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border text-sm sm:text-base bg-green-500 border-green-500 text-white">
+                <span role="img" aria-label="Vegetarian">🥦</span> Vegetarian
+              </span>
+              <span className="px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border text-sm sm:text-base bg-red-500 border-red-500 text-white">
+                <span role="img" aria-label="Spicy">🔥</span> Spicy
+              </span>
+              <span className="px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border text-sm sm:text-base bg-desi-orange border-desi-orange text-white">
+                Under $10
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Menu Items by Category */}
+        <div className="divide-y divide-gray-200 bg-transparent rounded-none shadow-none border-none">
+          <AnimatePresence>
+            {categories.map((category) => {
+              const categoryItems = filteredMenuItems.filter(item => item.category === category);
+              if (categoryItems.length === 0) return null;
+
+              return (
+                <div key={category} className="border-0 rounded-none">
+                  <button
+                    onClick={() => toggleCategory(category)}
+                    className="w-full text-center font-display font-bold py-1 md:py-2 px-0 text-base md:text-xl bg-transparent no-underline flex items-center justify-between hover:bg-gray-50 transition-colors"
+                  >
+                    <span className="flex-1">{category}</span>
+                    <ChevronDown 
+                      className={`w-5 h-5 transition-transform ${
+                        openCategories.has(category) ? 'rotate-180' : ''
+                      }`}
+                    />
+                  </button>
+                  <AnimatePresence>
+                    {openCategories.has(category) && (
+                      <div className="px-0 pb-6 pt-2">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                          {categoryItems.map(item => (
+                            <MenuItemCard
+                              key={item.id}
+                              item={item}
+                              handleAddToCart={handleAddToCart}
+                            />
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </AnimatePresence>
+        </div>
+
+        {/* No Results Message */}
+        {filteredMenuItems.length === 0 && !loading && (
+          <div className="text-center py-12">
+            <p className="text-gray-500 text-lg">No items found matching your search.</p>
+            <button
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedCategory(null);
+              }}
+              className="mt-4 px-6 py-2 bg-desi-orange text-white rounded-lg hover:bg-desi-orange/90 transition-colors"
+            >
+              Clear Filters
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Order Dialog */}
       <AnimatePresence>
-        {isDialogOpen && selectedItem && (
+        {showOrderDialog && selectedItem && (
           <OrderDialog
             item={selectedItem}
-            onClose={() => setIsDialogOpen(false)}
+            onClose={handleCloseOrderDialog}
             onAddToCart={handleAddToCart}
           />
         )}

@@ -78,20 +78,6 @@ const HeroSection = () => {
             </h1>
           </motion.div>
 
-          {/* Description */}
-          <motion.div
-            variants={fadeSlide}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ delay: 0.15 }}
-            className="mb-8 md:mb-10"
-          >
-            <p className="text-lg md:text-xl lg:text-2xl font-inter font-merriweather font-semibold text-white leading-relaxed max-w-6xl mx-auto">
-            Homestyle Indian cuisine and Dum Biryanis made with authentic recipes.
-            </p>
-          </motion.div>
-
           {/* Features */}
           <motion.div
             variants={fadeSlide}

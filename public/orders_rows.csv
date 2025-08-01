@@ -1,2 +1,0 @@
-id,created_at,customer_name,customer_email,customer_phone,items,total_amount,status,delivery_address,pickup_time,payment_id,special_instructions,order_type,external_delivery_id,scheduled_time
-62,2025-06-24 17:04:26.296819+00,Jaladevi Thota,joniovo99@gmail.com,3468244212,"[{""id"": 4, ""name"": ""Mutton (Goat) Biryani"", ""price"": ""$13.99"", ""isSpicy"": true, ""quantity"": 1, ""isVegetarian"": false, ""specialInstructions"": """"}]",28.51,pending,"25827 Sundrop Meadows Lane, Katy, TX, USA",,,,delivery,,2025-06-24T22:00:00.000Z

@@ -8,42 +8,28 @@
   :root {
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
-
     --card: 0 0% 100%;
     --card-foreground: 240 10% 3.9%;
-
     --popover: 0 0% 100%;
     --popover-foreground: 240 10% 3.9%;
-
     --primary: 240 5.9% 10%;
     --primary-foreground: 0 0% 98%;
-
     --secondary: 240 4.8% 95.9%;
     --secondary-foreground: 240 5.9% 10%;
-
     --muted: 240 4.8% 95.9%;
     --muted-foreground: 240 3.8% 46.1%;
-
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 240 5.9% 10%;
-
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
-
     --radius: 0.5rem;
-
     --chart-1: 12 76% 61%;
-
     --chart-2: 173 58% 39%;
-
     --chart-3: 197 37% 24%;
-
     --chart-4: 43 74% 66%;
-
     --chart-5: 27 87% 67%;
   }
 
@@ -59,13 +45,7 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-display;
   }
-  .theme {
-    --animate-caret-blink: caret-blink 1.25s ease-out infinite;
-    --animate-accordion-down: accordion-down 0.2s ease-out;
-    --animate-accordion-up: accordion-up 0.2s ease-out;
-    --animate-pulse: pulse var(--duration) ease-out infinite;
-    --animate-shine: shine var(--duration) infinite linear;
-  }
+  
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -94,7 +74,7 @@
   }
 }
 
-/* Custom classes */
+/* Critical path optimizations */
 @layer components {
   .transition-fade {
     @apply transition-all duration-300 ease-in-out;
@@ -105,176 +85,54 @@
   }
 
   .glass-card {
-    @apply bg-white/80 backdrop-blur-sm border border-white/20 shadow-md;
+    @apply bg-white/80 backdrop-blur-sm border border-white/20;
   }
 
   .nav-link {
-    @apply relative transition-colors duration-200 hover:text-desi-orange after:content-[''] after:absolute after:w-full after:scale-x-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-desi-orange after:origin-bottom-right after:transition-transform after:duration-300 hover:after:scale-x-100 hover:after:origin-bottom-left;
+    @apply transition-colors duration-200 hover:text-desi-orange;
   }
 
   .text-balance {
     text-wrap: balance;
   }
+
+  /* Performance optimizations */
+  .will-change-transform {
+    will-change: transform;
+  }
+
+  .will-change-opacity {
+    will-change: opacity;
+  }
+
+  .contain-layout {
+    contain: layout;
+  }
+
+  .contain-paint {
+    contain: paint;
+  }
 }
 
-/* Enhanced smooth scroll behavior */
+/* Global styles */
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px; /* Adjust based on your header height */
-  overflow-y: scroll; /* Always show scrollbar to prevent layout shifts */
+  font-family: 'Inter', sans-serif;
 }
 
-/* Custom scrollbar styling */
+/* Hide scrollbar but keep scroll functionality */
 ::-webkit-scrollbar {
-  width: 10px;
+  display: none;
 }
 
-::-webkit-scrollbar-track {
-  background: hsl(var(--background));
-}
-
-::-webkit-scrollbar-thumb {
-  background: hsl(var(--muted));
-  border-radius: 5px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: hsl(var(--primary) / 0.7);
-}
-
-/* Firefox scrollbar */
 * {
-  scrollbar-width: thin;
-  scrollbar-color: hsl(var(--muted)) hsl(var(--background));
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
-/* Image loading blur effect */
-.blur-load {
-  background-size: cover;
-  background-position: center;
-}
-
-.blur-load.loaded > img {
-  opacity: 1;
-}
-
-.blur-load > img {
-  opacity: 0;
-  transition: opacity 200ms ease-in-out;
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-@theme inline {
-  @keyframes caret-blink {
-  0%,70%,100% {
-    opacity: 1;
-    }
-  20%,50% {
-    opacity: 0;
-    }
-  }
-  @keyframes accordion-down {
-  from {
-    height: 0;
-    }
-  to {
-    height: var(--radix-accordion-content-height);
-    }
-  }
-  @keyframes accordion-up {
-  from {
-    height: var(--radix-accordion-content-height);
-    }
-  to {
-    height: 0;
-    }
-  }
-  @keyframes accordion-down {
-  from {
-    height: 0;
-    }
-  to {
-    height: var(--radix-accordion-content-height);
-    }
-  }
-  @keyframes accordion-up {
-  from {
-    height: var(--radix-accordion-content-height);
-    }
-  to {
-    height: 0;
-    }
-  }
-  @keyframes pulse {
-  0%, 100% {
-    boxShadow: 0 0 0 0 var(--pulse-color);
-    }
-  50% {
-    boxShadow: 0 0 0 8px var(--pulse-color);
-    }
-  }
-  @keyframes pulse {
-  0%, 100% {
-    boxShadow: 0 0 0 0 var(--pulse-color);
-    }
-  50% {
-    boxShadow: 0 0 0 8px var(--pulse-color);
-    }
-  }
-  @keyframes shine {
-  0% {
-    background-position: 0% 0%;
-    }
-  50% {
-    background-position: 100% 100%;
-    }
-  to {
-    background-position: 0% 0%;
-    }
-  }
-  @keyframes shine {
-  0% {
-    background-position: 0% 0%;
-    }
-  50% {
-    background-position: 100% 100%;
-    }
-  to {
-    background-position: 0% 0%;
-    }
-  }
-  @keyframes caret-blink {
-  0%,70%,100% {
-    opacity: 1;
-    }
-  20%,50% {
-    opacity: 0;
-    }
-  }
-  @keyframes caret-blink {
-  0%,70%,100% {
-    opacity: 1;
-    }
-  20%,50% {
-    opacity: 0;
-    }
-  }
-  @keyframes caret-blink {
-  0%,70%,100% {
-    opacity: 1;
-    }
-  20%,50% {
-    opacity: 0;
-    }
-  }
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
 }
 
 @layer utilities {
@@ -299,6 +157,7 @@ html {
   overflow: hidden;
   z-index: 1000;
 }
+
 .skip-link:focus, .skip-link:active {
   left: 1rem;
   top: 1rem;
