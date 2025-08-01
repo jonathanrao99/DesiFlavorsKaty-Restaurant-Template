@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 import MenuItemCard from '@/components/menu/MenuItemCard';
 import { toast } from 'sonner';
-import { Search, ChevronDown } from 'lucide-react';
+import { Search, ChevronDown, RefreshCw } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 
 // Lazy load OrderDialog for better performance
@@ -33,75 +33,7 @@ interface MenuItem {
   square_variation_id?: string | null;
 }
 
-// Static menu data as fallback - moved outside component to prevent recreation
-const staticMenuItems: MenuItem[] = [
-  {
-    id: 1,
-    name: "Chicken Dum Biryani",
-    description: "Slow-cooked biryani with tender chicken pieces. Aromatic rice dish packed with traditional spices and flavors.",
-    price: "11.99",
-    isvegetarian: false,
-    isspicy: true,
-    category: "Biryani",
-    menu_img: "/Menu_Images/chicken-dum-biryani.jpg",
-    sold_out: false,
-    square_variation_id: null
-  },
-  {
-    id: 8,
-    name: "Butter Chicken",
-    description: "Creamy, mildly spiced chicken in a luxurious tomato-based sauce. Beloved North Indian comfort dish.",
-    price: "11.99",
-    isvegetarian: false,
-    isspicy: false,
-    category: "Non-Veg Curry",
-    menu_img: "/Menu_Images/butter-chicken.jpg",
-    sold_out: false,
-    square_variation_id: null
-  },
-  {
-    id: 24,
-    name: "Aloo Samosa",
-    description: "Classic potato-filled pastry triangles. Iconic Indian street food with a crispy exterior.",
-    price: "4.99",
-    isvegetarian: true,
-    isspicy: false,
-    category: "Snacks",
-    menu_img: "/Menu_Images/aloo-samosa.jpeg",
-    sold_out: false,
-    square_variation_id: null
-  },
-  {
-    id: 5,
-    name: "Veg Biryani",
-    description: "Aromatic rice dish loaded with mixed vegetables. Flavorful and satisfying vegetarian biryani preparation.",
-    price: "9.99",
-    isvegetarian: true,
-    isspicy: false,
-    category: "Biryani",
-    menu_img: "/Menu_Images/veg-biryani.jpg",
-    sold_out: false,
-    square_variation_id: null
-  },
-  {
-    id: 15,
-    name: "Parotta",
-    description: "Thin, flaky layers of soft, golden-brown flatbread with a delightful chewiness.",
-    price: "3.99",
-    isvegetarian: true,
-    isspicy: false,
-    category: "Indian Breads",
-    menu_img: "/Menu_Images/parotta.jpg",
-    sold_out: false,
-    square_variation_id: null
-  }
-];
-
-type MenuClientProps = {
-  initialMenuItems?: MenuItem[];
-};
-
-export default function MenuClient({ initialMenuItems }: MenuClientProps) {
+export default function MenuClient() {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -110,6 +42,12 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
   const [showOrderDialog, setShowOrderDialog] = useState(false);
   const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  
+  // Filter states
+  const [vegetarianOnly, setVegetarianOnly] = useState(false);
+  const [spicyOnly, setSpicyOnly] = useState(false);
+  const [under10Only, setUnder10Only] = useState(false);
   
   const { addToCart } = useCart();
   const searchParams = useSearchParams();
@@ -117,76 +55,70 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
 
   // Memoized Supabase client to prevent recreation
   const supabaseClient = useMemo(() => {
-    return createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    
+    if (!url || !key) {
+      console.warn('Supabase credentials not found');
+      return null;
+    }
+    
+    return createClient(url, key);
   }, []);
 
-  // Fetch menu data on client side
-  useEffect(() => {
-    const fetchMenuData = async () => {
-      try {
-        console.log('Starting to fetch menu data from Supabase...');
-        setLoading(true);
-        
-        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-        const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-        
-        console.log('Supabase URL:', supabaseUrl ? 'Set' : 'Missing');
-        console.log('Supabase Key:', supabaseKey ? 'Set' : 'Missing');
-        
-        console.log('Supabase client created, fetching menu_items...');
-        const { data: items, error } = await supabaseClient
-          .from('menu_items')
-          .select('id, name, description, price, isvegetarian, isspicy, category, menu_img, sold_out, square_variation_id, images');
-        
-        if (error) {
-          console.error('Supabase error:', error);
-          console.warn('Using static data as fallback');
-          setMenuItems(staticMenuItems);
-          setLoading(false);
-          return;
-        }
+  // Fetch menu data from Supabase
+  const fetchMenuData = useCallback(async () => {
+    if (!supabaseClient) {
+      setError('Database connection not available');
+      setLoading(false);
+      return;
+    }
 
-        console.log('Supabase response - items count:', items?.length || 0);
-        console.log('Supabase response - items:', items);
+    try {
+      console.log('Fetching menu data from Supabase...');
+      setIsRefreshing(true);
+      setError(null);
+      
+      const { data: items, error: supabaseError } = await supabaseClient
+        .from('menu_items')
+        .select('id, name, description, price, isvegetarian, isspicy, category, menu_img, sold_out, square_variation_id, images')
+        .order('category', { ascending: true })
+        .order('name', { ascending: true });
 
-        if (!items || items.length === 0) {
-          console.warn('No menu items from Supabase, using static data');
-          setMenuItems(staticMenuItems);
-          setLoading(false);
-          return;
-        }
-
-        const processedItems = items.map((item: any) => {
-          let images = item.images;
-          if ((!images || images.length === 0) && item.menu_img) {
-            images = [item.menu_img];
-          } else if (images && item.menu_img && !images.includes(item.menu_img)) {
-            images = [item.menu_img, ...images];
-          }
-          return {
-            ...item,
-            images,
-            isSoldOut: !!item.sold_out
-          };
-        });
-
-        console.log('Processed menu items:', processedItems.length);
-        console.log('Categories found:', [...new Set(processedItems.map(item => item.category))]);
-        setMenuItems(processedItems);
-        setLoading(false);
-      } catch (err) {
-        console.error('Error fetching menu data:', err);
-        console.warn('Using static data as fallback');
-        setMenuItems(staticMenuItems);
-        setLoading(false);
+      if (supabaseError) {
+        console.error('Supabase error:', supabaseError);
+        setError('Failed to load menu from database');
+        return;
       }
-    };
 
-    fetchMenuData();
+      if (!items || items.length === 0) {
+        console.log('No items from Supabase');
+        setError('No menu items found');
+        return;
+      }
+
+      const processedItems = items.map((item: any) => ({
+        ...item,
+        images: item.images || [item.menu_img].filter(Boolean),
+        isSoldOut: !!item.sold_out
+      }));
+
+      console.log(`Loaded ${processedItems.length} items from Supabase`);
+      setMenuItems(processedItems);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching menu data:', err);
+      setError('Failed to load menu data');
+    } finally {
+      setLoading(false);
+      setIsRefreshing(false);
+    }
   }, [supabaseClient]);
+
+  // Initial data fetch
+  useEffect(() => {
+    fetchMenuData();
+  }, [fetchMenuData]);
   
   // Dynamically get categories from menu items in custom order
   const categories = useMemo(() => {
@@ -218,10 +150,11 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
     });
   }, [menuItems]);
 
-  // Filter menu items based on search and category
+  // Filter menu items based on search, category, and filter states
   const filteredMenuItems = useMemo(() => {
     let filtered = menuItems;
     
+    // Search filter
     if (searchTerm) {
       const term = searchTerm.toLowerCase();
       filtered = filtered.filter(item => 
@@ -231,12 +164,31 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
       );
     }
     
+    // Category filter
     if (selectedCategory) {
       filtered = filtered.filter(item => item.category === selectedCategory);
     }
     
+    // Vegetarian filter
+    if (vegetarianOnly) {
+      filtered = filtered.filter(item => item.isvegetarian);
+    }
+    
+    // Spicy filter
+    if (spicyOnly) {
+      filtered = filtered.filter(item => item.isspicy);
+    }
+    
+    // Under $10 filter
+    if (under10Only) {
+      filtered = filtered.filter(item => {
+        const price = parseFloat(item.price.replace(/[^\d.]/g, ''));
+        return price < 10;
+      });
+    }
+    
     return filtered;
-  }, [menuItems, searchTerm, selectedCategory]);
+  }, [menuItems, searchTerm, selectedCategory, vegetarianOnly, spicyOnly, under10Only]);
 
   // Initialize open categories when categories are available
   useEffect(() => {
@@ -259,7 +211,6 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
 
   const handleSearch = useCallback((searchTerm: string) => {
     setSearchTerm(searchTerm);
-    setSelectedCategory(null);
   }, []);
 
   const toggleCategory = useCallback((category: string) => {
@@ -276,7 +227,6 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
 
   const handleCategoryFilter = useCallback((category: string | null) => {
     setSelectedCategory(category);
-    setSearchTerm('');
   }, []);
 
   const handleAddToCart = useCallback((item: MenuItem) => {
@@ -298,6 +248,10 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
     setSelectedItem(null);
   }, []);
 
+  const handleRefresh = useCallback(() => {
+    fetchMenuData();
+  }, [fetchMenuData]);
+
   // Memoized search input handler
   const handleSearchInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     handleSearch(e.target.value);
@@ -307,6 +261,19 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
   const handleCategoryClick = useCallback((category: string) => {
     handleCategoryFilter(selectedCategory === category ? null : category);
   }, [selectedCategory, handleCategoryFilter]);
+
+  // Filter toggle handlers
+  const toggleVegetarian = useCallback(() => {
+    setVegetarianOnly(prev => !prev);
+  }, []);
+
+  const toggleSpicy = useCallback(() => {
+    setSpicyOnly(prev => !prev);
+  }, []);
+
+  const toggleUnder10 = useCallback(() => {
+    setUnder10Only(prev => !prev);
+  }, []);
 
   if (loading) {
     return (
@@ -322,61 +289,111 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
   return (
     <div className="min-h-screen bg-desi-cream overflow-x-hidden">
       <div className="w-[90%] max-w-[90vw] mx-auto px-2 sm:px-4 py-8">
+        {/* Header with refresh button */}
+        <div className="flex items-center justify-end mb-6">
+          <button
+            onClick={handleRefresh}
+            disabled={isRefreshing}
+            className="flex items-center gap-2 px-4 py-2 bg-desi-orange text-white rounded-lg hover:bg-desi-orange/90 transition-colors disabled:opacity-50"
+          >
+            <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+            Refresh
+          </button>
+        </div>
+
+        {/* Error message */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+            <p className="text-red-700">{error}</p>
+            <button
+              onClick={handleRefresh}
+              className="mt-2 text-red-600 hover:text-red-800 underline"
+            >
+              Try again
+            </button>
+          </div>
+        )}
+
         {/* Search and Filter Section */}
         <div className="mb-8">
-          {/* Search Bar */}
-          <div className="relative mb-4">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-            <input
-              ref={searchInputRef}
-              type="text"
-              placeholder="Search for dishes..."
-              value={searchTerm}
-              onChange={handleSearchInput}
-              className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-desi-orange focus:border-transparent"
-            />
-          </div>
-
-          {/* Category Filter Pills */}
-          <div className="flex flex-wrap gap-2 mb-4">
-            <button
-              onClick={() => handleCategoryFilter(null)}
-              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                selectedCategory === null
-                  ? 'bg-desi-orange text-white'
-                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-              }`}
-            >
-              All
-            </button>
-            {categories.map(category => (
+          {/* Filter Pills and Search Bar Row */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+            {/* Filter Pills */}
+            <div className="flex flex-wrap items-center gap-2">
               <button
-                key={category}
-                onClick={() => handleCategoryClick(category)}
+                onClick={() => handleCategoryFilter(null)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
-                  selectedCategory === category
+                  selectedCategory === null
                     ? 'bg-desi-orange text-white'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
-                {category}
+                All ({menuItems.length})
               </button>
-            ))}
+              {categories.map(category => {
+                const count = menuItems.filter(item => item.category === category).length;
+                return (
+                  <button
+                    key={category}
+                    onClick={() => handleCategoryClick(category)}
+                    className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                      selectedCategory === category
+                        ? 'bg-desi-orange text-white'
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                    }`}
+                  >
+                    {category} ({count})
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Search Bar */}
+            <div className="relative sm:w-64">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+              <input
+                ref={searchInputRef}
+                type="text"
+                placeholder="Search for dishes..."
+                value={searchTerm}
+                onChange={handleSearchInput}
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-desi-orange focus:border-transparent"
+              />
+            </div>
           </div>
 
-          {/* Filter Pills */}
-          <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:gap-4 mb-4 w-full">
-            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-center sm:justify-start">
-              <span className="px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border text-sm sm:text-base bg-green-500 border-green-500 text-white">
-                <span role="img" aria-label="Vegetarian">🥦</span> Vegetarian
-              </span>
-              <span className="px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border text-sm sm:text-base bg-red-500 border-red-500 text-white">
-                <span role="img" aria-label="Spicy">🔥</span> Spicy
-              </span>
-              <span className="px-4 sm:px-5 py-1.5 sm:py-2 rounded-full border text-sm sm:text-base bg-desi-orange border-desi-orange text-white">
-                Under $10
-              </span>
-            </div>
+          {/* Special Filter Pills */}
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              onClick={toggleVegetarian}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                vegetarianOnly
+                  ? 'bg-green-500 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              <span role="img" aria-label="Vegetarian">🥦</span> Vegetarian
+            </button>
+            <button
+              onClick={toggleSpicy}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                spicyOnly
+                  ? 'bg-red-500 text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              <span role="img" aria-label="Spicy">🔥</span> Spicy
+            </button>
+            <button
+              onClick={toggleUnder10}
+              className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
+                under10Only
+                  ? 'bg-desi-orange text-white'
+                  : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+              }`}
+            >
+              Under $10
+            </button>
           </div>
         </div>
 
@@ -394,6 +411,7 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
                     className="w-full text-center font-display font-bold py-1 md:py-2 px-0 text-base md:text-xl bg-transparent no-underline flex items-center justify-between hover:bg-gray-50 transition-colors"
                   >
                     <span className="flex-1">{category}</span>
+                    <span className="text-sm text-gray-500 mr-2">({categoryItems.length})</span>
                     <ChevronDown 
                       className={`w-5 h-5 transition-transform ${
                         openCategories.has(category) ? 'rotate-180' : ''
@@ -403,7 +421,7 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
                   <AnimatePresence>
                     {openCategories.has(category) && (
                       <div className="px-0 pb-6 pt-2">
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                           {categoryItems.map(item => (
                             <MenuItemCard
                               key={item.id}
@@ -429,6 +447,9 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
               onClick={() => {
                 setSearchTerm('');
                 setSelectedCategory(null);
+                setVegetarianOnly(false);
+                setSpicyOnly(false);
+                setUnder10Only(false);
               }}
               className="mt-4 px-6 py-2 bg-desi-orange text-white rounded-lg hover:bg-desi-orange/90 transition-colors"
             >
