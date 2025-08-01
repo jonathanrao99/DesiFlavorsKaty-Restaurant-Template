@@ -6,6 +6,7 @@
 
 @layer base {
   :root {
+    /* Color system */
     --background: 0 0% 100%;
     --foreground: 240 10% 3.9%;
     --card: 0 0% 100%;
@@ -26,26 +27,21 @@
     --input: 240 5.9% 90%;
     --ring: 240 10% 3.9%;
     --radius: 0.5rem;
+    
+    /* Chart colors */
     --chart-1: 12 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    
+    /* Font variables */
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+    --font-display: 'Playfair Display', serif;
+    --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
   }
 
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground font-sans;
-    @apply selection:bg-desi-orange selection:text-white;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
-  }
-  
+  /* Dark mode variables */
   .dark {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
@@ -72,10 +68,63 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  /* Base element styles */
+  * {
+    box-sizing: border-box;
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-sans);
+    line-height: 1.6;
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    @apply selection:bg-desi-orange selection:text-white;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-feature-settings: 'rlig' 1, 'calt' 1;
+  }
+
+  /* Typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  h1 { font-size: 2.5rem; font-weight: 700; }
+  h2 { font-size: 2rem; font-weight: 600; }
+  h3 { font-size: 1.75rem; font-weight: 600; }
+  h4 { font-size: 1.5rem; font-weight: 500; }
+  h5 { font-size: 1.25rem; font-weight: 500; }
+  h6 { font-size: 1rem; font-weight: 500; }
+
+  p {
+    margin: 0 0 1rem 0;
+  }
+
+  /* Focus styles for accessibility */
+  :focus-visible {
+    outline: 2px solid hsl(var(--ring));
+    outline-offset: 2px;
+  }
+
+  /* Remove focus outline for mouse users */
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
 }
 
-/* Critical path optimizations */
 @layer components {
+  /* Transition utilities */
   .transition-fade {
     @apply transition-all duration-300 ease-in-out;
   }
@@ -84,14 +133,33 @@
     @apply transition-all duration-500 ease-in-out;
   }
 
+  /* Card styles */
   .glass-card {
     @apply bg-white/80 backdrop-blur-sm border border-white/20;
   }
 
+  /* Navigation styles */
   .nav-link {
     @apply transition-colors duration-200 hover:text-desi-orange;
+    position: relative;
   }
 
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: hsl(var(--primary));
+    transition: width 0.3s ease;
+  }
+
+  .nav-link:hover::after {
+    width: 100%;
+  }
+
+  /* Text utilities */
   .text-balance {
     text-wrap: balance;
   }
@@ -112,42 +180,82 @@
   .contain-paint {
     contain: paint;
   }
-}
 
-/* Global styles */
-html {
-  scroll-behavior: smooth;
-  font-family: 'Inter', sans-serif;
-}
+  /* Loading states */
+  .loading-skeleton {
+    @apply animate-pulse bg-gray-200 rounded;
+  }
 
-/* Hide scrollbar but keep scroll functionality */
-::-webkit-scrollbar {
-  display: none;
-}
+  /* Button styles */
+  .btn-primary {
+    @apply bg-desi-orange text-white px-6 py-3 rounded-lg font-semibold;
+    @apply hover:bg-desi-orange/90 transition-colors duration-200;
+    @apply focus:ring-2 focus:ring-desi-orange/50 focus:outline-none;
+  }
 
-* {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-/* Reset and base styles */
-* {
-  box-sizing: border-box;
+  .btn-secondary {
+    @apply bg-gray-200 text-gray-800 px-6 py-3 rounded-lg font-semibold;
+    @apply hover:bg-gray-300 transition-colors duration-200;
+    @apply focus:ring-2 focus:ring-gray-300 focus:outline-none;
+  }
 }
 
 @layer utilities {
-  /* Ensure Google Places autocomplete dropdown appears above all other elements */
-  .pac-container {
-    z-index: 10000 !important;
+  /* Scrollbar hiding */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 
-  /* Ensure new PlaceAutocompleteElement spans full width */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Google Places autocomplete */
+  .pac-container {
+    z-index: 10000 !important;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  }
+
   gmp-place-autocomplete {
     width: 100% !important;
     display: block;
   }
+
+  /* Responsive utilities */
+  .container-responsive {
+    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out;
+  }
+
+  /* Accessibility utilities */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .focus-visible {
+    @apply focus:outline-none focus:ring-2 focus:ring-desi-orange/50 focus:ring-offset-2;
+  }
 }
 
+/* Skip link for accessibility */
 .skip-link {
   position: absolute;
   left: -999px;
@@ -158,7 +266,8 @@ html {
   z-index: 1000;
 }
 
-.skip-link:focus, .skip-link:active {
+.skip-link:focus,
+.skip-link:active {
   left: 1rem;
   top: 1rem;
   width: auto;
@@ -167,9 +276,107 @@ html {
   background: #fb923c;
   color: #fff;
   border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   outline: 2px solid #fff;
   outline-offset: 2px;
   text-decoration: none;
   font-weight: bold;
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Print styles */
+@media print {
+  * {
+    background: transparent !important;
+    color: black !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  a,
+  a:visited {
+    text-decoration: underline;
+  }
+
+  a[href]:after {
+    content: " (" attr(href) ")";
+  }
+
+  abbr[title]:after {
+    content: " (" attr(title) ")";
+  }
+
+  pre,
+  blockquote {
+    border: 1px solid #999;
+    page-break-inside: avoid;
+  }
+
+  thead {
+    display: table-header-group;
+  }
+
+  tr,
+  img {
+    page-break-inside: avoid;
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  p,
+  h2,
+  h3 {
+    orphans: 3;
+    widows: 3;
+  }
+
+  h2,
+  h3 {
+    page-break-after: avoid;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 0 0% 0%;
+    --border: 0 0% 0%;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
