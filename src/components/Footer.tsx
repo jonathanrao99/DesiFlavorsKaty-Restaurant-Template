@@ -224,7 +224,7 @@ const Footer = () => {
           </Link>
         </div>
         <div className="border-t border-gray-800 mt-1 pt-2 pb-4 flex flex-col md:flex-row justify-between items-center text-gray-400 text-sm">
-          <p className="mb-1 md:mb-0">Designed by <a href="https://jonathanthota.com" target="_blank" rel="noopener noreferrer" className="text-desi-orange hover:text-white transition-colors">Jonathan Thota</a></p>
+          <p className="mb-1 md:mb-0">Designed by <a href="https://sol3studio.framer.website" target="_blank" rel="noopener noreferrer" className="text-desi-orange hover:text-white transition-colors">Sol3 Studio</a></p>
           <p>© {currentYear} Desi Flavors Katy. All rights reserved.</p>
         </div>
       </div>

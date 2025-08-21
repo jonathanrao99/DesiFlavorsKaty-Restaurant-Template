@@ -9,7 +9,7 @@ import OrderDialog from '@/components/order/OrderDialog';
 import { fadeInUp } from '@/utils/motion.variants';
 import { SpinningText } from '@/components/magicui/spinning-text';
 import { logAnalyticsEvent } from '@/utils/loyaltyAndAnalytics';
-import { DeliveryServiceModal } from '@/components/ui/delivery-service-modal';
+
 
 interface MenuItemCardProps {
   item: MenuItem;
@@ -22,7 +22,6 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
   const [imageError, setImageError] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   // Improved image fallback logic with URL normalization
   const imageUrl = item.menu_img
     ? item.menu_img.replace(/([^:]\/)\/+/, '$1')
@@ -144,12 +143,12 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
               <InteractiveHoverButton
                 onClick={(e) => {
                   e.stopPropagation();
-                  setIsModalOpen(true);
+                  handleAddToCart(item);
                 }}
                 className="bg-white text-desi-orange hover:bg-desi-orange hover:text-white text-sm"
-                aria-label={`Order ${item.name} through delivery partners`}
+                aria-label={`Add ${item.name} to cart`}
               >
-                Order Now
+                Add to Cart
               </InteractiveHoverButton>
             )}
           </div>
@@ -164,10 +163,6 @@ export default function MenuItemCard({ item, handleAddToCart }: MenuItemCardProp
         />
       )}
 
-      <DeliveryServiceModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-      />
     </>
   );
 }

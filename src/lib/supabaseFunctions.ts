@@ -119,8 +119,8 @@ export const deliveryApi = {
     });
   },
 
-  // Create Shipday order after successful payment (using REST API)
-  async createShipdayOrder(orderData: {
+  // Create DoorDash Drive order
+  async createDoorDashOrder(orderData: {
     orderId: string;
     customerName: string;
     customerPhone: string;
@@ -133,37 +133,9 @@ export const deliveryApi = {
     deliveryFee: number;
     paymentId?: string;
   }) {
-    return callSupabaseFunction('create-shipday-order', {
+    return callSupabaseFunction('create-doordash-order', {
       method: 'POST',
       body: JSON.stringify(orderData),
-    });
-  },
-
-  // Create Shipday order using Python SDK (new)
-  async createShipdayOrderSDK(orderData: {
-    orderId: string;
-    customerName: string;
-    customerPhone: string;
-    customerEmail?: string;
-    deliveryAddress: string;
-    orderItems?: any[];
-    subtotal: number;
-    deliveryFee: number;
-    taxAmount: number;
-    totalAmount: number;
-    paymentId?: string;
-  }) {
-    return callSupabaseFunction('create-shipday-order-sdk', {
-      method: 'POST',
-      body: JSON.stringify(orderData),
-    });
-  },
-
-  // Estimate delivery fee using Python SDK
-  async estimateDeliveryFee(deliveryAddress: string, orderValue: number = 0) {
-    return callSupabaseFunction('estimate-delivery-fee', {
-      method: 'POST',
-      body: JSON.stringify({ deliveryAddress, orderValue }),
     });
   },
 
@@ -188,20 +160,11 @@ export const deliveryApi = {
     });
   },
 
-  // Create Shipday pickup order (no delivery driver)
-  async createShipdayPickupOrder(orderData: {
-    orderId: string;
-    customerName: string;
-    customerPhone: string;
-    customerEmail?: string;
-    orderItems?: any[];
-    subtotal: number;
-    taxAmount: number;
-    totalAmount: number;
-  }) {
-    return callSupabaseFunction('create-shipday-pickup-order', {
+  // Estimate delivery fee using DoorDash API
+  async estimateDeliveryFee(deliveryAddress: string, orderValue: number = 0) {
+    return callSupabaseFunction('estimate-delivery-fee', {
       method: 'POST',
-      body: JSON.stringify(orderData),
+      body: JSON.stringify({ deliveryAddress, orderValue }),
     });
   },
 

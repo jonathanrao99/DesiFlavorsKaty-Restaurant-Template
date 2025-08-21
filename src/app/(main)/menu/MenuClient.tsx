@@ -27,13 +27,9 @@ interface MenuItem {
   square_variation_id?: string | null;
 }
 
-type MenuClientProps = {
-  initialMenuItems?: MenuItem[];
-};
-
-export default function MenuClient({ initialMenuItems }: MenuClientProps) {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>(initialMenuItems || []);
-  const [loading, setLoading] = useState(!initialMenuItems || initialMenuItems.length === 0);
+export default function MenuClient() {
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
@@ -65,20 +61,16 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
   // Fetch menu data from Supabase
   const fetchMenuData = useCallback(async () => {
     if (!supabaseClient) {
-      console.log('No Supabase client, using static data');
-      if (initialMenuItems && initialMenuItems.length > 0) {
-        setMenuItems(initialMenuItems);
-        setLoading(false);
-      } else {
-        setError('Database connection not available');
-        setLoading(false);
-      }
+      console.error('No Supabase client available');
+      setError('Database connection not available');
+      setLoading(false);
       return;
     }
 
     try {
       console.log('Fetching menu data from Supabase...');
       setError(null);
+      setLoading(true);
       
       const { data: items, error: supabaseError } = await supabaseClient
         .from('menu_items')
@@ -88,59 +80,32 @@ export default function MenuClient({ initialMenuItems }: MenuClientProps) {
 
       if (supabaseError) {
         console.error('Supabase error:', supabaseError);
-        if (initialMenuItems && initialMenuItems.length > 0) {
-          console.log('Using static data as fallback');
-          setMenuItems(initialMenuItems);
-          setError(null);
-        } else {
-          setError('Failed to load menu from database');
-        }
+        setError('Failed to load menu from database');
+        setLoading(false);
         return;
       }
 
-      if (!items || items.length === 0) {
-        console.log('No items from Supabase, using static data');
-        if (initialMenuItems && initialMenuItems.length > 0) {
-          setMenuItems(initialMenuItems);
-          setError(null);
-        } else {
-          setError('No menu items found');
-        }
-        return;
-      }
-
-      const processedItems = items.map((item: any) => ({
-        ...item,
-        images: item.images || [item.menu_img].filter(Boolean),
-        isSoldOut: !!item.sold_out
-      }));
-
-      console.log(`Loaded ${processedItems.length} items from Supabase`);
-      setMenuItems(processedItems);
-      setError(null);
-    } catch (err) {
-      console.error('Error fetching menu data:', err);
-      if (initialMenuItems && initialMenuItems.length > 0) {
-        console.log('Using static data as fallback due to error');
-        setMenuItems(initialMenuItems);
+      if (items && items.length > 0) {
+        console.log(`Successfully loaded ${items.length} menu items from Supabase`);
+        setMenuItems(items);
         setError(null);
       } else {
-        setError('Failed to load menu data');
+        console.log('No menu items found in database');
+        setMenuItems([]);
+        setError('No menu items available');
       }
+    } catch (error) {
+      console.error('Error fetching menu data:', error);
+      setError('Failed to load menu data');
     } finally {
       setLoading(false);
     }
-  }, [supabaseClient, initialMenuItems]);
+  }, [supabaseClient]);
 
   // Initial data fetch
   useEffect(() => {
-    if (initialMenuItems && initialMenuItems.length > 0) {
-      setMenuItems(initialMenuItems);
-      setLoading(false);
-    } else {
-      fetchMenuData();
-    }
-  }, [initialMenuItems, fetchMenuData]);
+    fetchMenuData();
+  }, [fetchMenuData]);
   
   // Dynamically get categories from menu items in custom order
   const categories = useMemo(() => {

@@ -1,3 +1,5 @@
+'use client';
+
 import TrackOrderClient from '@/components/track/TrackOrderClient';
 
 export default function TrackOrderPage() {

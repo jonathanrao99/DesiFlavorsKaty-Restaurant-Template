@@ -50,7 +50,7 @@ export default function PaymentSuccessPage() {
   }, [clearCart]);
 
   useEffect(() => {
-    const createShipdayOrder = async () => {
+    const createDoorDashOrder = async () => {
       try {
         setIsCreatingOrder(true);
         
@@ -63,7 +63,7 @@ export default function PaymentSuccessPage() {
         const deliveryFee = parseFloat(searchParams.get('deliveryFee') || localStorage.getItem('deliveryFee') || '0');
         const totalAmount = parseFloat(searchParams.get('totalAmount') || localStorage.getItem('totalAmount') || '0');
         
-        console.log('Creating Shipday order with:', {
+        console.log('Creating DoorDash order with:', {
           orderId,
           customerName,
           customerPhone,
@@ -105,58 +105,45 @@ export default function PaymentSuccessPage() {
         });
 
         if (fulfillmentMethod === 'delivery') {
-          // Create Shipday order for delivery
-        const orderData = {
-          orderId: orderId,
-          customerName: customerName,
-          customerPhone: customerPhone,
-          customerEmail: customerEmail,
-          deliveryAddress: deliveryAddress,
-          pickupTime: pickupTimeFormatted,
-          deliveryTime: deliveryTimeFormatted,
-          orderItems: cartItems,
-          totalAmount: totalAmount,
-          deliveryFee: deliveryFee,
-          paymentId: `payment-${Date.now()}`
-        };
-
-          console.log('Sending delivery order data to Shipday:', orderData);
-        
-        const result = await deliveryApi.createShipdayOrder(orderData);
-        console.log('Shipday order creation result:', result);
-        
-        if (result.success) {
-          console.log('✅ Shipday order created successfully:', result.shipdayOrderId);
-            toast.success('Order confirmed! Your food will be ready in 25 minutes.');
-          } else {
-            console.error('❌ Failed to create Shipday order:', result.error);
-            toast.error('Order received but there was an issue with delivery setup.');
-          }
-        } else {
-          // For pickup orders, create Shipday order (no delivery driver)
-          const pickupOrderData = {
+          // Create DoorDash order for delivery
+          const orderData = {
             orderId: orderId,
             customerName: customerName,
             customerPhone: customerPhone,
             customerEmail: customerEmail,
+            deliveryAddress: deliveryAddress,
+            pickupTime: pickupTimeFormatted,
+            deliveryTime: deliveryTimeFormatted,
             orderItems: cartItems,
-            subtotal: parseFloat(localStorage.getItem('subtotal') || '0'),
-            taxAmount: parseFloat(localStorage.getItem('taxAmount') || '0'),
-            totalAmount: totalAmount
+            totalAmount: totalAmount,
+            deliveryFee: deliveryFee,
+            paymentId: `payment-${Date.now()}`
           };
 
-          console.log('Creating Shipday pickup order:', pickupOrderData);
-          
-          const pickupResult = await deliveryApi.createShipdayPickupOrder(pickupOrderData);
-          console.log('Pickup order creation result:', pickupResult);
-          
-          if (pickupResult.success) {
-            console.log('✅ Shipday pickup order created successfully:', pickupResult.shipdayOrderId);
-            toast.success('Order confirmed! Your food will be ready for pickup in 25 minutes.');
+          console.log('Sending delivery order data to DoorDash:', orderData);
+        
+          const result = await deliveryApi.createDoorDashOrder(orderData);
+          console.log('DoorDash order creation result:', result);
+        
+          if (result.success) {
+            console.log('✅ DoorDash order created successfully:', result.doordashOrderId);
+            toast.success('Order confirmed! Your food will be ready in 25 minutes.');
           } else {
-            console.error('❌ Failed to create Shipday pickup order:', pickupResult.error);
-            toast.success('Order confirmed! Your food will be ready for pickup in 25 minutes.');
+            console.error('❌ Failed to create DoorDash order:', result.error);
+            toast.error('Order received but there was an issue with delivery setup.');
           }
+        } else {
+          // For pickup orders, just show success message (no delivery service needed)
+          console.log('Pickup order confirmed:', {
+            orderId,
+            customerName,
+            customerPhone,
+            customerEmail,
+            orderItems: cartItems,
+            totalAmount
+          });
+          
+          toast.success('Order confirmed! Your food will be ready for pickup in 25 minutes.');
         }
 
         // Send order confirmation emails
@@ -191,20 +178,20 @@ export default function PaymentSuccessPage() {
         }
         
         // Clear localStorage after successful order processing
-          localStorage.removeItem('customerName');
-          localStorage.removeItem('customerPhone');
-          localStorage.removeItem('customerEmail');
-          localStorage.removeItem('deliveryAddress');
-          localStorage.removeItem('deliveryFee');
-          localStorage.removeItem('totalAmount');
-          localStorage.removeItem('orderId');
-          localStorage.removeItem('fulfillmentMethod');
+        localStorage.removeItem('customerName');
+        localStorage.removeItem('customerPhone');
+        localStorage.removeItem('customerEmail');
+        localStorage.removeItem('deliveryAddress');
+        localStorage.removeItem('deliveryFee');
+        localStorage.removeItem('totalAmount');
+        localStorage.removeItem('orderId');
+        localStorage.removeItem('fulfillmentMethod');
         localStorage.removeItem('subtotal');
         localStorage.removeItem('taxAmount');
         localStorage.removeItem('scheduledTime');
         
       } catch (error) {
-        console.error('Error creating Shipday order:', error);
+        console.error('Error creating DoorDash order:', error);
         toast.error('Order received but there was an issue with delivery setup.');
       } finally {
         setIsCreatingOrder(false);
@@ -213,7 +200,7 @@ export default function PaymentSuccessPage() {
 
     // Process order for both delivery and pickup
     if (fulfillmentMethod) {
-      createShipdayOrder();
+      createDoorDashOrder();
     }
   }, [searchParams, fulfillmentMethod, cartItems]);
 
