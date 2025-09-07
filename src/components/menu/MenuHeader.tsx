@@ -62,47 +62,8 @@ const MenuHeader = () => {
             </h1>
           </motion.div>
 
-                      <motion.p
-              variants={fadeInUp}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              transition={{ duration: 0.7, delay: 0.8 }}
-              className="text-lg md:text-xl lg:text-2xl text-white font-merriweather leading-relaxed max-w-10xl mx-auto mb-4"
-            >
-              Traditional desi flavors, now available to dine in or delivered fresh to your door.
+                    
 
-            </motion.p>
-
-          <motion.p
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 1.1 }}
-            className="text-lg md:text-xl lg:text-2xl text-desi-orange font-bold leading-relaxed max-w-2xl mx-auto mb-4 font-sans"
-          >
-            Find us on your favorite delivery platforms:
-          </motion.p>
-
-          <motion.div
-            variants={fadeInUp}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-            transition={{ duration: 0.7, delay: 1.4 }}
-            className="flex flex-wrap items-center justify-center gap-6"
-          >
-            <Link href="https://order.online/business/desi-flavors-katy-14145277" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <img src="/Doordash.webp" alt="DoorDash" width={220} height={80} className="object-contain" style={{ height: 'auto' }} />
-            </Link>
-            <Link href="http://menus.fyi/10883320" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <img src="/Grubhub.webp" alt="Grubhub" width={200} height={70} className="object-contain" style={{ height: 'auto' }} />
-            </Link>
-            <Link href="https://www.order.store/store/desi-flavors-katy-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g" target="_blank" rel="noopener noreferrer" className="transform transition-transform duration-300 hover:scale-105">
-              <img src="/ubereats.png" alt="Uber Eats" width={200} height={70} className="object-contain" style={{ height: 'auto' }} />
-            </Link>
-          </motion.div>
         </div>
       </div>
     </section>

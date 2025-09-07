@@ -1,57 +1,53 @@
-import { ChevronRight } from 'lucide-react';
-import { motion } from 'framer-motion';
-
-interface MenuCategoriesProps {
-  selectedCategory: string;
-  categories: string[];
-  setSelectedCategory: (category: string) => void;
-}
-
-import { logAnalyticsEvent } from '@/utils/loyaltyAndAnalytics';
-
-const MenuCategories = ({ selectedCategory, categories, setSelectedCategory }: MenuCategoriesProps) => {
-  const handleCategorySelect = (category) => {
-    logAnalyticsEvent('menu_category_view', { category });
-    if (typeof window !== 'undefined') {
-      window.gtag && window.gtag('event', 'menu_category_view', { category });
-      window.umami && window.umami('menu_category_view', { category });
-    }
-    setSelectedCategory(category);
-  };
-
+const MenuCategories = () => {
   return (
-    <div className="sticky top-0 z-50 transition-all duration-300 bg-white shadow-md">
-      <div className="container mx-auto px-4 py-2">
-        <div className="flex overflow-x-auto space-x-2 pb-1 scrollbar-hide">
-          <motion.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => handleCategorySelect('All')}
-            className={`px-4 py-1.5 rounded-full whitespace-nowrap transition-all flex items-center space-x-1 text-sm ${
-              selectedCategory === 'All'
-                ? 'bg-desi-orange text-white shadow-md shadow-desi-orange/20'
-                : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm'
-            }`}
-          >
-            <span>All Items</span>
-            {selectedCategory === 'All' && <ChevronRight className="w-3 h-3" />}
-          </motion.button>
-          {categories.map((category) => (
-            <motion.button
-              key={category}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={() => handleCategorySelect(category)}
-              className={`px-4 py-1.5 rounded-full whitespace-nowrap transition-all flex items-center space-x-1 text-sm ${
-                selectedCategory === category
-                  ? 'bg-desi-orange text-white shadow-md shadow-desi-orange/20'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 shadow-sm'
-              }`}
+    <div className="w-full bg-orange-50">
+      <div className="container mx-auto px-4 py-6">
+        <div className="text-center">
+          <p className="text-2xl font-bold text-desi-orange mb-6 mt-5">Available on your favorite delivery platforms:</p>
+          <div className="flex flex-wrap items-center justify-center gap-6">
+            <a 
+              href="http://menus.fyi/10883320" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="transform transition-transform duration-300 hover:scale-110 block"
             >
-              <span>{category}</span>
-              {selectedCategory === category && <ChevronRight className="w-3 h-3" />}
-            </motion.button>
-          ))}
+              <img 
+                src="/Grubhub.webp" 
+                alt="Order on Grubhub" 
+                width={120} 
+                height={42} 
+                className="object-contain h-10 w-auto" 
+              />
+            </a>
+            <a 
+              href="https://order.online/business/desi-flavors-katy-14145277" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="transform transition-transform duration-300 hover:scale-110 block"
+            >
+              <img 
+                src="/Doordash.webp" 
+                alt="Order on DoorDash" 
+                width={140} 
+                height={50} 
+                className="object-contain h-10 w-auto" 
+              />
+            </a>
+            <a 
+              href="https://www.order.store/store/desi-flavors-katy-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="transform transition-transform duration-300 hover:scale-110 block"
+            >
+              <img 
+                src="/ubereats.png" 
+                alt="Order on Uber Eats" 
+                width={120} 
+                height={42} 
+                className="object-contain h-7 w-auto" 
+              />
+            </a>
+          </div>
         </div>
       </div>
     </div>

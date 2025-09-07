@@ -2,12 +2,9 @@
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import { useCart } from '@/context/CartContext';
 import { useSearchParams } from 'next/navigation';
 import type { ReadonlyURLSearchParams } from 'next/navigation';
 import MenuItemCard from '@/components/menu/MenuItemCard';
-import OrderDialog from '@/components/order/OrderDialog';
-import { toast } from 'sonner';
 import { Search, ChevronDown, RefreshCw } from 'lucide-react';
 import { createClient } from '@supabase/supabase-js';
 
@@ -33,15 +30,11 @@ export default function MenuClient() {
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
-  const [showOrderDialog, setShowOrderDialog] = useState(false);
-  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
   
   // Filter states
   const [vegetarianOnly, setVegetarianOnly] = useState(false);
   const [spicyOnly, setSpicyOnly] = useState(false);
   const [under10Only, setUnder10Only] = useState(false);
-  
-  const { addToCart } = useCart();
   const searchParams = useSearchParams();
   const searchInputRef = useRef<HTMLInputElement>(null);
 
@@ -179,17 +172,6 @@ export default function MenuClient() {
     }
   }, [categories, openCategories.size]);
 
-  // Handle URL parameters for direct item access
-  useEffect(() => {
-    const itemId = searchParams.get('itemId');
-    if (itemId && menuItems.length > 0) {
-      const item = menuItems.find(item => item.id.toString() === itemId);
-      if (item) {
-        setSelectedItem(item);
-        setShowOrderDialog(true);
-      }
-    }
-  }, [searchParams, menuItems]);
 
   const handleSearch = useCallback((searchTerm: string) => {
     setSearchTerm(searchTerm);
@@ -213,28 +195,11 @@ export default function MenuClient() {
     // setSelectedCategory(category); 
   }, []);
 
-  const handleAddToCart = useCallback((item: MenuItem) => {
-    addToCart({
-      ...item,
-      quantity: 1,
-      specialInstructions: ''
-    });
-    toast.success(`${item.name} added to cart!`);
-  }, [addToCart]);
-
-  const handleOrderNow = useCallback((item: MenuItem) => {
-    setSelectedItem(item);
-    setShowOrderDialog(true);
-  }, []);
-
-  const handleCloseOrderDialog = useCallback(() => {
-    setShowOrderDialog(false);
-    setSelectedItem(null);
-  }, []);
 
   const handleRefresh = useCallback(() => {
     fetchMenuData();
   }, [fetchMenuData]);
+
 
   // Memoized search input handler
   const handleSearchInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -344,7 +309,6 @@ export default function MenuClient() {
                             <MenuItemCard
                               key={item.id}
                               item={item}
-                              handleAddToCart={handleAddToCart}
                             />
                           ))}
                         </div>
@@ -376,16 +340,6 @@ export default function MenuClient() {
         )}
       </div>
 
-      {/* Order Dialog */}
-      <AnimatePresence>
-        {showOrderDialog && selectedItem && (
-          <OrderDialog
-            item={selectedItem}
-            onClose={handleCloseOrderDialog}
-            onAddToCart={handleAddToCart}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 } 

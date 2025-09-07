@@ -2,18 +2,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Menu, X, ShoppingCart } from 'lucide-react';
-import { useCart } from '@/context/CartContext';
+import { Menu, X } from 'lucide-react';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isCartBouncing, setIsCartBouncing] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const {
-    cartItems
-  } = useCart();
 
   // Check if we're on home or about page
   const isHomeOrAbout = pathname === '/' || pathname === '/about';
@@ -52,28 +47,9 @@ const Navbar = () => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
-  // Handle cart bounce animation when items change
-  useEffect(() => {
-    if (cartItems.length > 0) {
-      setIsCartBouncing(true);
-      const timer = setTimeout(() => setIsCartBouncing(false), 500);
-      return () => clearTimeout(timer);
-    }
-  }, [cartItems]);
-
-  // Prevent hydration mismatch for cart badge
-  const [hasMounted, setHasMounted] = useState(false);
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
-
-  // Count total items in cart
-  const itemCount = cartItems.reduce((total, item) => total + item.quantity, 0);
-  // On cart/payment pages, always use white bg and desi-black text, even before hydration or scroll
-  const isCartPage = pathname === '/cart';
+  // On payment pages, always use white bg and desi-black text, even before hydration or scroll
   const isPaymentPage = pathname === '/payment';
-  // On cart/payment pages, always use white bg and desi-black text, even before hydration or scroll
-  const forceDesiBlack = isCartPage || isPaymentPage;
+  const forceDesiBlack = isPaymentPage;
   const useDarkText = forceDesiBlack || isScrolled;
   
   return <header className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${useDarkText ? 'bg-white/90 backdrop-blur-md shadow-sm py-3' : 'bg-transparent py-5'}`}>
@@ -129,28 +105,10 @@ const Navbar = () => {
           >
             About Us
           </Link>
-          <Link href="/cart" className="font-medium relative group">
-            <ShoppingCart 
-              size={20} 
-              className={`transition-all duration-300 group-hover:-rotate-12 group-hover:text-desi-orange ${isCartBouncing ? 'animate-bounce' : ''} ${forceDesiBlack ? 'text-desi-black' : useDarkText ? 'text-gray-900' : 'text-white'} ${forceDesiBlack ? '!text-desi-black' : ''}`}
-            />
-            {hasMounted && itemCount > 0 && <span className="absolute -top-2 -right-2 bg-desi-orange text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                {itemCount}
-              </span>}
-          </Link>
         </nav>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center space-x-4">
-          <Link href="/cart" className="relative mr-2">
-            <ShoppingCart 
-              size={20} 
-              className={`transition-colors duration-300 ${forceDesiBlack ? 'text-desi-black' : useDarkText ? 'text-gray-900' : 'text-white'} ${isCartBouncing ? 'animate-bounce' : ''} ${forceDesiBlack ? '!text-desi-black' : ''}`}
-            />
-            {hasMounted && itemCount > 0 && <span className="absolute -top-2 -right-2 bg-desi-orange text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-                {itemCount}
-              </span>}
-          </Link>
+        <div className="md:hidden flex items-center">
           <button 
             className={`transition-colors duration-300 ${forceDesiBlack ? 'text-desi-black hover:text-desi-orange' : useDarkText ? 'text-gray-900 hover:text-desi-orange' : 'text-white hover:text-desi-orange'} ${forceDesiBlack ? '!text-desi-black !hover:text-desi-orange' : ''}`} 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 

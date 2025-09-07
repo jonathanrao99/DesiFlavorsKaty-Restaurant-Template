@@ -1,0 +1,10 @@
+[33ma32588c[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Update HTML and text files to replace build identifiers and enhance consistency across multiple pages
+[33mca916fe[m Need To Implement Pickup and Delivery
+[33m256062b[m Update HTML files to replace build identifiers and update CSS references for improved styling consistency
+[33m2ccd099[m Add Merriweather font to Tailwind configuration, update layout to include it, and enhance text styles across components for improved readability
+[33m35ab6d3[m refactor: remove unused ESLint ignore files, update ESLint configuration, and replace Image component with img tags for better performance
+[33m15d4cae[m feat: integrate next-intl for improved localization, enhance accessibility with skip links, and update various components for better performance
+[33md367430[m feat: add SEO metadata and improve image handling across multiple components
+[33me126e58[m refactor: move Google Maps script loading to AddressAutocomplete component and conditionally render it
+[33m3e8baa7[m chore: update package dependencies, enhance SEO metadata in head component, and remove unused components from layout
+[33mf7d8f0e[m refactor: update build and cache files, remove obsolete routes and assets, and enhance layout for about and blog pages

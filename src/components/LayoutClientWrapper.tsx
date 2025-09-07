@@ -2,8 +2,6 @@
 
 import React, { useEffect } from 'react';
 import Analytics from '@/components/Analytics';
-import { CartProvider } from '@/context/CartContext';
-import { Toaster } from '@/components/ui/sonner';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import PageTransitionWrapper from '@/components/PageTransitionWrapper';
@@ -19,14 +17,11 @@ export default function LayoutClientWrapper({ children }: { children: React.Reac
   return (
     <>
       <Analytics />
-      <CartProvider>
-          <Toaster />
-        <Navbar />
-          <PageTransitionWrapper>
-            {children}
-          </PageTransitionWrapper>
-        <Footer />
-      </CartProvider>
+      <Navbar />
+      <PageTransitionWrapper>
+        {children}
+      </PageTransitionWrapper>
+      <Footer />
     </>
   );
 } 

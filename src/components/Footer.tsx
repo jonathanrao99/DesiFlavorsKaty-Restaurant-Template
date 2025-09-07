@@ -2,7 +2,6 @@
 import Link from 'next/link';
 import { Facebook, Instagram, Youtube, Mail, MapPin, Clock, Send } from 'lucide-react';
 import { useState } from 'react';
-import { toast } from 'sonner';
 
 // Custom X icon component
 const XIcon = ({ size = 20 }: { size?: number }) => (
@@ -31,12 +30,12 @@ const Footer = () => {
     e.preventDefault();
     
     if (!email.trim()) {
-      toast.error('Please enter your email address');
+      alert('Please enter your email address');
       return;
     }
 
     if (!email.includes('@')) {
-      toast.error('Please enter a valid email address');
+      alert('Please enter a valid email address');
       return;
     }
 
@@ -61,19 +60,19 @@ const Footer = () => {
       const result = await response.json();
 
       if (response.ok && result.success) {
-        toast.success('Successfully subscribed to our newsletter!');
+        alert('Successfully subscribed to our newsletter!');
         setEmail(''); // Clear the input
       } else {
         console.error('Newsletter subscription failed:', result);
         if (result.error?.includes('already subscribed')) {
-          toast.info('You are already subscribed to our newsletter!');
+          alert('You are already subscribed to our newsletter!');
         } else {
-          toast.error('Failed to subscribe. Please try again.');
+          alert('Failed to subscribe. Please try again.');
         }
       }
     } catch (error) {
       console.error('Newsletter subscription error:', error);
-      toast.error('Failed to subscribe. Please try again.');
+      alert('Failed to subscribe. Please try again.');
     } finally {
       setIsSubscribing(false);
     }
