@@ -69,22 +69,12 @@ serve(async (req) => {
   }
 
   try {
-    const SHIPDAY_API_KEY = Deno.env.get('SHIPDAY_API_KEY');
-    const STORE_ADDRESS = Deno.env.get('STORE_ADDRESS');
-    
-    console.log('Environment check:', {
-      hasShipDayApiKey: !!SHIPDAY_API_KEY,
-      hasStoreAddress: !!STORE_ADDRESS,
-      shipDayApiKeyLength: SHIPDAY_API_KEY?.length || 0,
-      storeAddressLength: STORE_ADDRESS?.length || 0
-    });
-    
-    if (!SHIPDAY_API_KEY || !STORE_ADDRESS) {
-      throw new Error(`Missing environment variables: SHIPDAY_API_KEY=${!!SHIPDAY_API_KEY}, STORE_ADDRESS=${!!STORE_ADDRESS}`);
-    }
-
     // Parse request body
-    const { address } = await req.json();
+    const { address, dropoffPhoneNumber } = await req.json();
+    console.log('calculate-fee received body:', {
+      address,
+      dropoffPhoneNumber
+    });
     console.log('Received request for address:', address);
 
     if (!address) {
