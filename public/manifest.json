@@ -1,6 +1,6 @@
 {
-  "name": "Desi Flavors Katy",
-  "short_name": "DesiFlavors",
+  "name": "Your Restaurant",
+  "short_name": "YourBrand",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#FFFFFF",

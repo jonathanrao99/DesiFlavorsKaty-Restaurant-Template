@@ -3,117 +3,27 @@ import '../index.css';
 import type { Metadata, Viewport } from 'next';
 import { inter, merriweather } from './fonts';
 import LayoutClientWrapper from '@/components/LayoutClientWrapper';
-import { SITE_URL } from '@/lib/siteUrl';
+import { SITE_URL, siteConfig } from '@/config/site';
+import { getStructuredDataGraph } from '@/config/structuredData';
 
-const restaurantJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Restaurant',
-  name: 'Desi Flavors Katy',
-  description:
-    'Authentic Indian street food served daily from our food truck in Katy, TX. Specializing in biryani, curries, and traditional Indian dishes.',
-  image: [
-    `${SITE_URL}/Truck/truck-4.jpg`,
-    `${SITE_URL}/Truck/truck-3.jpg`,
-    `${SITE_URL}/Food/foodtable.webp`,
-  ],
-  url: SITE_URL,
-  telephone: '+1-346-824-4212',
-  email: 'info@desiflavorskaty.com',
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: '1989 North Fry Rd',
-    addressLocality: 'Katy',
-    addressRegion: 'TX',
-    postalCode: '77494',
-    addressCountry: 'US',
-  },
-  geo: {
-    '@type': 'GeoCoordinates',
-    latitude: 29.794896,
-    longitude: -95.719412,
-  },
-  areaServed: [
-    {
-      '@type': 'City',
-      name: 'Katy',
-      containedInPlace: { '@type': 'State', name: 'Texas' },
-    },
-    {
-      '@type': 'AdministrativeArea',
-      name: 'Houston metropolitan area',
-    },
-  ],
-  hasMap:
-    'https://www.google.com/maps/search/?api=1&query=1989+North+Fry+Rd,+Katy,+TX+77494',
-  openingHours: ['Mo-Su 17:00-01:00'],
-  servesCuisine: ['Indian', 'South Asian', 'Desi'],
-  priceRange: '$$',
-  paymentAccepted: ['Cash', 'Credit Card', 'DoorDash', 'Grubhub', 'Uber Eats'],
-  hasMenu: `${SITE_URL}/menu`,
-  acceptsReservations: false,
-  currenciesAccepted: 'USD',
-  sameAs: [
-    'https://www.facebook.com/desiflavorskaty',
-    'https://www.instagram.com/desiflavorskaty',
-  ],
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    reviewCount: '150',
-  },
-} as const;
-
-const websiteJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'Desi Flavors Katy',
-  url: SITE_URL,
-  description:
-    'Authentic Indian street food in Katy, TX — biryani, curries, and Indian street food. Order online or find the food truck.',
-  inLanguage: 'en-US',
-  publisher: {
-    '@type': 'Organization',
-    name: 'Desi Flavors Katy',
-    url: SITE_URL,
-  },
-} as const;
-
-const structuredDataGraph = {
-  '@context': 'https://schema.org',
-  '@graph': [websiteJsonLd, restaurantJsonLd],
-};
+const structuredDataGraph = getStructuredDataGraph();
 
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: '#FF6B35',
+  themeColor: siteConfig.themeColor,
 };
 
 export const metadata: Metadata = {
   title: {
-    default: 'Desi Flavors Katy | Authentic Indian Street Food',
-    template: '%s | Desi Flavors Katy',
+    default: `${siteConfig.businessName} | ${siteConfig.titleSuffix}`,
+    template: `%s | ${siteConfig.businessName}`,
   },
-  description:
-    'Desi Flavors Katy - Authentic Indian street food served daily from our food truck in Katy, TX. Order online from DoorDash, Grubhub, and Uber Eats or find us at our next location!',
-  keywords: [
-    'Indian food Katy TX',
-    'Indian restaurant Katy',
-    'Desi food truck',
-    'authentic Indian cuisine',
-    'Indian street food',
-    'biryani Katy',
-    'curry Katy',
-    'food delivery Katy',
-    'DoorDash Katy',
-    'Grubhub Katy',
-    'Uber Eats Katy',
-    'Houston Indian food',
-    'Katy TX restaurant',
-  ],
-  authors: [{ name: 'Desi Flavors Katy' }],
-  creator: 'Desi Flavors Katy',
-  publisher: 'Desi Flavors Katy',
+  description: siteConfig.description,
+  keywords: siteConfig.keywords,
+  authors: [{ name: siteConfig.businessName }],
+  creator: siteConfig.businessName,
+  publisher: siteConfig.businessName,
   formatDetection: {
     email: false,
     address: false,
@@ -125,11 +35,10 @@ export const metadata: Metadata = {
   },
   category: 'restaurant',
   openGraph: {
-    title: 'Desi Flavors Katy | Authentic Indian Street Food',
-    description:
-      'Desi Flavors Katy - Authentic Indian street food served daily from our food truck in Katy, TX. Order online from DoorDash, Grubhub, and Uber Eats!',
+    title: `${siteConfig.businessName} | ${siteConfig.titleSuffix}`,
+    description: siteConfig.description,
     url: SITE_URL,
-    siteName: 'Desi Flavors Katy',
+    siteName: siteConfig.businessName,
     type: 'website',
     locale: 'en_US',
     images: [
@@ -137,23 +46,22 @@ export const metadata: Metadata = {
         url: `${SITE_URL}/Truck/truck-4.jpg`,
         width: 1200,
         height: 630,
-        alt: 'Desi Flavors Katy Food Truck',
+        alt: `${siteConfig.businessName} — food`,
       },
       {
         url: `${SITE_URL}/Food/foodtable.webp`,
         width: 1200,
         height: 630,
-        alt: 'Authentic Indian Food at Desi Flavors Katy',
+        alt: `Menu and food at ${siteConfig.businessName}`,
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Desi Flavors Katy | Authentic Indian Street Food',
-    description:
-      'Desi Flavors Katy - Authentic Indian street food served daily from our food truck in Katy, TX. Order online from DoorDash, Grubhub, and Uber Eats!',
+    title: `${siteConfig.businessName} | ${siteConfig.titleSuffix}`,
+    description: siteConfig.description,
     images: [`${SITE_URL}/Truck/truck-4.jpg`],
-    creator: '@desiflavorskaty',
+    creator: siteConfig.twitterCreator,
   },
   robots: {
     index: true,
@@ -167,10 +75,10 @@ export const metadata: Metadata = {
     },
   },
   other: {
-    'geo.region': 'US-TX',
-    'geo.placename': 'Katy',
-    'geo.position': '29.794896;-95.719412',
-    ICBM: '29.794896, -95.719412',
+    'geo.region': siteConfig.geoRegionMeta,
+    'geo.placename': siteConfig.geoPlacename,
+    'geo.position': `${siteConfig.latitude};${siteConfig.longitude}`,
+    ICBM: `${siteConfig.latitude}, ${siteConfig.longitude}`,
   },
   ...(process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
     ? {

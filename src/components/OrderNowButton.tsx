@@ -2,10 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { CookingPot } from 'lucide-react';
+import { siteConfig } from '@/config/site';
 
 export default function OrderNowButton() {
   const handleOrderClick = () => {
-    window.open('https://desiflavorskaty.square.site/', '_blank', 'noopener,noreferrer');
+    window.open(siteConfig.orderUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (

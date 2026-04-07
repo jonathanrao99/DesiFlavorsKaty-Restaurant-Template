@@ -1,27 +1,25 @@
 import { Metadata } from 'next';
-import { SITE_URL } from '@/lib/siteUrl';
+import { SITE_URL, siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'Catering Services - Indian Food Catering Katy TX',
-  description: 'Professional Indian food catering services in Katy, TX. Perfect for corporate events, weddings, and private parties. Authentic Indian cuisine delivered to your venue.',
+  title: `Catering Services - ${siteConfig.businessName}`,
+  description: `Professional catering by ${siteConfig.businessName}. Corporate events, weddings, and private parties.`,
   keywords: [
-    'Indian catering Katy TX',
-    'corporate catering Katy',
-    'wedding catering Indian food',
+    'catering',
+    'corporate catering',
+    'wedding catering',
     'private party catering',
-    'Indian food delivery catering',
-    'authentic Indian catering services',
-    'Desi catering Katy Texas'
-  ],
+    siteConfig.addressCity,
+  ].filter(Boolean),
   openGraph: {
-    title: 'Catering Services - Indian Food Catering Katy TX | Desi Flavors Katy',
-    description: 'Professional Indian food catering services in Katy, TX. Perfect for corporate events, weddings, and private parties.',
+    title: `Catering | ${siteConfig.businessName}`,
+    description: `Catering services — ${siteConfig.description}`,
     images: [
       {
         url: `${SITE_URL}/Truck/IMG-20250603-WA0005.jpg`,
         width: 1200,
         height: 630,
-        alt: 'Indian Food Catering Services at Desi Flavors Katy',
+        alt: `Catering — ${siteConfig.businessName}`,
       },
     ],
   },

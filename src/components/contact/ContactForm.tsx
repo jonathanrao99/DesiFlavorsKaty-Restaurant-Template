@@ -2,6 +2,7 @@ import { useState, Fragment } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Phone, User, MessageSquare, Check, AlertCircle, ArrowRight, Users, PartyPopper, ChevronDown, Download, HelpCircle } from 'lucide-react';
 import { logAnalyticsEvent } from '@/utils/loyaltyAndAnalytics';
+import { siteConfig } from '@/config/site';
 
 const ContactForm = () => {
   const [formData, setFormData] = useState({
@@ -76,7 +77,7 @@ Message:
 ${formData.message}
       `.trim());
       
-      window.location.href = `mailto:desiflavorskaty@gmail.com?subject=${subject}&body=${body}`;
+      window.location.href = `mailto:${siteConfig.emailContact}?subject=${subject}&body=${body}`;
       
       // Show success message
       setSubmitStatus({

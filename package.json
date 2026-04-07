@@ -1,5 +1,5 @@
 {
-  "name": "desi-flavors-hub-main",
+  "name": "next-restaurant-site-template",
   "private": true,
   "version": "1.0.0",
   "type": "module",
@@ -11,10 +11,8 @@
     "optimize-images": "node scripts/optimize-menu-images.js"
   },
   "dependencies": {
-    "@googlemaps/google-maps-services-js": "^3.4.1",
     "@radix-ui/react-dialog": "^1.1.14",
     "@radix-ui/react-slot": "^1.2.3",
-    "@tanstack/react-query": "^5.56.2",
     "@vercel/analytics": "^2.0.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -23,26 +21,19 @@
     "next": "15.3.8",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "sonner": "^1.7.4",
     "tailwind-merge": "^2.6.0",
-    "tailwindcss-animate": "^1.0.7",
-    "use-places-autocomplete": "^4.0.1"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
     "@types/node": "^22.16.1",
     "@types/react": "^18.3.23",
     "@types/react-dom": "^18.3.7",
-    "@types/react-icons": "^2.2.7",
     "autoprefixer": "^10.4.21",
-    "cross-env": "^7.0.3",
     "dotenv": "^16.5.0",
     "eslint": "^9.9.0",
     "eslint-plugin-react-refresh": "^0.4.9",
     "globals": "^15.9.0",
-    "ignore-loader": "^0.1.2",
-    "jest-axe": "^10.0.0",
-    "jsdom": "^26.1.0",
     "sharp": "^0.34.1",
     "tailwindcss": "^3.4.11",
     "typescript": "^5.8.3",

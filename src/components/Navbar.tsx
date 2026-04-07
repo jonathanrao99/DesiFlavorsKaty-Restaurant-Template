@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { Menu, X } from 'lucide-react';
+import { siteConfig } from '@/config/site';
 
 const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -86,8 +87,8 @@ const Navbar = () => {
               handleNavClick('/');
             }}
           >
-            <span className="font-samarkan text-4xl text-desi-orange">Desi</span>
-            <span className={`font-display text-2xl font-bold ml-2 tracking-wide transition-colors duration-300 ${false ? 'text-desi-black' : useDarkText ? 'text-gray-900' : 'text-white'} ${false ? '!text-desi-black' : ''}`}>FlavorsKaty</span>
+            <span className="font-samarkan text-4xl text-desi-orange">{siteConfig.brandWordPrimary}</span>
+            <span className={`font-display text-2xl font-bold ml-2 tracking-wide transition-colors duration-300 ${false ? 'text-desi-black' : useDarkText ? 'text-gray-900' : 'text-white'} ${false ? '!text-desi-black' : ''}`}>{siteConfig.brandWordSecondary}</span>
           </Link>
         </div>
 

@@ -1,4 +1,4 @@
-// Static menu data for Desi Flavors Katy
+// Static menu data — replace with your menu (see TEMPLATE.md)
 export interface MenuItem {
   id: number;
   name: string;

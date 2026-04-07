@@ -1,5 +1,6 @@
 'use client';
 import { ImageIcon, Star, ArrowRight, Clock, Utensils, ExternalLink, ShoppingBag, Leaf, Flame } from 'lucide-react';
+import { siteConfig } from '@/config/site';
 import { MenuItem } from '@/types/menu';
 import { useState, useCallback } from 'react';
 import { motion } from 'framer-motion';
@@ -266,7 +267,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
                       <p className="text-white/95 mb-2 text-xs">Place your order now through our secure Square ordering system</p>
                       
                       <a
-                        href="https://desiflavorskaty.square.site/"
+                        href={siteConfig.orderUrl}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}

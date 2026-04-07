@@ -1,12 +1,14 @@
-# Desi Flavors Katy
+# Restaurant site template (Next.js + Vercel)
 
-**Live site:** [desiflavorskaty.vercel.app](https://desiflavorskaty.vercel.app)
+**Use this as a GitHub template:** see **[TEMPLATE.md](./TEMPLATE.md)** for the full checklist (env vars, content to replace, deploy).
 
-Go click that. Order something. Come back if you are still curious about the code. We will wait.
+**Demo / live example:** [desiflavorskaty.vercel.app](https://desiflavorskaty.vercel.app) (Desi Flavors Katy).
 
 ---
 
-This repo powers the website for **Desi Flavors Katy**—Indian street food out of Katy, Texas, where the hard questions include “dum biryani or masala dosa?” and “how spicy is *spicy*?” The site exists so nobody has to dig through three apps and a group chat just to figure out what we serve and how to get it in front of their face.
+Brand, contact, social, SEO, and JSON-LD are driven by **`NEXT_PUBLIC_*` environment variables** (see `.env.example`). After creating a new repo from the template, copy `.env.example` → `.env.local`, fill in your values, and mirror them in Vercel.
+
+This codebase was originally built for **Desi Flavors Katy** (Indian street food in Katy, Texas). Fork it, change the env and content, and make it yours.
 
 If you are a developer: hi, thanks for reading. If you are here because someone dropped a GitHub link in your lap with zero explanation: also hi. The food is real, the truck is real, and the menu has opinions.
 
@@ -45,11 +47,11 @@ Optional: `npm start` after a build to smoke-test the production server locally.
 
 ## Secrets and env files
 
-Copy `.env.example` to `.env.local` and fill in the blanks: maps, optional analytics, anything else the build whines about. If the map looks like a sad gray rectangle, it is almost never your destiny—it is usually a missing key.
+Copy `.env.example` to `.env.local` and add at least `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` if you want maps to work locally. Optional: `NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION` for Search Console—see `GOOGLE_VERIFICATION_SETUP.md` if you are setting that up.
 
 ## Deploy
 
-**Vercel** is the happy path: push, build, done. If you graduate to a custom domain, bump `SITE_URL` in `src/lib/siteUrl.ts` so Open Graph, sitemaps, and robots.txt do not tell lies about where the site lives.
+**Vercel** is the happy path: push, build, done. Set `NEXT_PUBLIC_SITE_URL` to your production URL (and your custom domain when you add one) so Open Graph, `robots.txt`, and `sitemap.xml` stay correct.
 
 ## Cool people disclaimer
 
@@ -57,6 +59,6 @@ Contributions and issues are welcome if you are fixing a bug or making the exper
 
 ---
 
-**Order online:** [Square site](https://desiflavorskaty.square.site/) (linked from the live site too—no Easter egg hunt required.)
+**Order link** is configured with `NEXT_PUBLIC_ORDER_URL` (e.g. Square, Toast, or your ordering page).
 
 Built for people who like flavor, loud colors, and websites that admit they are selling food. Business questions? Hit the contact info on the live site. Code questions? Open an issue or bribe your friend with chaat.

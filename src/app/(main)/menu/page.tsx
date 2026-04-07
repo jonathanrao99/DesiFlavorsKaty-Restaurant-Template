@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import { SITE_URL } from '@/lib/siteUrl';
+import { SITE_URL, siteConfig } from '@/config/site';
 import MenuHeader from '@/components/menu/MenuHeader';
 import MenuCategories from '@/components/menu/MenuCategories';
 import MenuNotes from '@/components/menu/MenuNotes';
@@ -8,27 +8,18 @@ import MenuClient from './MenuClient';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 export const metadata: Metadata = {
-  title: 'Menu - Authentic Indian Street Food',
-  description: 'Explore our authentic Indian street food menu featuring biryani, curries, tandoori dishes, and traditional Indian cuisine. Order online from DoorDash, Grubhub, and Uber Eats.',
-  keywords: [
-    'Indian menu Katy TX',
-    'Indian food menu',
-    'biryani menu',
-    'curry menu',
-    'tandoori menu',
-    'Indian street food menu',
-    'vegetarian Indian food',
-    'spicy Indian dishes'
-  ],
+  title: `Menu - ${siteConfig.businessName}`,
+  description: `Explore the full menu at ${siteConfig.businessName}. ${siteConfig.description}`,
+  keywords: [...siteConfig.keywords, 'menu', 'order online'],
   openGraph: {
-    title: 'Menu - Authentic Indian Street Food | Desi Flavors Katy',
-    description: 'Explore our authentic Indian street food menu featuring biryani, curries, tandoori dishes, and traditional Indian cuisine.',
+    title: `Menu | ${siteConfig.businessName}`,
+    description: siteConfig.description,
     images: [
       {
         url: `${SITE_URL}/Food/foodtable.webp`,
         width: 1200,
         height: 630,
-        alt: 'Authentic Indian Food Menu at Desi Flavors Katy',
+        alt: `Menu — ${siteConfig.businessName}`,
       },
     ],
   },

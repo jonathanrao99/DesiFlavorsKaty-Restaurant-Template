@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { fadeInUp } from '@/utils/motion.variants';
 import { PulsatingButton } from '@/components/magicui/pulsating-button';
 import { Phone, Mail, MapPin } from 'lucide-react';
+import { siteConfig } from '@/config/site';
 
 const Catering = () => {
   const router = useRouter();
@@ -280,20 +281,20 @@ const Catering = () => {
                 <div className="flex items-center justify-center space-x-4">
                   <Phone className="h-6 w-6 text-desi-orange" />
                   <a
-                    href="tel:+13468244212"
+                    href={`tel:${siteConfig.phoneE164.replace(/\D/g, '')}`}
                     className="text-gray-700 hover:text-desi-orange font-medium text-lg"
                   >
-                    +1 (346) 824-4212
+                    {siteConfig.phoneDisplay}
                   </a>
                 </div>
 
                 <div className="flex items-center space-x-4">
                   <Mail className="h-6 w-6 text-desi-orange" />
                   <a
-                    href="mailto:desiflavorskaty@gmail.com"
+                    href={`mailto:${siteConfig.emailContact}`}
                     className="text-gray-700 hover:text-desi-orange font-medium text-lg"
                   >
-                    desiflavorskaty@gmail.com
+                    {siteConfig.emailContact}
                   </a>
                 </div>
               </div>
@@ -302,12 +303,12 @@ const Catering = () => {
               <div className="flex items-center justify-center space-x-4">
                 <MapPin className="h-6 w-6 text-desi-orange" />
                 <a
-                  href="https://maps.app.goo.gl/JURVBywvbtw7Qgja7"
+                  href={siteConfig.mapsLink}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-gray-700 hover:text-desi-orange text-center font-medium text-lg"
                 >
-                  1989 North Fry Rd, Katy, TX 77494
+                  {siteConfig.addressDisplay}
                 </a>
               </div>
             </section>

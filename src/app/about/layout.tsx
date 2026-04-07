@@ -1,25 +1,24 @@
 import { Metadata } from 'next';
-import { SITE_URL } from '@/lib/siteUrl';
+import { SITE_URL, siteConfig } from '@/config/site';
 
 export const metadata: Metadata = {
-  title: 'About Us - Desi Flavors Katy',
-  description: 'Learn about Desi Flavors Katy, your authentic Indian street food truck in Katy, TX. Discover our story, mission, and commitment to serving traditional Indian cuisine.',
+  title: `About Us - ${siteConfig.businessName}`,
+  description: `Learn about ${siteConfig.businessName}: our story, mission, and how we serve our community.`,
   keywords: [
-    'about Desi Flavors Katy',
-    'Indian food truck Katy TX',
-    'authentic Indian cuisine story',
-    'Desi food truck history',
-    'Indian restaurant Katy Texas'
+    `about ${siteConfig.businessName}`,
+    'food truck',
+    'restaurant story',
+    'catering',
   ],
   openGraph: {
-    title: 'About Us - Desi Flavors Katy',
-    description: 'Learn about Desi Flavors Katy, your authentic Indian street food truck in Katy, TX. Discover our story, mission, and commitment to serving traditional Indian cuisine.',
+    title: `About Us - ${siteConfig.businessName}`,
+    description: `Learn about ${siteConfig.businessName} and our team.`,
     images: [
       {
         url: `${SITE_URL}/Truck/truck-4.jpg`,
         width: 1200,
         height: 630,
-        alt: 'Desi Flavors Katy Food Truck - About Us',
+        alt: `${siteConfig.businessName} — About`,
       },
     ],
   },

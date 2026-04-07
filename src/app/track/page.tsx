@@ -2,10 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { ShoppingBag, ExternalLink } from 'lucide-react';
+import { siteConfig } from '@/config/site';
 
 export default function TrackOrderPage() {
   const handleOrderClick = () => {
-    window.open('https://desiflavorskaty.square.site/', '_blank', 'noopener,noreferrer');
+    window.open(siteConfig.orderUrl, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -48,17 +49,17 @@ export default function TrackOrderPage() {
           <p className="text-sm text-gray-500">
             Need help? Contact us at{' '}
             <a
-              href="tel:+13468244212"
+              href={`tel:${siteConfig.phoneE164.replace(/\D/g, '')}`}
               className="text-desi-orange hover:underline font-medium"
             >
-              (346) 824-4212
+              {siteConfig.phoneDisplay}
             </a>
             {' '}or{' '}
             <a
-              href="mailto:desiflavorskaty@gmail.com"
+              href={`mailto:${siteConfig.emailContact}`}
               className="text-desi-orange hover:underline font-medium"
             >
-              desiflavorskaty@gmail.com
+              {siteConfig.emailContact}
             </a>
           </p>
         </div>
