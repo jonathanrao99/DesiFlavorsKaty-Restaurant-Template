@@ -103,15 +103,15 @@ export default function BestsellerCard({
       </div>
       <div className="p-4">
         <div className="flex items-center justify-between mb-2">
-          <h3 className="font-display font-bold text-lg text-desi-black group-hover:text-desi-orange transition-colors">
+          <h3 className="font-display font-bold text-lg text-your-black group-hover:text-your-orange transition-colors">
             {title}
           </h3>
-          <span className="font-display font-bold text-desi-orange">{price}</span>
+          <span className="font-display font-bold text-your-orange">{price}</span>
         </div>
         <p className="text-gray-600 text-sm mb-3 line-clamp-2">{description}</p>
         <div className="flex items-center justify-between">
           <span className="text-xs text-gray-500 capitalize">{category}</span>
-          <ChevronRight className="w-4 h-4 text-desi-orange group-hover:translate-x-1 transition-transform" />
+          <ChevronRight className="w-4 h-4 text-your-orange group-hover:translate-x-1 transition-transform" />
         </div>
       </div>
     </motion.div>

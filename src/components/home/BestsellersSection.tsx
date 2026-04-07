@@ -61,20 +61,20 @@ const BestsellersSection = () => {
     >
       {/* Decorative elements with parallax */}
       <motion.div 
-        className="absolute top-0 left-0 w-24 h-24 bg-desi-orange/5 rounded-full -translate-x-1/2 -translate-y-1/2"
+        className="absolute top-0 left-0 w-24 h-24 bg-your-orange/5 rounded-full -translate-x-1/2 -translate-y-1/2"
         style={{ y: scrollYProgress ? scrollYProgress.get() * 20 : 0 }}
       />
       <motion.div 
-        className="absolute bottom-0 right-0 w-48 h-48 bg-desi-orange/5 rounded-full translate-x-1/3 translate-y-1/3"
+        className="absolute bottom-0 right-0 w-48 h-48 bg-your-orange/5 rounded-full translate-x-1/3 translate-y-1/3"
         style={{ y: scrollYProgress ? -scrollYProgress.get() * 20 : 0 }}
       />
       <motion.div 
-        className="absolute top-1/4 left-10 w-12 h-12 bg-desi-orange/10 rounded-full"
+        className="absolute top-1/4 left-10 w-12 h-12 bg-your-orange/10 rounded-full"
         style={{ y: scrollYProgress ? scrollYProgress.get() * 10 : 0 }}
       />
       
       <motion.div 
-        className="absolute left-10 bottom-20 w-3 h-3 rounded-full bg-desi-orange/40"
+        className="absolute left-10 bottom-20 w-3 h-3 rounded-full bg-your-orange/40"
         animate={hasAnimated ? { 
           y: 0,
           opacity: 0.6
@@ -91,7 +91,7 @@ const BestsellersSection = () => {
       ></motion.div>
       
       <motion.div 
-        className="absolute right-1/3 top-40 w-4 h-4 rounded-full bg-desi-orange/30"
+        className="absolute right-1/3 top-40 w-4 h-4 rounded-full bg-your-orange/30"
         animate={hasAnimated ? { 
           y: 0,
           opacity: 0.5
@@ -163,7 +163,7 @@ const BestsellersSection = () => {
                     <div className="rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl hover:scale-[1.03] transition-all duration-300 bg-white">
                       <div className="p-0">
                         <div className="relative">
-                          <SpinningText className="text-desi-orange bg-transparent text-[0.6rem]">
+                          <SpinningText className="text-your-orange bg-transparent text-[0.6rem]">
                             bestseller • bestseller • bestseller •
                           </SpinningText>
                           <BestsellerCard {...item} />
@@ -186,8 +186,8 @@ const BestsellersSection = () => {
             className="mt-10 md:mt-12 text-center"
           >
             <Link href="/menu">
-              <MagneticButton className="inline-flex items-center text-desi-orange hover:text-white/80 font-medium transition-colors group transition-transform duration-300 hover:scale-105">
-                <span className="border-b border-desi-orange/30 group-hover:border-desi-orange/80 transition-colors pb-1">View Full Menu</span>
+              <MagneticButton className="inline-flex items-center text-your-orange hover:text-white/80 font-medium transition-colors group transition-transform duration-300 hover:scale-105">
+                <span className="border-b border-your-orange/30 group-hover:border-your-orange/80 transition-colors pb-1">View Full Menu</span>
                 <ChevronRight size={16} className="ml-1 group-hover:translate-x-1 transition-transform duration-300" />
               </MagneticButton>
             </Link>

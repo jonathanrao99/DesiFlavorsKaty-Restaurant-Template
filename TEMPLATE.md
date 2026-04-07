@@ -24,7 +24,7 @@ Rebuild after changing `NEXT_PUBLIC_*` values (they are inlined at build time).
 | `public/` assets | `favicon.ico`, logos, `Truck/`, `Food/`, `Menu_Images/` as needed |
 | `public/llms.txt` | Facts for AI crawlers — align with your real address and links |
 | `public/manifest.json` | PWA `name` / `short_name` |
-| `tailwind.config.ts` | Colors under `desi.*` if you rebrand |
+| `tailwind.config.ts` | Colors under `your.*` if you rebrand |
 
 ## 4. Optional: GitHub template settings
 
@@ -38,6 +38,10 @@ Connect the new repo to **Vercel** (import project → select repo). Use the def
 
 See `GOOGLE_VERIFICATION_SETUP.md` if you use Google Search Console (`NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`).
 
+## 7. License
+
+The template is under the [MIT License](LICENSE). When you ship a fork, you may update the copyright line in `LICENSE` to your name or business.
+
 ---
 
-**Tip:** Search the codebase for `Your ` and `example.com` only if you left generic defaults in `src/config/site.ts` — the template is designed to be driven by `.env.local` instead.
+**Tip:** Search the codebase for `Your ` and `example.com` only if you left generic defaults in `src/config/site.ts` — the template is yourgned to be driven by `.env.local` instead.

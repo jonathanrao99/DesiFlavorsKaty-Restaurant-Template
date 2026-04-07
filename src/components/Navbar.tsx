@@ -57,7 +57,7 @@ const Navbar = () => {
         <nav className="hidden md:flex items-center space-x-8 flex-1 justify-start">
           <Link 
             href="/menu" 
-            className={`font-display font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${false ? 'text-desi-black hover:text-desi-orange' : useDarkText ? 'text-gray-900 hover:text-desi-orange' : 'text-white hover:text-desi-orange'} ${false ? '!text-desi-black !hover:text-desi-orange' : ''}`}
+            className={`font-display font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${false ? 'text-your-black hover:text-your-orange' : useDarkText ? 'text-gray-900 hover:text-your-orange' : 'text-white hover:text-your-orange'} ${false ? '!text-your-black !hover:text-your-orange' : ''}`}
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('/menu');
@@ -67,7 +67,7 @@ const Navbar = () => {
           </Link>
           <Link 
             href="/catering" 
-            className={`font-display font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${false ? 'text-desi-black hover:text-desi-orange' : useDarkText ? 'text-gray-900 hover:text-desi-orange' : 'text-white hover:text-desi-orange'} ${false ? '!text-desi-black !hover:text-desi-orange' : ''}`}
+            className={`font-display font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${false ? 'text-your-black hover:text-your-orange' : useDarkText ? 'text-gray-900 hover:text-your-orange' : 'text-white hover:text-your-orange'} ${false ? '!text-your-black !hover:text-your-orange' : ''}`}
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('/catering');
@@ -87,8 +87,8 @@ const Navbar = () => {
               handleNavClick('/');
             }}
           >
-            <span className="font-samarkan text-4xl text-desi-orange">{siteConfig.brandWordPrimary}</span>
-            <span className={`font-display text-2xl font-bold ml-2 tracking-wide transition-colors duration-300 ${false ? 'text-desi-black' : useDarkText ? 'text-gray-900' : 'text-white'} ${false ? '!text-desi-black' : ''}`}>{siteConfig.brandWordSecondary}</span>
+            <span className="font-samarkan text-4xl text-your-orange">{siteConfig.brandWordPrimary}</span>
+            <span className={`font-display text-2xl font-bold ml-2 tracking-wide transition-colors duration-300 ${false ? 'text-your-black' : useDarkText ? 'text-gray-900' : 'text-white'} ${false ? '!text-your-black' : ''}`}>{siteConfig.brandWordSecondary}</span>
           </Link>
         </div>
 
@@ -96,7 +96,7 @@ const Navbar = () => {
         <nav className="hidden md:flex items-center space-x-8 flex-1 justify-end">
           <Link 
             href="/about" 
-            className={`font-display font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${false ? 'text-desi-black hover:text-desi-orange' : useDarkText ? 'text-gray-900 hover:text-desi-orange' : 'text-white hover:text-desi-orange'} ${false ? '!text-desi-black !hover:text-desi-orange' : ''}`}
+            className={`font-display font-semibold uppercase tracking-wider text-md px-2 py-1 rounded transition-colors duration-300 ${false ? 'text-your-black hover:text-your-orange' : useDarkText ? 'text-gray-900 hover:text-your-orange' : 'text-white hover:text-your-orange'} ${false ? '!text-your-black !hover:text-your-orange' : ''}`}
             onClick={(e) => {
               e.preventDefault();
               handleNavClick('/about');
@@ -109,7 +109,7 @@ const Navbar = () => {
         {/* Mobile Menu Button */}
         <div className="md:hidden flex items-center">
           <button 
-            className={`transition-colors duration-300 ${false ? 'text-desi-black hover:text-desi-orange' : useDarkText ? 'text-gray-900 hover:text-desi-orange' : 'text-white hover:text-desi-orange'} ${false ? '!text-desi-black !hover:text-desi-orange' : ''}`} 
+            className={`transition-colors duration-300 ${false ? 'text-your-black hover:text-your-orange' : useDarkText ? 'text-gray-900 hover:text-your-orange' : 'text-white hover:text-your-orange'} ${false ? '!text-your-black !hover:text-your-orange' : ''}`} 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)} 
             aria-label="Toggle menu"
           >
@@ -123,7 +123,7 @@ const Navbar = () => {
           <nav className="container mx-auto px-4 py-6 flex flex-col space-y-4">
             <Link 
               href="/" 
-              className="px-4 py-2 hover:bg-desi-orange/10 rounded-md transition-colors text-desi-black hover:text-desi-orange"
+              className="px-4 py-2 hover:bg-your-orange/10 rounded-md transition-colors text-your-black hover:text-your-orange"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick('/');
@@ -133,7 +133,7 @@ const Navbar = () => {
             </Link>
             <Link 
               href="/menu" 
-              className="px-4 py-2 hover:bg-desi-orange/10 rounded-md transition-colors text-desi-black hover:text-desi-orange"
+              className="px-4 py-2 hover:bg-your-orange/10 rounded-md transition-colors text-your-black hover:text-your-orange"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick('/menu');
@@ -143,7 +143,7 @@ const Navbar = () => {
             </Link>
             <Link 
               href="/catering" 
-              className="px-4 py-2 hover:bg-desi-orange/10 rounded-md transition-colors text-desi-black hover:text-desi-orange"
+              className="px-4 py-2 hover:bg-your-orange/10 rounded-md transition-colors text-your-black hover:text-your-orange"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick('/catering');
@@ -153,7 +153,7 @@ const Navbar = () => {
             </Link>
             <Link 
               href="/about" 
-              className="px-4 py-2 hover:bg-desi-orange/10 rounded-md transition-colors text-desi-black hover:text-desi-orange"
+              className="px-4 py-2 hover:bg-your-orange/10 rounded-md transition-colors text-your-black hover:text-your-orange"
               onClick={(e) => {
                 e.preventDefault();
                 handleNavClick('/about');

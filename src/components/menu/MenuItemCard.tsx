@@ -76,7 +76,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
             const name = item.name.toLowerCase();
             const highlight = ['chicken dum biryani', 'butter chicken', 'samosa'].some(k => name.includes(k));
             return highlight ? (
-              <SpinningText className="text-desi-orange bg-transparent text-[0.6rem] z-30 pointer-events-none" children="bestseller • bestseller • bestseller •" />
+              <SpinningText className="text-your-orange bg-transparent text-[0.6rem] z-30 pointer-events-none" children="bestseller • bestseller • bestseller •" />
             ) : null;
           })()}
           {imageLoading && (
@@ -108,8 +108,8 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
           <div className="flex-grow">
             <div className="flex justify-between items-start">
               <h3 className="text-lg font-semibold text-gray-900 font-sans">{item.name}</h3>
-              <span className="text-desi-orange font-medium text-base">
-                <span className="text-desi-orange">$</span>{item.price}
+              <span className="text-your-orange font-medium text-base">
+                <span className="text-your-orange">$</span>{item.price}
               </span>
             </div>
             <p className="text-gray-600 text-sm line-clamp-2 mt-1">{item.description}</p>
@@ -178,7 +178,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
                         className="bg-white/95 backdrop-blur-md px-4 py-2 rounded-xl shadow-2xl border border-white/40"
                       >
                         <div className="text-xs text-gray-600 font-medium uppercase tracking-wide">Price</div>
-                        <div className="text-2xl font-bold text-desi-orange mt-0.5">${item.price}</div>
+                        <div className="text-2xl font-bold text-your-orange mt-0.5">${item.price}</div>
                       </motion.div>
                     </div>
 
@@ -221,7 +221,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
                     <h2 className="text-2xl lg:text-3xl font-display font-bold text-gray-900 mb-1 leading-tight">
                       {item.name}
                     </h2>
-                    <div className="h-1 w-12 bg-gradient-to-r from-desi-orange to-yellow-500 rounded-full mb-1"></div>
+                    <div className="h-1 w-12 bg-gradient-to-r from-your-orange to-yellow-500 rounded-full mb-1"></div>
                   </div>
                   
                   {/* Close Button */}
@@ -241,8 +241,8 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
               <div className="p-3 pb-2 flex-1">
                 <div className="mb-3">
                   <div className="flex items-center gap-2 mb-1.5">
-                    <div className="w-7 h-7 bg-desi-orange/10 rounded-lg flex items-center justify-center">
-                      <Utensils className="w-3.5 h-3.5 text-desi-orange" />
+                    <div className="w-7 h-7 bg-your-orange/10 rounded-lg flex items-center justify-center">
+                      <Utensils className="w-3.5 h-3.5 text-your-orange" />
                     </div>
                     <h3 className="text-base font-bold text-gray-900">About This Dish</h3>
                   </div>
@@ -253,7 +253,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
 
                 {/* Order Now - Primary CTA */}
                 <div className="mb-3">
-                  <div className="bg-gradient-to-br from-desi-orange via-orange-500 to-orange-600 rounded-lg p-3 text-center relative overflow-hidden group">
+                  <div className="bg-gradient-to-br from-your-orange via-orange-500 to-orange-600 rounded-lg p-3 text-center relative overflow-hidden group">
                     {/* Animated Background Pattern */}
                     <div className="absolute inset-0 opacity-10">
                       <div className="absolute inset-0" style={{
@@ -271,7 +271,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
-                        className="inline-flex items-center gap-2 bg-white text-desi-orange px-4 py-2 rounded-lg font-bold text-sm shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                        className="inline-flex items-center gap-2 bg-white text-your-orange px-4 py-2 rounded-lg font-bold text-sm shadow-xl hover:shadow-2xl hover:scale-105 transition-all duration-300"
                       >
                         Order on Square
                         <ExternalLink className="w-3.5 h-3.5" />
@@ -285,11 +285,11 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
                   <h3 className="text-xs font-semibold text-gray-900 mb-1.5 text-center">Also Available on Delivery Apps</h3>
                   <div className="grid grid-cols-3 gap-1.5">
                     <a
-                      href="https://order.online/business/desi-flavors-katy-14145277"
+                      href="https://order.online/business/your-brand-14145277"
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="group bg-gray-50 hover:bg-white rounded-lg p-1.5 transition-all duration-300 hover:shadow-md border border-gray-100 hover:border-desi-orange/30"
+                      className="group bg-gray-50 hover:bg-white rounded-lg p-1.5 transition-all duration-300 hover:shadow-md border border-gray-100 hover:border-your-orange/30"
                     >
                       <div className="flex flex-col items-center gap-0.5">
                         <div className="h-6 flex items-center justify-center">
@@ -299,7 +299,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
                             className="h-5 w-auto object-contain group-hover:scale-110 transition-transform"
                           />
                         </div>
-                        <p className="text-[10px] text-gray-600 group-hover:text-desi-orange transition-colors font-medium">DoorDash</p>
+                        <p className="text-[10px] text-gray-600 group-hover:text-your-orange transition-colors font-medium">DoorDash</p>
                       </div>
                     </a>
 
@@ -308,7 +308,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="group bg-gray-50 hover:bg-white rounded-lg p-1.5 transition-all duration-300 hover:shadow-md border border-gray-100 hover:border-desi-orange/30"
+                      className="group bg-gray-50 hover:bg-white rounded-lg p-1.5 transition-all duration-300 hover:shadow-md border border-gray-100 hover:border-your-orange/30"
                     >
                       <div className="flex flex-col items-center gap-0.5">
                         <div className="h-6 flex items-center justify-center">
@@ -318,16 +318,16 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
                             className="h-5 w-auto object-contain group-hover:scale-110 transition-transform"
                           />
                         </div>
-                        <p className="text-[10px] text-gray-600 group-hover:text-desi-orange transition-colors font-medium">Grubhub</p>
+                        <p className="text-[10px] text-gray-600 group-hover:text-your-orange transition-colors font-medium">Grubhub</p>
                       </div>
                     </a>
 
                     <a
-                      href="https://www.order.store/store/desi-flavors-katy-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g"
+                      href="https://www.order.store/store/your-brand-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g"
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="group bg-gray-50 hover:bg-white rounded-lg p-1.5 transition-all duration-300 hover:shadow-md border border-gray-100 hover:border-desi-orange/30"
+                      className="group bg-gray-50 hover:bg-white rounded-lg p-1.5 transition-all duration-300 hover:shadow-md border border-gray-100 hover:border-your-orange/30"
                     >
                       <div className="flex flex-col items-center gap-0.5">
                         <div className="h-6 flex items-center justify-center">
@@ -337,7 +337,7 @@ export default function MenuItemCard({ item }: MenuItemCardProps) {
                             className="h-5 w-auto object-contain group-hover:scale-110 transition-transform"
                           />
                         </div>
-                        <p className="text-[10px] text-gray-600 group-hover:text-desi-orange transition-colors font-medium">Uber Eats</p>
+                        <p className="text-[10px] text-gray-600 group-hover:text-your-orange transition-colors font-medium">Uber Eats</p>
                       </div>
                     </a>
                   </div>

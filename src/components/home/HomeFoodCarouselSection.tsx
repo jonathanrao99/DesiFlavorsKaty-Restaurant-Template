@@ -150,10 +150,10 @@ export default function HomeFoodCarouselSection() {
             </AnimatePresence>
             {/* Controls at bottom of carousel */}
             <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-4 z-20">
-              <button onClick={handlePrev} aria-label="Previous" className="bg-white/80 hover:bg-desi-orange/90 text-desi-orange hover:text-white rounded-full p-3 shadow transition-colors">
+              <button onClick={handlePrev} aria-label="Previous" className="bg-white/80 hover:bg-your-orange/90 text-your-orange hover:text-white rounded-full p-3 shadow transition-colors">
                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M15 19l-7-7 7-7" /></svg>
               </button>
-              <button onClick={handleNext} aria-label="Next" className="bg-white/80 hover:bg-desi-orange/90 text-desi-orange hover:text-white rounded-full p-3 shadow transition-colors">
+              <button onClick={handleNext} aria-label="Next" className="bg-white/80 hover:bg-your-orange/90 text-your-orange hover:text-white rounded-full p-3 shadow transition-colors">
                 <svg width="18" height="18" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path d="M9 5l7 7-7 7" /></svg>
               </button>
             </div>
@@ -168,9 +168,9 @@ export default function HomeFoodCarouselSection() {
         >
           {/* Decorative bg behind text */}
           <div className="absolute -left-10 -top-10 w-32 h-32 bg-gradient-to-br from-yellow-100/40 via-orange-100/20 to-white/0 rounded-full blur-2xl opacity-60 -z-10" />
-          <h3 className="text-3xl md:text-4xl font-display font-bold text-desi-black mb-4 drop-shadow-sm">Made Fresh, From our Heart to your Plate</h3>
+          <h3 className="text-3xl md:text-4xl font-display font-bold text-your-black mb-4 drop-shadow-sm">Made Fresh, From our Heart to your Plate</h3>
           <p className="text-lg md:text-xl text-gray-700 mb-4 font-medium">
-          Experience the essence of Indian cooking with every bite. At <span className="font-samarkan font-bold text-2xl text-desi-orange">Desi</span> <span className="font-semibold text-desi-black">Flavors Katy</span>, we bring together time-honored traditions and a spark of creativity—using only the freshest ingredients and authentic, hand-ground spices. <br />From the first sizzle in the pan to the comforting aroma that fills the air, every dish is a warm reminder of home, crafted with love and served with pride.
+          Experience the essence of Indian cooking with every bite. At <span className="font-samarkan font-bold text-2xl text-your-orange">your</span> <span className="font-semibold text-your-black">brand</span>, we bring together time-honored traditions and a spark of creativity—using only the freshest ingredients and authentic, hand-ground spices. <br />From the first sizzle in the pan to the comforting aroma that fills the air, every dish is a warm reminder of home, crafted with love and served with pride.
           </p>
         </motion.div>
       </div>

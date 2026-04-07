@@ -17,7 +17,7 @@ export function LoadingSpinner({ size = 'md', className, text }: LoadingSpinnerP
     <div className={cn('flex flex-col items-center justify-center', className)}>
       <div
         className={cn(
-          'animate-spin rounded-full border-b-2 border-desi-orange',
+          'animate-spin rounded-full border-b-2 border-your-orange',
           sizeClasses[size]
         )}
       />

@@ -1,15 +1,15 @@
 
 const MenuNotes = () => {
   return (
-    <section className="bg-desi-cream py-12">
+    <section className="bg-your-cream py-12">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-7xl mx-auto">
           {/* Menu Notes Card */}
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex justify-center items-center gap-3 mb-4">
-              <h3 className="text-xl font-display font-bold text-desi-black flex items-center gap-3">
-                <div className="w-8 h-8 rounded-full bg-desi-orange/10 flex items-center justify-center flex-shrink-0">
-                  <svg className="w-4 h-4 text-desi-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <h3 className="text-xl font-display font-bold text-your-black flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-your-orange/10 flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-your-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
                 </div>
@@ -48,10 +48,10 @@ const MenuNotes = () => {
           <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
             <div className="flex justify-center items-center gap-3 mb-4">
               <div className="flex flex-col items-center gap-1">
-                <h3 className="text-xl font-display font-bold text-desi-black flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-desi-orange/10 flex items-center justify-center flex-shrink-0">
+                <h3 className="text-xl font-display font-bold text-your-black flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full bg-your-orange/10 flex items-center justify-center flex-shrink-0">
                     <svg 
-                      className="w-5 h-5 text-desi-orange" 
+                      className="w-5 h-5 text-your-orange" 
                       fill="none" 
                       stroke="currentColor" 
                       viewBox="0 0 24 24"
@@ -66,7 +66,7 @@ const MenuNotes = () => {
                   </div>
                   Online Ordering
                 </h3>
-                <span className="text-xs font-medium bg-desi-orange/10 text-desi-orange px-2 py-1 rounded-full">
+                <span className="text-xs font-medium bg-your-orange/10 text-your-orange px-2 py-1 rounded-full">
                   Available Now
                 </span>
               </div>
@@ -92,7 +92,7 @@ const MenuNotes = () => {
                 />
               </a>
               <a
-                href="https://order.online/business/desi-flavors-katy-14145277"
+                href="https://order.online/business/your-brand-14145277"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center group"
@@ -106,7 +106,7 @@ const MenuNotes = () => {
                 />
               </a>
               <a
-                href="https://www.order.store/store/desi-flavors-katy-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g"
+                href="https://www.order.store/store/your-brand-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center justify-center group"

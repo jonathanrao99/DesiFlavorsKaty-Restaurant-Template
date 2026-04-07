@@ -21,9 +21,9 @@ export default function TrackOrderPage() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ delay: 0.2, type: 'spring' }}
-          className="w-20 h-20 bg-desi-orange/10 rounded-full flex items-center justify-center mx-auto mb-6"
+          className="w-20 h-20 bg-your-orange/10 rounded-full flex items-center justify-center mx-auto mb-6"
         >
-          <ShoppingBag className="w-10 h-10 text-desi-orange" />
+          <ShoppingBag className="w-10 h-10 text-your-orange" />
         </motion.div>
 
         <h1 className="text-3xl md:text-4xl font-display font-bold text-gray-900 mb-4">
@@ -39,7 +39,7 @@ export default function TrackOrderPage() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleOrderClick}
-          className="inline-flex items-center gap-2 bg-desi-orange text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:bg-desi-orange/90 transition-all duration-300"
+          className="inline-flex items-center gap-2 bg-your-orange text-white px-8 py-4 rounded-full font-semibold text-lg shadow-lg hover:bg-your-orange/90 transition-all duration-300"
         >
           <span>Go to Order Portal</span>
           <ExternalLink className="w-5 h-5" />
@@ -50,14 +50,14 @@ export default function TrackOrderPage() {
             Need help? Contact us at{' '}
             <a
               href={`tel:${siteConfig.phoneE164.replace(/\D/g, '')}`}
-              className="text-desi-orange hover:underline font-medium"
+              className="text-your-orange hover:underline font-medium"
             >
               {siteConfig.phoneDisplay}
             </a>
             {' '}or{' '}
             <a
               href={`mailto:${siteConfig.emailContact}`}
-              className="text-desi-orange hover:underline font-medium"
+              className="text-your-orange hover:underline font-medium"
             >
               {siteConfig.emailContact}
             </a>

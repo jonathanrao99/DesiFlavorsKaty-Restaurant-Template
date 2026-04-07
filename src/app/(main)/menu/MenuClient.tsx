@@ -111,7 +111,7 @@ export default function MenuClient() {
   }, [handleSearch]);
 
   return (
-    <div className="min-h-screen bg-desi-cream overflow-x-hidden">
+    <div className="min-h-screen bg-your-cream overflow-x-hidden">
       <div className="w-[90%] max-w-[90vw] mx-auto px-2 sm:px-4 py-8">
         {/* Search and Filter Section */}
         <div className="mb-8">
@@ -143,7 +143,7 @@ export default function MenuClient() {
                 onClick={() => setUnder10Only(prev => !prev)}
                 className={`px-4 py-2 rounded-full text-sm font-medium transition-colors ${
                   under10Only
-                    ? 'bg-desi-orange text-white shadow-md'
+                    ? 'bg-your-orange text-white shadow-md'
                     : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
                 }`}
               >
@@ -160,7 +160,7 @@ export default function MenuClient() {
                 placeholder="Search for dishes..."
                 value={searchTerm}
                 onChange={handleSearchInput}
-                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-desi-orange focus:border-desi-orange transition-all duration-200 bg-white shadow-sm hover:shadow-md"
+                className="w-full pl-10 pr-4 py-3 border-2 border-gray-200 rounded-2xl focus:ring-2 focus:ring-your-orange focus:border-your-orange transition-all duration-200 bg-white shadow-sm hover:shadow-md"
               />
             </div>
           </div>
@@ -218,7 +218,7 @@ export default function MenuClient() {
                 setSpicyOnly(false);
                 setUnder10Only(false);
               }}
-              className="mt-4 px-6 py-2 bg-desi-orange text-white rounded-lg hover:bg-desi-orange/90 transition-colors"
+              className="mt-4 px-6 py-2 bg-your-orange text-white rounded-lg hover:bg-your-orange/90 transition-colors"
             >
               Clear Filters
             </button>

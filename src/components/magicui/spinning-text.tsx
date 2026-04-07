@@ -59,7 +59,7 @@ export function SpinningText({
   return (
     <motion.div
       className={cn(
-        "absolute top-9 left-7 z-20 text-xs font-bold bg-desi-orange text-white px-2 py-1 rounded",
+        "absolute top-9 left-7 z-20 text-xs font-bold bg-your-orange text-white px-2 py-1 rounded",
         className
       )}
       style={{

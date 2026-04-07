@@ -42,8 +42,8 @@ const Index = () => {
         }}
         transition={{ duration: 0.3 }}
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        className="fixed bottom-8 right-8 bg-desi-orange text-white p-3 rounded-full shadow-lg 
-          hover:bg-desi-orange/90 transition-colors z-50"
+        className="fixed bottom-8 right-8 bg-your-orange text-white p-3 rounded-full shadow-lg 
+          hover:bg-your-orange/90 transition-colors z-50"
         aria-label="Back to top"
       >
         <svg 

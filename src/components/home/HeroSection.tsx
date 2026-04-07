@@ -29,7 +29,7 @@ const HeroSection = () => {
   return (
     <section 
       ref={containerRef} 
-      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-desi-black"
+      className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-your-black"
     >
       {/* Ken Burns Background Animation */}
       <motion.div
@@ -43,7 +43,7 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-white/5 animate-pulse-subtle pointer-events-none" />
         <img
           src="/Truck/truck-3.jpg"
-          alt="Desi Flavors Food Truck"
+          alt="your Flavors Food Truck"
           className="object-cover w-full h-full absolute inset-0"
         />
       </motion.div>
@@ -72,7 +72,7 @@ const HeroSection = () => {
           >
             <h1 className="text-3xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight leading-tight">
               <span className="text-white block">Authentic Indian Flavors</span>
-              <span className="text-desi-orange block mt-2 font-bold">
+              <span className="text-your-orange block mt-2 font-bold">
                 On Wheels
               </span>
             </h1>
@@ -104,7 +104,7 @@ const HeroSection = () => {
           >
             <Link href="/menu">
               <MagneticButton
-                className="w-full sm:w-auto flex items-center justify-center gap-2 !bg-desi-orange !text-white"
+                className="w-full sm:w-auto flex items-center justify-center gap-2 !bg-your-orange !text-white"
                 onClick={() => router.push('/menu')}
               >
                 <span>Order Online</span>

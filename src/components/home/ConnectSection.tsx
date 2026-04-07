@@ -11,16 +11,16 @@ const TikTokIcon = ({ className }: { className?: string }) => (
 );
 
 const socialLinks = [
-  { platform: 'Instagram', icon: Instagram, url: siteConfig.social.instagram, color: 'hover:text-desi-orange' },
-  { platform: 'Facebook', icon: Facebook, url: siteConfig.social.facebook, color: 'hover:text-desi-orange' },
-  { platform: 'Twitter', icon: Twitter, url: siteConfig.social.x, color: 'hover:text-desi-orange' },
-  { platform: 'TikTok', icon: TikTokIcon, url: siteConfig.social.tiktok, color: 'hover:text-desi-orange' },
-  { platform: 'YouTube', icon: Youtube, url: siteConfig.social.youtube, color: 'hover:text-desi-orange' },
+  { platform: 'Instagram', icon: Instagram, url: siteConfig.social.instagram, color: 'hover:text-your-orange' },
+  { platform: 'Facebook', icon: Facebook, url: siteConfig.social.facebook, color: 'hover:text-your-orange' },
+  { platform: 'Twitter', icon: Twitter, url: siteConfig.social.x, color: 'hover:text-your-orange' },
+  { platform: 'TikTok', icon: TikTokIcon, url: siteConfig.social.tiktok, color: 'hover:text-your-orange' },
+  { platform: 'YouTube', icon: Youtube, url: siteConfig.social.youtube, color: 'hover:text-your-orange' },
 ];
 
 const ConnectSection = () => {
   return (
-    <section id="connect" className="py-12 bg-desi-black relative">
+    <section id="connect" className="py-12 bg-your-black relative">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Left Grid - Content */}
@@ -54,14 +54,14 @@ const ConnectSection = () => {
                 <h3 className="text-xl font-display font-bold mb-6 text-white">Contact Information</h3>
                 
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-desi-orange mt-1 flex-shrink-0" />
+                  <MapPin className="w-5 h-5 text-your-orange mt-1 flex-shrink-0" />
                   <div>
                     <p className="font-medium text-white">Location</p>
                     <a 
                       href={siteConfig.mapsLink} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-gray-300 hover:text-desi-orange transition-colors flex items-center gap-1 group"
+                      className="text-gray-300 hover:text-your-orange transition-colors flex items-center gap-1 group"
                     >
                       <span>{siteConfig.addressDisplay}</span>
                       <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -70,14 +70,14 @@ const ConnectSection = () => {
                 </div>
                 
                 <div className="flex items-start gap-3">
-                  <Phone className="w-5 h-5 text-desi-orange mt-1 flex-shrink-0" />
+                  <Phone className="w-5 h-5 text-your-orange mt-1 flex-shrink-0" />
                   <div>
                     <p className="font-medium text-white">Phone</p>
                     <a 
                       href={`https://wa.me/${siteConfig.whatsappDigits}`} 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="text-gray-300 hover:text-desi-orange transition-colors flex items-center gap-1 group"
+                      className="text-gray-300 hover:text-your-orange transition-colors flex items-center gap-1 group"
                     >
                       <span>{siteConfig.phoneDisplay}</span>
                       <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -86,12 +86,12 @@ const ConnectSection = () => {
                 </div>
                 
                 <div className="flex items-start gap-3">
-                  <Mail className="w-5 h-5 text-desi-orange mt-1 flex-shrink-0" />
+                  <Mail className="w-5 h-5 text-your-orange mt-1 flex-shrink-0" />
                   <div>
                     <p className="font-medium text-white">Email</p>
                     <a 
                       href={`mailto:${siteConfig.emailContact}`} 
-                      className="text-gray-300 hover:text-desi-orange transition-colors flex items-center gap-1 group"
+                      className="text-gray-300 hover:text-your-orange transition-colors flex items-center gap-1 group"
                     >
                       <span>{siteConfig.emailContact}</span>
                       <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -100,7 +100,7 @@ const ConnectSection = () => {
                 </div>
                 
                 <div className="flex items-start gap-3">
-                  <Clock className="w-5 h-5 text-desi-orange mt-1 flex-shrink-0" />
+                  <Clock className="w-5 h-5 text-your-orange mt-1 flex-shrink-0" />
                   <div>
                     <p className="font-medium text-white">Hours</p>
                     <p className="text-gray-300">{siteConfig.hoursLine1}: </p>
@@ -121,7 +121,7 @@ const ConnectSection = () => {
                       href={social.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className={`text-white hover:text-desi-orange transition-colors`}
+                      className={`text-white hover:text-your-orange transition-colors`}
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
                       initial={{ opacity: 0, y: 20 }}

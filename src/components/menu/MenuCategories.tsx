@@ -3,7 +3,7 @@ const MenuCategories = () => {
     <div className="w-full bg-orange-50">
       <div className="container mx-auto px-4 py-6">
         <div className="text-center">
-          <p className="text-2xl font-bold text-desi-orange mb-6 mt-5">Available on your favorite delivery platforms:</p>
+          <p className="text-2xl font-bold text-your-orange mb-6 mt-5">Available on your favorite delivery platforms:</p>
           <div className="flex flex-wrap items-center justify-center gap-6">
             <a 
               href="http://menus.fyi/10883320" 
@@ -20,7 +20,7 @@ const MenuCategories = () => {
               />
             </a>
             <a 
-              href="https://order.online/business/desi-flavors-katy-14145277" 
+              href="https://order.online/business/your-brand-14145277" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="transform transition-transform duration-300 hover:scale-110 block"
@@ -34,7 +34,7 @@ const MenuCategories = () => {
               />
             </a>
             <a 
-              href="https://www.order.store/store/desi-flavors-katy-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g" 
+              href="https://www.order.store/store/your-brand-1989-fry-road/drrAdlMVTTin4O0Bdvzo2g" 
               target="_blank" 
               rel="noopener noreferrer" 
               className="transform transition-transform duration-300 hover:scale-110 block"

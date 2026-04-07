@@ -122,11 +122,11 @@ ${formData.message}
       transition={{ duration: 0.6 }}
       className="relative max-w-3xl mx-auto"
     >
-      <div className="absolute inset-0 bg-gradient-to-br from-desi-orange/5 via-white to-transparent rounded-2xl"></div>
+      <div className="absolute inset-0 bg-gradient-to-br from-your-orange/5 via-white to-transparent rounded-2xl"></div>
       
       <form onSubmit={handleSubmit} className="relative space-y-8 bg-white/90 p-8 md:p-10 rounded-2xl shadow-xl border border-gray-100">
         <div className="space-y-2 text-center mb-8">
-          <h3 className="text-2xl font-display font-bold text-desi-black">Get in Touch</h3>
+          <h3 className="text-2xl font-display font-bold text-your-black">Get in Touch</h3>
           <p className="text-gray-600">Fill out the form below and we'll get back to you as soon as possible.</p>
         </div>
 
@@ -139,7 +139,7 @@ ${formData.message}
           >
             <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Name</label>
             <div className="relative">
-              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-desi-orange/80 group-focus-within:text-desi-orange transition-colors z-10" size={20} />
+              <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-your-orange/80 group-focus-within:text-your-orange transition-colors z-10" size={20} />
               <input
                 id="name"
                 type="text"
@@ -148,7 +148,7 @@ ${formData.message}
                 onChange={handleChange}
                 placeholder="John Doe"
                 required
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-desi-orange focus:ring-2 focus:ring-desi-orange/20 transition-all bg-white"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-your-orange focus:ring-2 focus:ring-your-orange/20 transition-all bg-white"
               />
             </div>
           </motion.div>
@@ -161,7 +161,7 @@ ${formData.message}
           >
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">Email</label>
             <div className="relative">
-              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-desi-orange/80 group-focus-within:text-desi-orange transition-colors z-10" size={20} />
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-your-orange/80 group-focus-within:text-your-orange transition-colors z-10" size={20} />
               <input
                 id="email"
                 type="email"
@@ -170,7 +170,7 @@ ${formData.message}
                 onChange={handleChange}
                 placeholder="john@example.com"
                 required
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-desi-orange focus:ring-2 focus:ring-desi-orange/20 transition-all bg-white"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-your-orange focus:ring-2 focus:ring-your-orange/20 transition-all bg-white"
               />
             </div>
           </motion.div>
@@ -183,7 +183,7 @@ ${formData.message}
           >
             <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
             <div className="relative">
-              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-desi-orange/80 group-focus-within:text-desi-orange transition-colors z-10" size={20} />
+              <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-your-orange/80 group-focus-within:text-your-orange transition-colors z-10" size={20} />
               <input
                 id="phone"
                 type="tel"
@@ -192,7 +192,7 @@ ${formData.message}
                 onChange={handleChange}
                 placeholder="(123) 456-7890"
                 required
-                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-desi-orange focus:ring-2 focus:ring-desi-orange/20 transition-all bg-white"
+                className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-your-orange focus:ring-2 focus:ring-your-orange/20 transition-all bg-white"
               />
             </div>
           </motion.div>
@@ -205,13 +205,13 @@ ${formData.message}
           >
             <label htmlFor="event_type" className="block text-sm font-medium text-gray-700 mb-1">Event Type</label>
             <div className="relative">
-              <SelectedEventIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-desi-orange/80 group-focus-within:text-desi-orange transition-colors z-10" size={20} />
+              <SelectedEventIcon className="absolute left-3 top-1/2 transform -translate-y-1/2 text-your-orange/80 group-focus-within:text-your-orange transition-colors z-10" size={20} />
               <select
                 id="event_type"
                 name="event_type"
                 value={formData.event_type}
                 onChange={handleChange}
-                className="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-200 focus:border-desi-orange focus:ring-2 focus:ring-desi-orange/20 transition-all bg-white appearance-none cursor-pointer"
+                className="w-full pl-10 pr-10 py-3 rounded-xl border border-gray-200 focus:border-your-orange focus:ring-2 focus:ring-your-orange/20 transition-all bg-white appearance-none cursor-pointer"
               >
                 {eventOptions.map((option) => {
                   const Icon = option.icon;
@@ -235,7 +235,7 @@ ${formData.message}
         >
           <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">Message</label>
           <div className="relative">
-            <MessageSquare className="absolute left-3 top-3 text-desi-orange/80 group-focus-within:text-desi-orange transition-colors" size={20} />
+            <MessageSquare className="absolute left-3 top-3 text-your-orange/80 group-focus-within:text-your-orange transition-colors" size={20} />
             <textarea
               id="message"
               name="message"
@@ -244,7 +244,7 @@ ${formData.message}
               placeholder="How can we help you?"
               required
               rows={4}
-              className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-desi-orange focus:ring-2 focus:ring-desi-orange/20 transition-all bg-white"
+              className="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:border-your-orange focus:ring-2 focus:ring-your-orange/20 transition-all bg-white"
             />
           </div>
         </motion.div>
@@ -261,9 +261,9 @@ ${formData.message}
             name="subscribe_newsletter"
             checked={formData.subscribe_newsletter}
             onChange={(e) => setFormData(prev => ({ ...prev, subscribe_newsletter: e.target.checked }))}
-            className="h-5 w-5 rounded border-gray-300 text-desi-orange focus:ring-desi-orange"
+            className="h-5 w-5 rounded border-gray-300 text-your-orange focus:ring-your-orange"
           />
-          <label htmlFor="subscribe_newsletter" className="text-sm text-desi-black">
+          <label htmlFor="subscribe_newsletter" className="text-sm text-your-black">
             Subscribe to our newsletter for exclusive promotions and special offers.
           </label>
         </motion.div>
@@ -296,7 +296,7 @@ ${formData.message}
           transition={{ duration: 0.4, delay: 0.6 }}
           type="submit"
           disabled={isSubmitting}
-          className="w-full bg-desi-orange hover:bg-desi-orange/90 text-white px-8 py-4 rounded-full 
+          className="w-full bg-your-orange hover:bg-your-orange/90 text-white px-8 py-4 rounded-full 
             font-medium transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5
             disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
         >
@@ -317,7 +317,7 @@ ${formData.message}
               </>
             )}
           </span>
-          <div className="absolute inset-0 bg-gradient-to-r from-desi-orange to-desi-orange/80 opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute inset-0 bg-gradient-to-r from-your-orange to-your-orange/80 opacity-0 group-hover:opacity-100 transition-opacity" />
         </motion.button>
       </form>
     </motion.div>

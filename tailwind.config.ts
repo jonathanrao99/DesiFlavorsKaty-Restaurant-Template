@@ -53,7 +53,7 @@ export default {
     				DEFAULT: 'hsl(var(--card))',
     				foreground: 'hsl(var(--card-foreground))'
     			},
-    			desi: {
+    			your: {
     				black: '#111111',
     				orange: '#FF6B35',
     				cream: '#FFF8F0',

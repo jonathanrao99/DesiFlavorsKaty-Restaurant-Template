@@ -106,7 +106,7 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    @apply selection:bg-desi-orange selection:text-white;
+    @apply selection:bg-your-orange selection:text-white;
     margin: 0;
     padding: 0;
     min-height: 100vh;
@@ -187,7 +187,7 @@
 
   /* Navigation styles */
   .nav-link {
-    @apply transition-colors duration-200 hover:text-desi-orange;
+    @apply transition-colors duration-200 hover:text-your-orange;
     position: relative;
   }
 
@@ -235,9 +235,9 @@
 
   /* Button styles */
   .btn-primary {
-    @apply bg-desi-orange text-white px-6 py-3 rounded-lg font-semibold;
-    @apply hover:bg-desi-orange/90 transition-colors duration-200;
-    @apply focus:ring-2 focus:ring-desi-orange/50 focus:outline-none;
+    @apply bg-your-orange text-white px-6 py-3 rounded-lg font-semibold;
+    @apply hover:bg-your-orange/90 transition-colors duration-200;
+    @apply focus:ring-2 focus:ring-your-orange/50 focus:outline-none;
   }
 
   .btn-secondary {
@@ -298,7 +298,7 @@
   }
 
   .focus-visible {
-    @apply focus:outline-none focus:ring-2 focus:ring-desi-orange/50 focus:ring-offset-2;
+    @apply focus:outline-none focus:ring-2 focus:ring-your-orange/50 focus:ring-offset-2;
   }
 }
 

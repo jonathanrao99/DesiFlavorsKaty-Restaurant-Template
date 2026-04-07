@@ -59,7 +59,7 @@ const MagneticButton = ({ children, className = "", onClick }: {
         damping: 20,
         mass: 0.5
       }}
-      className={`px-6 py-3 rounded-xl font-semibold bg-desi-orange text-white shadow-lg hover:shadow-2xl transition ${className}`}
+      className={`px-6 py-3 rounded-xl font-semibold bg-your-orange text-white shadow-lg hover:shadow-2xl transition ${className}`}
     >
       {children}
     </motion.button>

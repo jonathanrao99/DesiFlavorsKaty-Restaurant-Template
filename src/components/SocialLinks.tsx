@@ -28,37 +28,37 @@ const SocialLinks = ({ iconSize = 18, spacing = "space-x-2", iconColor = "text-g
   return (
     <div className={`flex ${spacing}`}>
       <a
-        href="https://facebook.com/desiflavors"
+        href="https://facebook.com/yourflavors"
         target="_blank"
         rel="noopener noreferrer"
-        className={`${iconColor} hover:text-desi-orange transition-colors`}
+        className={`${iconColor} hover:text-your-orange transition-colors`}
         aria-label="Facebook"
       >
         <Facebook size={iconSize} />
       </a>
       <a
-        href="https://instagram.com/desiflavors"
+        href="https://instagram.com/yourflavors"
         target="_blank"
         rel="noopener noreferrer"
-        className={`${iconColor} hover:text-desi-orange transition-colors`}
+        className={`${iconColor} hover:text-your-orange transition-colors`}
         aria-label="Instagram"
       >
         <Instagram size={iconSize} />
       </a>
       <a
-        href="https://x.com/desiflavors"
+        href="https://x.com/yourflavors"
         target="_blank"
         rel="noopener noreferrer"
-        className={`${iconColor} hover:text-desi-orange transition-colors`}
+        className={`${iconColor} hover:text-your-orange transition-colors`}
         aria-label="X (formerly Twitter)"
       >
         <XIcon size={iconSize} />
       </a>
       <a
-        href="https://youtube.com/desiflavors"
+        href="https://youtube.com/yourflavors"
         target="_blank"
         rel="noopener noreferrer"
-        className={`${iconColor} hover:text-desi-orange transition-colors`}
+        className={`${iconColor} hover:text-your-orange transition-colors`}
         aria-label="YouTube"
       >
         <Youtube size={iconSize} />
@@ -67,7 +67,7 @@ const SocialLinks = ({ iconSize = 18, spacing = "space-x-2", iconColor = "text-g
         href="https://wa.me/13468244212"
         target="_blank"
         rel="noopener noreferrer"
-        className={`${iconColor} hover:text-desi-orange transition-colors`}
+        className={`${iconColor} hover:text-your-orange transition-colors`}
         aria-label="WhatsApp"
       >
         <svg 

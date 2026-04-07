@@ -2,13 +2,13 @@
 
 **Use this as a GitHub template:** see **[TEMPLATE.md](./TEMPLATE.md)** for the full checklist (env vars, content to replace, deploy).
 
-**Demo / live example:** [desiflavorskaty.vercel.app](https://desiflavorskaty.vercel.app) (Desi Flavors Katy).
+**Demo / live example:** [yourflavorskaty.vercel.app](https://yourflavorskaty.vercel.app) (your brand).
 
 ---
 
 Brand, contact, social, SEO, and JSON-LD are driven by **`NEXT_PUBLIC_*` environment variables** (see `.env.example`). After creating a new repo from the template, copy `.env.example` → `.env.local`, fill in your values, and mirror them in Vercel.
 
-This codebase was originally built for **Desi Flavors Katy** (Indian street food in Katy, Texas). Fork it, change the env and content, and make it yours.
+This codebase was originally built for **your brand** (Indian street food in Katy, Texas). Fork it, change the env and content, and make it yours.
 
 If you are a developer: hi, thanks for reading. If you are here because someone dropped a GitHub link in your lap with zero explanation: also hi. The food is real, the truck is real, and the menu has opinions.
 
@@ -20,7 +20,7 @@ If you are a developer: hi, thanks for reading. If you are here because someone 
 - **Catering** — For when your office or your cousin’s wedding needs trays, not tiny samples  
 - **Order** — Big friendly buttons that send people to Square and the delivery apps so nobody gets lost  
 
-We are not trying to win a minimalist design award for an empty white page. We are trying to make you hungry and then hand you a link.
+We are not trying to win a minimalist yourgn award for an empty white page. We are trying to make you hungry and then hand you a link.
 
 ## Stack, but make it quick
 
@@ -56,6 +56,10 @@ Copy `.env.example` to `.env.local` and add at least `NEXT_PUBLIC_GOOGLE_MAPS_AP
 ## Cool people disclaimer
 
 Contributions and issues are welcome if you are fixing a bug or making the experience better for guests. Drive-by refactors that “simplify” the brand voice into corporate oatmeal will be read with the same suspicion as unsalted butter.
+
+## License
+
+Released under the [MIT License](LICENSE). You can use this template for your own restaurant, client work, or learning—just keep the copyright and license notice in copies of the source you distribute. If you fork for a new brand, updating the copyright line in `LICENSE` for your own project is fine.
 
 ---
 

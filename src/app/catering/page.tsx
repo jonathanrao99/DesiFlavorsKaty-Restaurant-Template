@@ -108,9 +108,9 @@ const Catering = () => {
   };
 
   return (
-    <div className="bg-desi-cream">
+    <div className="bg-your-cream">
       {/* Hero Section */}
-      <section className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-desi-black">
+      <section className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-your-black">
         <motion.div
           className="absolute inset-0 z-0 will-change-transform"
           initial={{ scale: 1, x: 0, y: 0 }}
@@ -148,7 +148,7 @@ const Catering = () => {
               className="mb-6 md:mb-8"
             >
               <h1 className="text-4xl md:text-4xl lg:text-7xl font-display font-bold tracking-tight leading-tight">
-                <span className="text-desi-orange block">Catering Your Events</span>
+                <span className="text-your-orange block">Catering Your Events</span>
               </h1>
             </motion.div>
 
@@ -182,14 +182,14 @@ const Catering = () => {
             >
               <div className="absolute -left-10 -top-10 w-32 h-32 bg-gradient-to-br from-yellow-100/40 via-orange-100/20 to-white/0 rounded-full blur-2xl opacity-60 -z-10" />
 
-              <h3 className="text-3xl md:text-4xl font-display font-bold text-desi-orange mb-4 drop-shadow-sm">
+              <h3 className="text-3xl md:text-4xl font-display font-bold text-your-orange mb-4 drop-shadow-sm">
                 Catering Services
               </h3>
 
-              <p className="text-lg md:text-xl text-desi-black mb-4 font-medium">
-              Bring the vibrant taste of India to your next event with <span className="font-samarkan font-bold text-2xl text-desi-orange">Desi</span> <span className="font-semibold text-desi-black">Flavors Katy</span>. Our handcrafted dishes and heartfelt hospitality make every celebration unforgettable — whether it’s an intimate gathering or a grand occasion.
+              <p className="text-lg md:text-xl text-your-black mb-4 font-medium">
+              Bring the vibrant taste of India to your next event with <span className="font-samarkan font-bold text-2xl text-your-orange">your</span> <span className="font-semibold text-your-black">brand</span>. Our handcrafted dishes and heartfelt hospitality make every celebration unforgettable — whether it’s an intimate gathering or a grand occasion.
               </p>
-              <p className="text-lg md:text-xl text-desi-black mb-4 font-medium">
+              <p className="text-lg md:text-xl text-your-black mb-4 font-medium">
               We don’t just cater meals — we deliver an experience.
               </p>
 
@@ -197,7 +197,7 @@ const Catering = () => {
                 variants={listContainer}
                 initial="hidden"
                 animate="visible"
-                className="list-disc pl-5 text-desi-black space-y-3 text-base md:text-lg font-medium"
+                className="list-disc pl-5 text-your-black space-y-3 text-base md:text-lg font-medium"
               >
                 <motion.li variants={listItem}>
                   📋 Customizable menus for weddings, corporate events, festivals, and private celebrations.
@@ -240,10 +240,10 @@ const Catering = () => {
 
         {/* Tray Pricing Download */}
         <section className="text-center">
-          <h2 className="text-3xl font-display font-bold text-desi-black mb-4">
+          <h2 className="text-3xl font-display font-bold text-your-black mb-4">
             Tray Pricing
           </h2>
-          <p className="text-desi-black mb-4 text-2xl font-medium font-semibold max-w-3xl mx-auto">
+          <p className="text-your-black mb-4 text-2xl font-medium font-semibold max-w-3xl mx-auto">
             Don't need our food truck at your event?{' '}
             <motion.span
               initial={{ y: 1 }}
@@ -261,7 +261,7 @@ const Catering = () => {
 
           <p className="text-gray-600 text-lg font-medium max-w-3xl mx-auto">
             Fill out the{' '}
-            <a href="/#connect" className="text-desi-orange underline hover:opacity-80 font-semibold">
+            <a href="/#connect" className="text-your-orange underline hover:opacity-80 font-semibold">
               Connect With Us
             </a>{' '}
             form below to inquire about tray pricing and place your order.
@@ -272,27 +272,27 @@ const Catering = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-stretch">
             {/* Contact Information */}
             <section className="bg-white rounded-xl shadow-lg pt-12 pb-12 px-6 h-full flex flex-col space-y-6">
-              <h2 className="text-3xl font-display font-bold text-desi-black mb-8 text-center">
+              <h2 className="text-3xl font-display font-bold text-your-black mb-8 text-center">
                 Connect With Us
               </h2>
 
               {/* Phone & Email side-by-side */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="flex items-center justify-center space-x-4">
-                  <Phone className="h-6 w-6 text-desi-orange" />
+                  <Phone className="h-6 w-6 text-your-orange" />
                   <a
                     href={`tel:${siteConfig.phoneE164.replace(/\D/g, '')}`}
-                    className="text-gray-700 hover:text-desi-orange font-medium text-lg"
+                    className="text-gray-700 hover:text-your-orange font-medium text-lg"
                   >
                     {siteConfig.phoneDisplay}
                   </a>
                 </div>
 
                 <div className="flex items-center space-x-4">
-                  <Mail className="h-6 w-6 text-desi-orange" />
+                  <Mail className="h-6 w-6 text-your-orange" />
                   <a
                     href={`mailto:${siteConfig.emailContact}`}
-                    className="text-gray-700 hover:text-desi-orange font-medium text-lg"
+                    className="text-gray-700 hover:text-your-orange font-medium text-lg"
                   >
                     {siteConfig.emailContact}
                   </a>
@@ -301,12 +301,12 @@ const Catering = () => {
 
               {/* Centered Location */}
               <div className="flex items-center justify-center space-x-4">
-                <MapPin className="h-6 w-6 text-desi-orange" />
+                <MapPin className="h-6 w-6 text-your-orange" />
                 <a
                   href={siteConfig.mapsLink}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-gray-700 hover:text-desi-orange text-center font-medium text-lg"
+                  className="text-gray-700 hover:text-your-orange text-center font-medium text-lg"
                 >
                   {siteConfig.addressDisplay}
                 </a>
@@ -314,7 +314,7 @@ const Catering = () => {
             </section>
 
             {/* Get a Quote CTA */}
-            <section className="pt-12 pb-12 rounded-xl bg-desi-orange overflow-hidden flex items-center justify-center h-full">
+            <section className="pt-12 pb-12 rounded-xl bg-your-orange overflow-hidden flex items-center justify-center h-full">
               <div className="relative z-10 max-w-xl mx-auto px-6 md:px-10 text-center space-y-4">
                 <h3 className="text-3xl font-display text-white font-bold">
                   Get a Custom Quote
@@ -326,7 +326,7 @@ const Catering = () => {
                   onClick={handleQuoteClick}
                   pulseColor="rgba(255,255,255,0.5)"
                   duration="4s"
-                  className="mx-auto block px-6 py-3 bg-white text-desi-black font-semibold rounded-xl shadow-lg"
+                  className="mx-auto block px-6 py-3 bg-white text-your-black font-semibold rounded-xl shadow-lg"
                 >
                   Get a Quote
                 </PulsatingButton>

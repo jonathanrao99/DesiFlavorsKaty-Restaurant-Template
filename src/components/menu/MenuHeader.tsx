@@ -20,7 +20,7 @@ const MenuHeader = () => {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-desi-black"
+      className="relative min-h-[70svh] flex items-center justify-center overflow-hidden bg-your-black"
     >
       <motion.div
         style={{ scale, opacity }}
@@ -30,7 +30,7 @@ const MenuHeader = () => {
         <div className="absolute inset-0 bg-black/40 z-10"></div>
         <img
           src="/Food/foodtable.webp"
-          alt="Desi Flavors Food Table"
+          alt="your Flavors Food Table"
           className="transform-gpu object-cover absolute inset-0 w-full h-full"
           style={{ objectFit: 'cover', width: '100%', height: '100%' }}
         />
