@@ -1,6 +1,6 @@
 # 🤖 AI Chatbot Recommendations for Desi Flavors Katy
 
-## Top 5 AI Chatbot Solutions (Best to Good)
+## Top 4 AI Chatbot Solutions (Best to Good)
 
 ---
 
@@ -127,31 +127,6 @@
 
 ---
 
-## 🎯 **5. Crisp with AI Assist** ⭐⭐⭐⭐
-**Great Free Option**
-
-### Why It's Good:
-- ✅ **Forever free** plan available
-- ✅ Unlimited conversations
-- ✅ AI assistant powered by GPT
-- ✅ Shared inbox for team
-- ✅ Mobile apps
-- ✅ Email integration
-- ✅ Clean, modern interface
-
-### Pricing:
-- **Free:** Unlimited messages, 2 operators
-- **Pro ($25/month/operator):** Advanced features
-- **Unlimited ($95/month/operator):** Everything
-
-### Setup Time: **10 minutes**
-
-### Perfect For: Small businesses on budget
-
-### Sign Up: [crisp.chat](https://crisp.chat/)
-
----
-
 ## 🎖️ **RECOMMENDED: Tidio for You**
 
 ### Why Tidio is Perfect for Desi Flavors:
@@ -268,18 +243,18 @@ Option 3: "🌶️ Hi there! Looking for biryani, curry, or something else?"
 
 ## 📊 Comparison Table
 
-| Feature | Tidio | Voiceflow | Chatbase | Crisp |
-|---------|-------|-----------|----------|-------|
-| **Free Plan** | ✅ 50 chats | ✅ 100 msgs | ✅ 30 msgs | ✅ Unlimited |
-| **GPT Integration** | ✅ | ✅ | ✅ GPT-4 | ✅ |
-| **Menu Training** | ✅ Easy | ✅ Custom | ✅ PDF | ⚠️ Manual |
-| **Order Integration** | ✅ | ✅ | ❌ | ⚠️ Limited |
-| **Mobile App** | ✅ | ✅ | ✅ | ✅ |
-| **WhatsApp** | ✅ | ✅ | ❌ | ✅ |
-| **Analytics** | ✅ | ✅✅ | ✅ | ✅ |
-| **Setup Time** | 10 min | 30 min | 15 min | 10 min |
-| **Paid Plan** | $29/mo | $40/mo | $19/mo | $25/mo |
-| **Best For** | Restaurants | Custom needs | Data training | Budget |
+| Feature | Tidio | Voiceflow | Chatbase |
+|---------|-------|-----------|----------|
+| **Free Plan** | ✅ 50 chats | ✅ 100 msgs | ✅ 30 msgs |
+| **GPT Integration** | ✅ | ✅ | ✅ GPT-4 |
+| **Menu Training** | ✅ Easy | ✅ Custom | ✅ PDF |
+| **Order Integration** | ✅ | ✅ | ❌ |
+| **Mobile App** | ✅ | ✅ | ✅ |
+| **WhatsApp** | ✅ | ✅ | ❌ |
+| **Analytics** | ✅ | ✅✅ | ✅ |
+| **Setup Time** | 10 min | 30 min | 15 min |
+| **Paid Plan** | $29/mo | $40/mo | $19/mo |
+| **Best For** | Restaurants | Custom needs | Data training |
 
 ---
 
@@ -360,7 +335,7 @@ Would you like to:
 
 ## 🆚 DIY vs Professional
 
-### DIY Chatbot (Tidio/Crisp):
+### DIY Chatbot (Tidio):
 - ✅ $0-30/month
 - ✅ Easy setup
 - ✅ Good for most questions
@@ -394,11 +369,6 @@ Would you like to:
 - Want ultra-accurate answers
 - Need GPT-4 power
 
-### 🥉 **Crisp** - Budget option
-- If you want free forever
-- Basic AI is enough
-- Team collaboration needed
-
 ---
 
 ## 📞 Ready to Set Up?
@@ -406,7 +376,6 @@ Would you like to:
 Choose your chatbot:
 1. **Tidio** → Sign up → Get code → Send to me
 2. **Chatbase** → Upload menu → Get code → Send to me
-3. **Crisp** → Create account → Get code → Send to me
 
 **I'll integrate it in minutes!** 🚀
 

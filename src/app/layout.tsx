@@ -146,17 +146,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           src="https://unpkg.com/@googlemaps/places-autocomplete-element@latest/dist/index.min.js"
           async
         ></script>
-        <script type="text/javascript" dangerouslySetInnerHTML={{ __html: `
-          window.$crisp=[];
-          window.CRISP_WEBSITE_ID="1421e060-c514-45cf-8dcf-ae477f8b5cf9";
-          (function(){
-            d=document;
-            s=d.createElement("script");
-            s.src="https://client.crisp.chat/l.js";
-            s.async=1;
-            d.getElementsByTagName("head")[0].appendChild(s);
-          })();
-        ` }} />
       </head>
       <body>
         <a href="#main-content" className="skip-link sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 bg-desi-orange text-white px-4 py-2 rounded shadow transition-all">Skip to main content</a>

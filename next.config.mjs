@@ -1,4 +1,16 @@
 /** @type {import('next').NextConfig} */
+function supabaseImageHostname() {
+  const raw = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  if (!raw) return null;
+  try {
+    return new URL(raw).hostname;
+  } catch {
+    return null;
+  }
+}
+
+const supabaseHostname = supabaseImageHostname();
+
 const nextConfig = {
   output: 'export',
   trailingSlash: false,
@@ -14,7 +26,7 @@ const nextConfig = {
   images: {
     unoptimized: true, // Required for static export
     domains: [
-      new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname,
+      ...(supabaseHostname ? [supabaseHostname] : []),
       'images.unsplash.com',
     ],
     remotePatterns: [
@@ -24,12 +36,16 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
-      {
-        protocol: 'https',
-        hostname: new URL(process.env.NEXT_PUBLIC_SUPABASE_URL).hostname,
-        port: '',
-        pathname: '/storage/v1/**',
-      },
+      ...(supabaseHostname
+        ? [
+            {
+              protocol: 'https',
+              hostname: supabaseHostname,
+              port: '',
+              pathname: '/storage/v1/**',
+            },
+          ]
+        : []),
     ],
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
