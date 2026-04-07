@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
+import { SITE_URL } from '@/lib/siteUrl';
 import MenuHeader from '@/components/menu/MenuHeader';
 import MenuCategories from '@/components/menu/MenuCategories';
 import MenuNotes from '@/components/menu/MenuNotes';
@@ -24,7 +25,7 @@ export const metadata: Metadata = {
     description: 'Explore our authentic Indian street food menu featuring biryani, curries, tandoori dishes, and traditional Indian cuisine.',
     images: [
       {
-        url: 'https://www.desiflavorskaty.com/Food/foodtable.webp',
+        url: `${SITE_URL}/Food/foodtable.webp`,
         width: 1200,
         height: 630,
         alt: 'Authentic Indian Food Menu at Desi Flavors Katy',

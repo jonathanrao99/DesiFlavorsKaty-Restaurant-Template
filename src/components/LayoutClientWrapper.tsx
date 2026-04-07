@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Analytics as VercelAnalytics } from '@vercel/analytics/react';
 import Analytics from '@/components/Analytics';
 import Navbar from '@/components/Navbar';
@@ -9,13 +9,6 @@ import PageTransitionWrapper from '@/components/PageTransitionWrapper';
 import OrderNowButton from '@/components/OrderNowButton';
 
 export default function LayoutClientWrapper({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator && process.env.NODE_ENV === 'production') {
-      navigator.serviceWorker.register('/sw.js').catch((err) => {
-        console.warn('Service worker registration failed:', err);
-      });
-    }
-  }, []);
   return (
     <>
       <VercelAnalytics />

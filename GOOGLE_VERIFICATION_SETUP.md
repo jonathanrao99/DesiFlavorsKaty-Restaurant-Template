@@ -5,7 +5,7 @@
 ### Option A: If You Already Have Google Search Console
 1. Go to [Google Search Console](https://search.google.com/search-console)
 2. Click "Add Property"
-3. Enter your website URL: `https://www.desiflavorskaty.com`
+3. Enter your website URL: `https://desiflavorskaty.vercel.app`
 4. Choose verification method: **HTML tag**
 5. Copy the code that looks like: `<meta name="google-site-verification" content="YOUR_VERIFICATION_CODE_HERE" />`
 6. Extract just the code part (the long string after `content="` and before `"`)
@@ -15,7 +15,7 @@
 2. Sign in with your Google account (use your business email)
 3. Click "Start Now" or "Add Property"
 4. Choose "URL prefix" property type
-5. Enter: `https://www.desiflavorskaty.com`
+5. Enter: `https://desiflavorskaty.vercel.app`
 6. Click "Continue"
 7. Select "HTML tag" verification method
 8. Copy your verification code
@@ -84,7 +84,7 @@ npm run build
 Once verified:
 
 1. In Google Search Console, go to **Sitemaps** (left sidebar)
-2. Enter: `https://www.desiflavorskaty.com/sitemap.xml`
+2. Enter: `https://desiflavorskaty.vercel.app/sitemap.xml`
 3. Click "Submit"
 4. Wait 24-48 hours for Google to crawl your site
 

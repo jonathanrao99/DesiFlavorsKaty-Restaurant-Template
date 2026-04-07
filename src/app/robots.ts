@@ -1,8 +1,9 @@
 import { MetadataRoute } from 'next';
+import { SITE_URL } from '@/lib/siteUrl';
 
 export const dynamic = 'force-static';
 
-const host = 'https://www.desiflavorskaty.com';
+const host = SITE_URL;
 
 /** Broad allow-list so search engines and AI crawlers can index and cite the site. */
 export default function robots(): MetadataRoute.Robots {

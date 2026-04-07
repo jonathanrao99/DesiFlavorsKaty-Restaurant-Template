@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { SITE_URL } from '@/lib/siteUrl';
 
 export const metadata: Metadata = {
   title: 'Catering Services - Indian Food Catering Katy TX',
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     description: 'Professional Indian food catering services in Katy, TX. Perfect for corporate events, weddings, and private parties.',
     images: [
       {
-        url: 'https://www.desiflavorskaty.com/Truck/IMG-20250603-WA0005.jpg',
+        url: `${SITE_URL}/Truck/IMG-20250603-WA0005.jpg`,
         width: 1200,
         height: 630,
         alt: 'Indian Food Catering Services at Desi Flavors Katy',

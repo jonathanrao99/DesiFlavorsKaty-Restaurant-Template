@@ -9,17 +9,17 @@
 - **Area**: Serves Katy, TX and the greater Houston metro
 - **Phone**: +1-346-824-4212
 - **Email**: info@desiflavorskaty.com
-- **Website**: https://www.desiflavorskaty.com
+- **Website**: https://desiflavorskaty.vercel.app
 - **Order online**: https://desiflavorskaty.square.site/
 - **Hours** (verify on site): Typically evening / late-night service; see website for current hours and truck schedule
 
 ## Primary pages
 
-- Home: https://www.desiflavorskaty.com/
-- Menu: https://www.desiflavorskaty.com/menu
-- About: https://www.desiflavorskaty.com/about
-- Catering: https://www.desiflavorskaty.com/catering
-- Order tracking: https://www.desiflavorskaty.com/track
+- Home: https://desiflavorskaty.vercel.app/
+- Menu: https://desiflavorskaty.vercel.app/menu
+- About: https://desiflavorskaty.vercel.app/about
+- Catering: https://desiflavorskaty.vercel.app/catering
+- Order tracking: https://desiflavorskaty.vercel.app/track
 
 ## Social
 

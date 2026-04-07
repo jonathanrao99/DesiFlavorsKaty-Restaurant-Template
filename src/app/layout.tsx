@@ -3,8 +3,7 @@ import '../index.css';
 import type { Metadata, Viewport } from 'next';
 import { inter, merriweather } from './fonts';
 import LayoutClientWrapper from '@/components/LayoutClientWrapper';
-
-const siteUrl = 'https://www.desiflavorskaty.com';
+import { SITE_URL } from '@/lib/siteUrl';
 
 const restaurantJsonLd = {
   '@context': 'https://schema.org',
@@ -13,11 +12,11 @@ const restaurantJsonLd = {
   description:
     'Authentic Indian street food served daily from our food truck in Katy, TX. Specializing in biryani, curries, and traditional Indian dishes.',
   image: [
-    `${siteUrl}/Truck/truck-4.jpg`,
-    `${siteUrl}/Truck/truck-3.jpg`,
-    `${siteUrl}/Food/foodtable.webp`,
+    `${SITE_URL}/Truck/truck-4.jpg`,
+    `${SITE_URL}/Truck/truck-3.jpg`,
+    `${SITE_URL}/Food/foodtable.webp`,
   ],
-  url: siteUrl,
+  url: SITE_URL,
   telephone: '+1-346-824-4212',
   email: 'info@desiflavorskaty.com',
   address: {
@@ -50,7 +49,7 @@ const restaurantJsonLd = {
   servesCuisine: ['Indian', 'South Asian', 'Desi'],
   priceRange: '$$',
   paymentAccepted: ['Cash', 'Credit Card', 'DoorDash', 'Grubhub', 'Uber Eats'],
-  hasMenu: `${siteUrl}/menu`,
+  hasMenu: `${SITE_URL}/menu`,
   acceptsReservations: false,
   currenciesAccepted: 'USD',
   sameAs: [
@@ -68,14 +67,14 @@ const websiteJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebSite',
   name: 'Desi Flavors Katy',
-  url: siteUrl,
+  url: SITE_URL,
   description:
     'Authentic Indian street food in Katy, TX — biryani, curries, and Indian street food. Order online or find the food truck.',
   inLanguage: 'en-US',
   publisher: {
     '@type': 'Organization',
     name: 'Desi Flavors Katy',
-    url: siteUrl,
+    url: SITE_URL,
   },
 } as const;
 
@@ -120,7 +119,7 @@ export const metadata: Metadata = {
     address: false,
     telephone: false,
   },
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   alternates: {
     canonical: '/',
   },
@@ -129,19 +128,19 @@ export const metadata: Metadata = {
     title: 'Desi Flavors Katy | Authentic Indian Street Food',
     description:
       'Desi Flavors Katy - Authentic Indian street food served daily from our food truck in Katy, TX. Order online from DoorDash, Grubhub, and Uber Eats!',
-    url: siteUrl,
+    url: SITE_URL,
     siteName: 'Desi Flavors Katy',
     type: 'website',
     locale: 'en_US',
     images: [
       {
-        url: `${siteUrl}/Truck/truck-4.jpg`,
+        url: `${SITE_URL}/Truck/truck-4.jpg`,
         width: 1200,
         height: 630,
         alt: 'Desi Flavors Katy Food Truck',
       },
       {
-        url: `${siteUrl}/Food/foodtable.webp`,
+        url: `${SITE_URL}/Food/foodtable.webp`,
         width: 1200,
         height: 630,
         alt: 'Authentic Indian Food at Desi Flavors Katy',
@@ -153,7 +152,7 @@ export const metadata: Metadata = {
     title: 'Desi Flavors Katy | Authentic Indian Street Food',
     description:
       'Desi Flavors Katy - Authentic Indian street food served daily from our food truck in Katy, TX. Order online from DoorDash, Grubhub, and Uber Eats!',
-    images: [`${siteUrl}/Truck/truck-4.jpg`],
+    images: [`${SITE_URL}/Truck/truck-4.jpg`],
     creator: '@desiflavorskaty',
   },
   robots: {

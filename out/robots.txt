@@ -25,5 +25,5 @@ Allow: /
 User-Agent: Applebot-Extended
 Allow: /
 
-Host: https://www.desiflavorskaty.com
-Sitemap: https://www.desiflavorskaty.com/sitemap.xml
+Host: https://desiflavorskaty.vercel.app
+Sitemap: https://desiflavorskaty.vercel.app/sitemap.xml
